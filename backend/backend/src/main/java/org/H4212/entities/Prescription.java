@@ -151,7 +151,6 @@ public class Prescription {
                 ", patient=" + patient +
                 ", consultationDate=" + consultationDate +
                 ", medication=" + medication +
-                ", dosage=" + dosage +
                 ", duration=" + duration +
                 ", nbRenewals=" + nbRenewals +
                 ", NR=" + NR +
