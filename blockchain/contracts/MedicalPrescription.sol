@@ -50,15 +50,15 @@ contract MedicalPrescription {
         emit PrescriptionAdded(msg.sender, prescriptionHash);
     }
 
-    function verifyPrescription(bytes32 prescriptionHash) public onlyPharmacist returns (bool) {
-        bool isValid = prescriptions[prescriptionHash];
-        if (isValid) {
-            emit PrescriptionVerified(msg.sender, prescriptionHash);
-        }
-        return isValid;
+    function verifyPrescription(bytes32 prescriptionHash) public view onlyPharmacist returns (bool) {
+        return prescriptions[prescriptionHash];
     }
 
     function isDoctor(address doctor) public view returns (bool) {
         return doctors[doctor];
+    }
+
+    function isPharmacist(address pharmacist) public view returns (bool) {
+        return pharmacists[pharmacist];
     }
 }

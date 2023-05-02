@@ -31,15 +31,8 @@ contract("MedicalPrescription", (accounts) => {
         await medicalPrescription.addPharmacist(pharmacist, { from: owner });
 
         // Verify the prescription
-        const tx = await medicalPrescription.verifyPrescription(prescriptionHash, { from: pharmacist });
-
-        // Check for the PrescriptionVerified event in the logs
-        const event = tx.logs.find(e => e.event === "PrescriptionVerified");
-        assert.exists(event, "PrescriptionVerified event not emitted");
-
-        // Check the event parameters
-        assert.equal(event.args.pharmacist, pharmacist, "Incorrect pharmacist in event");
-        assert.equal(event.args.prescriptionHash, prescriptionHash, "Incorrect prescriptionHash in event");
+        const isValid = await medicalPrescription.verifyPrescription.call(prescriptionHash, { from: pharmacist });
+        assert.isTrue(isValid, "Prescription should be valid");
     });
 
     it("should not verify an invalid prescription", async() => {
@@ -48,14 +41,7 @@ contract("MedicalPrescription", (accounts) => {
         const invalidPrescriptionHash = web3.utils.sha3("invalid-prescription");
 
         // Attempt to verify the invalid prescription
-        const tx = await medicalPrescription.verifyPrescription(invalidPrescriptionHash, { from: pharmacist });
-
-        // Check for the absence of PrescriptionVerified event in the logs
-        const event = tx.logs.find(e => e.event === "PrescriptionVerified");
-        assert.notExists(event, "PrescriptionVerified event should not be emitted");
-
-        // Check the return value
-        const isValid = await medicalPrescription.verifyPrescription.call(invalidPrescriptionHash, { from: pharmacist });
+        const isValid = await medicalPrescription.verifyPrescription(invalidPrescriptionHash, { from: pharmacist });
         assert.isFalse(isValid, "Prescription should not be valid");
     });
 });
