@@ -17,7 +17,7 @@ services:
       PGDATA: /data/postgres
     volumes:
       - postgres-prescrypt:/data/postgres
-      - ./main/sqlfiles/CreatePrescrypt.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./src/main/sqlfiles/CreatePrescrypt.sql:/docker-entrypoint-initdb.d/001-create-database-schema.sql
 
     ports:
       - "5432:5432"
