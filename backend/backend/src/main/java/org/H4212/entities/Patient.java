@@ -1,6 +1,9 @@
 package org.H4212.entities;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
+
+@Entity
 
 public class Patient extends Person{
 
