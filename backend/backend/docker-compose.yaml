@@ -1,0 +1,35 @@
+version: '3.5'
+
+services:
+
+  postgres-prescrypt:
+    container_name: postgres-prescrypt
+    image: postgres
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "prescrypt" ]
+      timeout: 45s
+      interval: 10s
+      retries: 10
+    environment:
+      POSTGRES_DB: prescrypt
+      POSTGRES_USER: prescrypt
+      POSTGRES_PASSWORD: prescrypt
+      PGDATA: /data/postgres
+    volumes:
+      - postgres-prescrypt:/data/postgres
+      # copy the sql script to create tables
+      - main/sqlfiles/CreatePrescrypt.sql:/docker-entrypoint-initdb.d/001-create-database-schema.sql
+    ports:
+      - "5434:5432"
+    networks:
+      - prescrypt
+    restart: unless-stopped
+
+volumes:
+  postgres-prescrypt:
+  postgres-prescrypt-keycloak:
+    driver: local
+
+networks:
+  prescrypt:
+    driver: bridge
