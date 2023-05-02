@@ -11,3 +11,5 @@ Le patient, après s'être authentifié, peut rechercher ses ordonnances.
 Le pharmacien, après s'être authentifié, peut scanner et authentifier une ordonnance.
 
 ![signatureNumérique drawio](https://user-images.githubusercontent.com/101802610/235607000-b32234ae-69db-42b7-a2df-67e52239a6e3.svg)
+
+![signatureNumériquePharmacien drawio](https://user-images.githubusercontent.com/101802610/235607870-3077e2b6-91f6-4dee-9816-51b489674f3f.svg)
