@@ -153,12 +153,21 @@
 .navigation-bar {
     width: 100%;  /* i'm assuming full width */
     height: 80px; /* change it to desired width */
+    border-bottom: 1px solid black;
+    
 }
+
+td:nth-child(5){
+    width : 10%;
+}
+
 .logo {
     display: inline-block;
     vertical-align: top;
     width: 200px; /*4vw*/
     margin-left: 5vh;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 header img {
@@ -190,6 +199,8 @@ select
 #doctorPrescription
 {
     margin-left:10vh;
+    margin-top: 5vw;
+    
 }
 .indications
 {
@@ -225,6 +236,7 @@ select
   border-collapse: collapse; 
   font-size: 16px; 
   text-align: center; 
+  width : 95%;
   
 }
 
@@ -236,11 +248,13 @@ select
 .my-table td {
   background-color: rgba(24,23,186,0.23); 
   color:white;
+
 }
 
 .my-table th {
   background-color: rgba(24,23,186,0.63); 
   color:white;
+
 }
 
 .buttonTable
@@ -254,8 +268,17 @@ select
     width:2vw;
 }
 .ordonnance {
-  display: block;
-  margin: auto;
+    display: block;
+    margin: auto;
+    margin-top: 5vh;
+    padding: 15px 25px 15px 25px;
+    background: rgba(24, 23, 186, 0.46);
+    border: none;
+    color:white;
+    font-variant: small-caps;
+    font-size: 20px;
+    cursor: pointer;
+
 }
 
 </style>
