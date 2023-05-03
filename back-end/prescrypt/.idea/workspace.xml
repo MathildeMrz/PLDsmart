@@ -5,17 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="16b56ae0-e4c2-48f6-8785-903c0d0f3c39" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../prescrypt/.mvn/wrapper/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../prescrypt/.mvn/wrapper/MavenWrapperDownloader.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../prescrypt/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../prescrypt/src/main/resources/application.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../prescrypt/src/main/resources/resources/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../prescrypt/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../prescrypt/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../prescrypt/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../prescrypt/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../prescrypt/src/main/java/org/H4212/api/Authentication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../prescrypt/src/main/java/org/H4212/api/Authentication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../prescrypt/src/main/java/org/H4212/api/BlockchainApi.java" beforeDir="false" afterPath="$PROJECT_DIR$/../prescrypt/src/main/java/org/H4212/api/BlockchainApi.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../prescrypt/src/main/java/org/H4212/services/ServiceUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/../prescrypt/src/main/java/org/H4212/services/ServiceUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/docker-compose.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/H4212/api/Authentication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/H4212/api/Authentication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/H4212/api/jsonSerializers/AuthenticateUserRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/H4212/api/jsonSerializers/AuthenticateUserRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/H4212/api/jsonSerializers/AuthenticateUserResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/H4212/api/jsonSerializers/AuthenticateUserResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/H4212/entities/Person.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/H4212/entities/Person.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/H4212/services/ServiceUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/H4212/services/ServiceUser.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,7 +48,11 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/Malob/OneDrive/Documents/4IF/SMART/PLDsmart/back-end/getting-started",
+    "last_opened_file_path": "C:/Users/Malob/OneDrive/Documents/4IF/SMART/PLDsmart/back-end/prescrypt",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "vue.rearranger.settings.migration": "true"
   }
@@ -111,6 +112,8 @@
       <option name="presentableId" value="Default" />
       <updated>1683125908943</updated>
       <workItem from="1683125910107" duration="56000" />
+      <workItem from="1683126526034" duration="1654000" />
+      <workItem from="1683128225238" duration="5995000" />
     </task>
     <servers />
   </component>
