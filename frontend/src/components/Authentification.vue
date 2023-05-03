@@ -26,8 +26,8 @@
             <input type="radio" id="role-admin" name="role" value="Administrateur" />
             <label for="role-admin">Administrateur</label>
           </div>
-        </div>  
-        <button id="connexion-button" type="button">ME CONNECTER</button>    
+        </div>
+        <button id="connexion-button" onclick="location.href = 'prescription.html';">ME CONNECTER</button>
       </form>
     </div>
     <div id="doctor-box">
