@@ -1,15 +1,17 @@
 <template>
-  <DoctorPrescription/>
+  <HelloWorld/>
 </template>
 
 <script>
-import DoctorPrescription from './components/DoctorPrescription.vue'
+/*import DoctorPrescription from './components/DoctorPrescription.vue'*/
+import HelloWorld from './components/HelloWorld.vue';
 
 export default {
   name: 'App',
   components: {
-    DoctorPrescription
-  }
+    /*DoctorPrescription,*/
+    HelloWorld
+}
 }
 </script>
 
@@ -19,6 +21,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+  text-align: center;
 }
 
 </style>

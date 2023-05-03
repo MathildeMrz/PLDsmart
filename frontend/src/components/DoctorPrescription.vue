@@ -79,6 +79,12 @@
             </div>
             <div id="prescription">
                 <h3>La prescription</h3>
+
+                <div class="column" >
+                <input type="text" name="" placeholder="90">
+                <p class="indications">La validité de l'ordonnance (jours)</p>
+                </div>
+
                 <table class="my-table">
                 <thead>
                     <tr>
@@ -132,6 +138,10 @@
                 <button class="buttonTable" type="submit">
                     <img src="../assets/plus.png" alt="button add prescription" />
                 </button>
+
+            
+                 
+            
                
             </div>
                 <button class="ordonnance"
@@ -237,6 +247,7 @@ select
   font-size: 16px; 
   text-align: center; 
   width : 95%;
+  margin-top: 3vh;
   
 }
 
