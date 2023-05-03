@@ -4,12 +4,13 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import io.swagger.annotations.*;
 
 @Path("/api/")
 @Api(description = "the authentication API")
 public class Authentication {
 
-    @POST
+    /*@POST
     @Path("/auth/token")
     @Consumes({ "application/json", "application/x-www-form-urlencoded" })
     @Produces({ "application/json" })
@@ -20,7 +21,7 @@ public class Authentication {
             @ApiResponse(code = 429, message = "Too Many requests", response = GetErrorResponse.class) })
     Response createAccessToken(@Valid @NotNull GetAccessTokenRequest getAccessTokenRequest){
 
-    }
+    }*/
 
 
 }
