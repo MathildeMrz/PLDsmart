@@ -1,64 +1,60 @@
 pragma solidity ^0.8.0;
+import "../node_modules/@openzeppelin/contracts/access/AccessControl.sol";
 
-contract MedicalPrescription {
+contract MedicalPrescription is AccessControl {
+    // Define roles using constants
+    bytes32 public constant DOCTOR_ROLE = keccak256("DOCTOR_ROLE");
+    bytes32 public constant PHARMACIST_ROLE = keccak256("PHARMACIST_ROLE");
 
-    address private owner;
-    mapping(address => bool) private doctors;
-    mapping(address => bool) private pharmacists;
-    mapping(bytes32 => bool) private prescriptions;
+    struct Prescription {
+        address doctor;
+        bool toDeliver;
+        uint256 expirationDate;
+    }
+
+    mapping(bytes32 => Prescription) private prescriptions;
 
     event PrescriptionAdded(address indexed doctor, bytes32 indexed prescriptionHash);
-    event PrescriptionVerified(address indexed pharmacist, bytes32 indexed prescriptionHash);
-
-    modifier onlyOwner() {
-        require(msg.sender == owner, "Caller is not the owner");
-        _;
-    }
-
-    modifier onlyDoctor() {
-        require(doctors[msg.sender], "Caller is not a doctor");
-        _;
-    }
-
-    modifier onlyPharmacist() {
-        require(pharmacists[msg.sender], "Caller is not a pharmacist");
-        _;
-    }
 
     constructor() {
-        owner = msg.sender;
+        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
     }
 
-    function addDoctor(address doctor) public onlyOwner {
-        doctors[doctor] = true;
+    function grantDoctorRole(address doctor) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        grantRole(DOCTOR_ROLE, doctor);
     }
 
-    function removeDoctor(address doctor) public onlyOwner {
-        doctors[doctor] = false;
+    function revokeDoctorRole(address doctor) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        revokeRole(DOCTOR_ROLE, doctor);
     }
 
-    function addPharmacist(address pharmacist) public onlyOwner {
-        pharmacists[pharmacist] = true;
+    function grantPharmacistRole(address pharmacist) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        grantRole(PHARMACIST_ROLE, pharmacist);
     }
 
-    function removePharmacist(address pharmacist) public onlyOwner {
-        pharmacists[pharmacist] = false;
+    function revokePharmacistRole(address pharmacist) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        revokeRole(PHARMACIST_ROLE, pharmacist);
     }
 
-    function addPrescription(bytes32 prescriptionHash) public onlyDoctor {
-        prescriptions[prescriptionHash] = true;
+    function addPrescription(bytes32 prescriptionHash, uint256 daysValid) public onlyRole(DOCTOR_ROLE) {
+        prescriptions[prescriptionHash] = Prescription({
+            doctor: msg.sender,
+            toDeliver: true,
+            expirationDate: block.timestamp + daysValid * 1 days
+        });
         emit PrescriptionAdded(msg.sender, prescriptionHash);
     }
 
-    function verifyPrescription(bytes32 prescriptionHash) public view onlyPharmacist returns (bool) {
-        return prescriptions[prescriptionHash];
+    function verifyPrescription(bytes32 prescriptionHash) public view onlyRole(PHARMACIST_ROLE) returns (bool) {
+        Prescription memory p = prescriptions[prescriptionHash];
+        return p.toDeliver && (block.timestamp <= p.expirationDate);
     }
 
-    function isDoctor(address doctor) public view returns (bool) {
-        return doctors[doctor];
-    }
-
-    function isPharmacist(address pharmacist) public view returns (bool) {
-        return pharmacists[pharmacist];
+    function deliverPrescription(bytes32 prescriptionHash) public onlyRole(PHARMACIST_ROLE) {
+        Prescription storage p = prescriptions[prescriptionHash];
+        require(p.doctor != address(0), "Prescription does not exist");
+        require(p.toDeliver, "Prescription has already been delivered");
+        require(block.timestamp <= p.expirationDate, "Prescription has expired");
+        p.toDeliver = false;
     }
 }
