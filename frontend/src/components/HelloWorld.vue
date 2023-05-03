@@ -32,7 +32,11 @@
     </div>
     <div id="doctor-box">
         <img id="doctor-image" src="../assets/doctor.jpg" alt="Doctor smiling">
-        <div class="centered"><p id="slogan">Votre vérificateur d’ordonnances</p><p id="secured">100% sécurisé</p></div>
+        <div class="centered">
+          <p id="slogan">Votre vérificateur d’ordonnances</p>
+          <p id="secured">100% sécurisé</p>
+          <img id="zigouigoui" src="../assets/zigouigoui.png" alt="Zigouigoui secured">
+        </div>
     </div>
   </div>
   
@@ -84,6 +88,7 @@ export default {
     color:white;
     font-variant: small-caps;
     font-size: 20px;
+    cursor: pointer;
   }
 
   input::placeholder
@@ -111,7 +116,7 @@ export default {
   .centered {
     position: absolute;
     width: 100%;
-    top: 67%;
+    top: 66%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 1;
@@ -127,6 +132,17 @@ export default {
     color: black;
     font-size: 30px;
     font-weight: 600;
+    padding: 0;
+    margin: 0;
+    margin-top: 10px;
+  }
+
+  #zigouigoui {
+    margin: 0;
+    padding-left: 80px;
+    width: 89px;
+    height: 20px;
+    transform: translateY(-5px) ;
   }
 
   #doctor-box {
