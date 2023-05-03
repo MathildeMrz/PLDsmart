@@ -88,6 +88,7 @@
                         <th>Renouvellement *</th>
                         <th>NR</th>
                         <th>Indications</th>
+                        <th>Supprimer</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -119,12 +120,19 @@
                         <td>
                             <textarea id="indication" rows="4" style="word-wrap: break-word;" name="">Prendre le traitement pendant le déjeuner</textarea>
                         </td>                    
+                        
+                        <td>
+                        <button class="buttonTable" type="delete">
+                            <img src="../assets/delete.png" alt="button delete prescription" />
+                        </button>
+                        </td>
                     </tr>
                 </tbody>
                 </table>
                 <button class="buttonTable" type="submit">
                     <img src="../assets/plus.png" alt="button add prescription" />
                 </button>
+               
             </div>
                 <button class="ordonnance"
                 type="button">Générer l'ordonnance</button>
