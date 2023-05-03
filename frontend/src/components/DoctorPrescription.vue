@@ -100,12 +100,10 @@
                 <tbody>
                     <tr>
                         <td>
-                            <select id="medicineAct" name="medicamentActe">
-                                <option value="" disabled selected hidden></option>
-                                <option value="MedicamentActe1">MedicamentActe1</option>
-                                <option value="MedicamentActe2">MedicamentActe2</option>
-                                <option value="MedicamentActe3">MedicamentActe3</option>
-                            </select>
+                            <input type="text" id="pays" list="medicineAct">
+                            <datalist id="medicineAct">
+                            </datalist>
+
                         </td>
                         <td>
                             <input id="posology" type="text" name="" value="30 mg" required>
@@ -138,11 +136,6 @@
                 <button class="buttonTable" type="submit">
                     <img src="../assets/plus.png" alt="button add prescription" />
                 </button>
-
-            
-                 
-            
-               
             </div>
                 <button class="ordonnance"
                 type="button">Générer l'ordonnance</button>
@@ -150,13 +143,39 @@
     </body>
 </template>
 
+
 <script>
+
     export default {
-    name: 'DoctorPrescription',
-    props: {
+        name: 'DoctorPrescription',
+        props: {}
     }
-    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+
+        //Ajout médicaments liste déroulante
+        const data = require('../assets/medicine.json');
+        // La liste déroulante HTML
+        const medicineSelect = document.getElementById("medicineAct");
+
+        let result = [];
+
+        for(let i=0; i<data.length; i++) {
+            let concat = data[i].CODE_UCD.toString() + " " + data[i].NOM_COURT;
+            result.push(concat);
+
+            //Ajout liste déroulante
+            let option = document.createElement("option");
+            option.value = data[i].CODE_UCD;
+            option.text = concat;
+            medicineSelect.appendChild(option);
+
+        }
+    });
+
+
 </script>
+
 
 <style scoped>
 
