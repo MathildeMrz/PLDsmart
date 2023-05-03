@@ -64,7 +64,7 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: calc(100vw - 625px);
+    width: 60vw;
     height: 100vh;
   }
 
@@ -136,8 +136,8 @@ export default {
   }
 
   #doctor-image {
-    max-height: 100vh;
-    width: auto;
+    height: 100vh;
+    width: 40vw;
     z-index: -1;
   }
 
