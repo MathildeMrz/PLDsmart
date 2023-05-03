@@ -36,6 +36,23 @@ contract("MedicalPrescription", (accounts) => {
         assert.isTrue(isValid, "The prescription should be valid");
     });
 
+    it("Test doctor add a prescription twice", async() => {
+        await medicalPrescription.grantDoctorRole(doctor, { from: admin });
+        await medicalPrescription.grantPharmacistRole(pharmacist, { from: admin });
+        const daysValid = 7;
+        await medicalPrescription.addPrescription(prescriptionHash, daysValid, { from: doctor });
+
+        const isValid = await medicalPrescription.verifyPrescription.call(prescriptionHash, {
+            from: pharmacist,
+        });
+        assert.isTrue(isValid, "The prescription should be valid");
+
+        await expectRevert(
+            medicalPrescription.addPrescription(prescriptionHash, daysValid, { from: doctor }),
+            "Prescription with this hash already exist"
+        );
+    });
+
     it("Test verify invalid prescription", async() => {
         await medicalPrescription.grantPharmacistRole(pharmacist, { from: admin });
         // Assuming an invalid prescription hash
@@ -74,6 +91,32 @@ contract("MedicalPrescription", (accounts) => {
         await expectRevert(
             medicalPrescription.deliverPrescription(prescriptionHash, { from: pharmacist }),
             "Prescription has expired"
+        );
+    });
+
+    it("Test doctor revokes a prescription", async() => {
+        await medicalPrescription.grantDoctorRole(doctor, { from: admin });
+        await medicalPrescription.grantPharmacistRole(pharmacist, { from: admin });
+        const daysValid = 7;
+        await medicalPrescription.addPrescription(prescriptionHash, daysValid, { from: doctor });
+
+        await medicalPrescription.revokePrescription(prescriptionHash, { from: doctor });
+
+        const isValid = await medicalPrescription.verifyPrescription.call(prescriptionHash, {
+            from: pharmacist,
+        });
+
+        assert.isFalse(isValid, "The revoked prescription should not be valid");
+    });
+
+    it("Test revoking a non-existent prescription", async() => {
+        await medicalPrescription.grantDoctorRole(doctor, { from: admin });
+
+        const nonExistentPrescriptionHash = web3.utils.sha3("non-existent-prescription");
+
+        await expectRevert(
+            medicalPrescription.revokePrescription(nonExistentPrescriptionHash, { from: doctor }),
+            "Prescription does not exist"
         );
     });
 });
