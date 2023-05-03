@@ -20,9 +20,19 @@ public class Person {
     @NotNull
     private String firstName;
 
-    public Person(String lastName, String firstName) {
+    @Column(name = "Username")
+    @NotNull
+    private String username;
+
+    @Column(name = "User password")
+    @NotNull
+    private String password;
+
+    public Person(String lastName, String firstName, String username, String password) {
         this.lastName = lastName;
         this.firstName = firstName;
+        this.username = username;
+        this.password = password;
     }
 
     public Person() {
@@ -48,12 +58,30 @@ public class Person {
         return firstName;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public String toString() {
         return "Person{" +
                 "id=" + id +
                 ", lastName='" + lastName + '\'' +
                 ", firstName='" + firstName + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
                 '}';
     }
 }
