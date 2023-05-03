@@ -1,22 +1,20 @@
 <template>
-  <HelloWorld/>
+  <Authentification/>
 </template>
 
 <script>
-/*import DoctorPrescription from './components/DoctorPrescription.vue'*/
-import HelloWorld from './components/HelloWorld.vue';
+import Authentification from '@/components/Authentification.vue';
 
 export default {
   name: 'App',
   components: {
-    /*DoctorPrescription,*/
-    HelloWorld
+    Authentification
 }
 }
 </script>
 
 <style>
-#app {
+#auth {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

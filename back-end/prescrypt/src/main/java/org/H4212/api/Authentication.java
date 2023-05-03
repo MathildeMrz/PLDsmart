@@ -1,30 +1,31 @@
 package org.H4212.api;
 
+import jakarta.inject.Inject;
+import jakarta.json.Json;
+import jakarta.json.JsonBuilderFactory;
+import jakarta.json.JsonObject;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.H4212.api.jsonSerializers.*;
 import org.H4212.entities.Person;
 import org.H4212.services.ServiceUser;
-import org.H4212.util.*;
+import org.jboss.logging.annotations.Param;
 
 @Path("/api/")
 public class Authentication {
 
     @POST
+    @Consumes("application/json")
+    @Produces("application/json")
     @Path("/auth")
-    @Consumes({ "application/json", "application/x-www-form-urlencoded" })
-    @Produces({ "application/json" })
-    /*@ApiOperation(value = "Authenticates user and generates an access token", notes = "Validate credentials of a user and, if available, get an access token. ", tags={ "Authentication" })
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "An access token was generated successfully. ", response = AuthenticateUserResponse.class),
-            @ApiResponse(code = 400, message = "Bad request", response = GetErrorResponse.class),
-            @ApiResponse(code = 429, message = "Too Many requests", response = GetErrorResponse.class) })
-     */
-    public Response authenticate(@Valid @NotNull AuthenticateUserRequest authenticateUserRequest){
+    public Response authenticate(JsonObject jsonObject){
 
         ServiceUser serviceUser = new ServiceUser();
+
+        AuthenticateUserRequest authenticateUserRequest = new AuthenticateUserRequest(jsonObject);
 
         Person person = new Person();
 
@@ -33,7 +34,6 @@ public class Authentication {
         try
         {
             person = serviceUser.authenticate(authenticateUserRequest.getUsername(), authenticateUserRequest.getPassword());
-            authenticateUserResponse.setAuthenticated(true);
             authenticateUserResponse.setUser(person);
         }
         catch(Exception e)
@@ -42,7 +42,12 @@ public class Authentication {
             e.printStackTrace();
         }
 
-        return ResponseUtil.ok(authenticateUserResponse).build();
+        /*JsonBuilderFactory factory = Json.createBuilderFactory(null);
+        JsonObject value = factory.createObjectBuilder()
+                .add("firstName", "John")
+                .add("lastName", "Smith").build();*/
+
+        return Response.ok(authenticateUserResponse.toJson()).build();
 
     }
 

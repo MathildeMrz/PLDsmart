@@ -1,16 +1,25 @@
 package org.H4212.api.jsonSerializers;
 
-import jakarta.validation.*;
-import java.io.Serializable;
+import jakarta.json.JsonObject;
 
-public class AuthenticateUserRequest implements Serializable {
+public class AuthenticateUserRequest {
 
-    private @Valid String username;
-    private @Valid String password;
+    private String username;
+    private String password;
+
+    public AuthenticateUserRequest(JsonObject jsonObject)
+    {
+        this.username = jsonObject.getString("username");
+        this.password = jsonObject.getString("password");
+    }
 
     public AuthenticateUserRequest(String username, String password) {
         this.username = username;
         this.password = password;
+    }
+
+    public AuthenticateUserRequest(){
+
     }
 
     public String getUsername() {
