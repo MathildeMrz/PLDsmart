@@ -122,15 +122,12 @@
                     </tr>
                 </tbody>
                 </table>
-
-                <button id="buttonTable" type="submit">
+                <button class="buttonTable" type="submit">
                     <img src="../assets/plus.png" alt="button add prescription" />
                 </button>
-
-                <button class="favorite styled"
-                type="button">Générer l'ordonnance</button>
-
             </div>
+                <button class="ordonnance"
+                type="button">Générer l'ordonnance</button>
         </div>
     </body>
 </template>
@@ -152,7 +149,8 @@
 .logo {
     display: inline-block;
     vertical-align: top;
-    width: 4vw;
+    width: 200px; /*4vw*/
+    margin-left: 5vh;
 }
 
 header img {
@@ -237,15 +235,19 @@ select
   color:white;
 }
 
-#buttonTable
+.buttonTable
 {
     border:none;
     background-color:transparent;
 }
 
-#buttonTable img
+.buttonTable img
 {
     width:2vw;
+}
+.ordonnance {
+  display: block;
+  margin: auto;
 }
 
 </style>
