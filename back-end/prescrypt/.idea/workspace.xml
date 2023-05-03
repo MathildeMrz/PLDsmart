@@ -5,37 +5,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5d02b09c-9272-4d85-a188-a7a78140c6dd" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/backend/backend.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../../backend/prescrypt-backend/backend.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/backend/docker-compose.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/backend/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/backend/src/main/java/org/H4212/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/backend/src/main/java/org/H4212/api/Authentication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/H4212/api/Authentication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/backend/src/main/java/org/H4212/api/BlockchainApi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/H4212/api/BlockchainApi.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/backend/src/main/java/org/H4212/api/jsonSerializers/GetAccessTokenRequest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/backend/src/main/java/org/H4212/api/jsonSerializers/GetAccessTokenResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/backend/src/main/java/org/H4212/entities/Doctor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/H4212/entities/Doctor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/backend/src/main/java/org/H4212/entities/Medication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/H4212/entities/Medication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/backend/src/main/java/org/H4212/entities/Patient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/H4212/entities/Patient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/backend/src/main/java/org/H4212/entities/Person.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/H4212/entities/Person.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/backend/src/main/java/org/H4212/entities/Pharmacist.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/H4212/entities/Pharmacist.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/backend/src/main/java/org/H4212/entities/Prescription.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/H4212/entities/Prescription.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../backend/backend/src/main/sqlfiles/CreatePrescrypt.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/H4212/api/Authentication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/H4212/api/Authentication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/H4212/api/jsonSerializers/GetAccessTokenRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/H4212/api/jsonSerializers/GetAccessTokenResponse.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="MavenImportPreferences">
     <option name="importingSettings">
@@ -54,7 +46,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/Malob/OneDrive/Documents/4IF/SMART/PLDsmart/back-end/prescrypt/src/main/java/org/H4212/api",
+    "last_opened_file_path": "C:/Users/Malob/OneDrive/Documents/4IF/SMART/PLDsmart/back-end/prescrypt/src/main/java/org/H4212/api/jsonSerializers",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -64,6 +56,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Malob\OneDrive\Documents\4IF\SMART\PLDsmart\back-end\prescrypt\src\main\java\org\H4212\api\jsonSerializers" />
       <recent name="C:\Users\Malob\OneDrive\Documents\4IF\SMART\PLDsmart\back-end\prescrypt\src\main\java\org\H4212\api" />
       <recent name="C:\Users\Malob\OneDrive\Documents\4IF\SMART\PLDsmart\back-end\prescrypt\src\main\java\org\H4212\entities" />
     </key>
@@ -76,7 +69,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1683101433312</updated>
-      <workItem from="1683101434454" duration="353000" />
+      <workItem from="1683101434454" duration="2749000" />
     </task>
     <servers />
   </component>
