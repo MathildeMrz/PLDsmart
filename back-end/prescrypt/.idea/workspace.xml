@@ -6,10 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="5d02b09c-9272-4d85-a188-a7a78140c6dd" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/H4212/api/Authentication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/H4212/api/Authentication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/H4212/api/jsonSerializers/GetAccessTokenRequest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/H4212/api/jsonSerializers/GetAccessTokenResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/H4212/api/jsonSerializers/AuthenticateUserResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/H4212/api/jsonSerializers/AuthenticateUserResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/H4212/entities/Doctor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/H4212/entities/Doctor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/H4212/entities/Patient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/H4212/entities/Patient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/H4212/entities/Person.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/H4212/entities/Person.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/H4212/entities/Pharmacist.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/H4212/entities/Pharmacist.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,7 +71,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1683101433312</updated>
-      <workItem from="1683101434454" duration="2749000" />
+      <workItem from="1683101434454" duration="4597000" />
     </task>
     <servers />
   </component>

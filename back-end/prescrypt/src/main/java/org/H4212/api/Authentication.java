@@ -6,6 +6,9 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import io.swagger.annotations.*;
 import org.H4212.api.jsonSerializers.*;
+import org.H4212.entities.Person;
+import org.H4212.services.ServiceUser;
+import org.H4212.util.*;
 
 import java.util.List;
 
@@ -22,9 +25,27 @@ public class Authentication {
             @ApiResponse(code = 200, message = "An access token was generated successfully. ", response = AuthenticateUserResponse.class),
             @ApiResponse(code = 400, message = "Bad request", response = GetErrorResponse.class),
             @ApiResponse(code = 429, message = "Too Many requests", response = GetErrorResponse.class) })
-    Response authenticate(@Valid @NotNull AuthenticateUserRequest authenticateUserRequest){
+    public Response authenticate(@Valid @NotNull AuthenticateUserRequest authenticateUserRequest){
 
+        ServiceUser serviceUser = new ServiceUser();
 
+        Person person = new Person();
+
+        AuthenticateUserResponse authenticateUserResponse = new AuthenticateUserResponse();
+
+        try
+        {
+            person = serviceUser.authenticate(authenticateUserRequest.getUsername(), authenticateUserRequest.getPassword());
+            authenticateUserResponse.setAuthenticated(true);
+            authenticateUserResponse.setUser(person);
+        }
+        catch(Exception e)
+        {
+            person = null;
+            e.printStackTrace();
+        }
+
+        return ResponseUtil.ok(authenticateUserResponse).build();
 
     }
 

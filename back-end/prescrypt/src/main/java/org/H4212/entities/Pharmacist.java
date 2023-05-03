@@ -6,8 +6,8 @@ import javax.persistence.Entity;
 @Entity
 public class Pharmacist extends Person{
 
-    public Pharmacist(String lastName, String firstName) {
-        super(lastName, firstName);
+    public Pharmacist(String lastName, String firstName, String pseudo, String password) {
+        super(lastName, firstName, pseudo, password);
     }
 
     public Pharmacist(){}
