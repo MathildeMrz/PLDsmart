@@ -1,7 +1,6 @@
 package org.H4212.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import jakarta.persistence.Entity;
 
 @Entity
 public class Pharmacist extends Person{

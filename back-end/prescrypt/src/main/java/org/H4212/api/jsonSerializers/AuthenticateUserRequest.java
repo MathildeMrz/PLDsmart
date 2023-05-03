@@ -1,9 +1,6 @@
 package org.H4212.api.jsonSerializers;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModelProperty;
-
-import javax.validation.Valid;
+import jakarta.validation.*;
 import java.io.Serializable;
 
 public class AuthenticateUserRequest implements Serializable {
@@ -16,24 +13,18 @@ public class AuthenticateUserRequest implements Serializable {
         this.password = password;
     }
 
-    @ApiModelProperty(value = "The user name. ")
-    @JsonProperty("username")
     public String getUsername() {
         return username;
     }
 
-    @JsonProperty("username")
     public void setUsername(String username) {
         this.username = username;
     }
 
-    @ApiModelProperty(value = "The user password or one time password. ")
-    @JsonProperty("password")
     public String getPassword() {
         return password;
     }
 
-    @JsonProperty("password")
     public void setPassword(String password) {
         this.password = password;
     }
