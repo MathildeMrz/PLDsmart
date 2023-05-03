@@ -4,26 +4,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5d02b09c-9272-4d85-a188-a7a78140c6dd" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/H4212/api/Authentication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/H4212/api/Authentication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/H4212/api/jsonSerializers/AuthenticateUserResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/H4212/api/jsonSerializers/AuthenticateUserResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/H4212/entities/Doctor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/H4212/entities/Doctor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/H4212/entities/Patient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/H4212/entities/Patient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/H4212/entities/Person.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/H4212/entities/Person.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/H4212/entities/Pharmacist.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/H4212/entities/Pharmacist.java" afterDir="false" />
+    <list default="true" id="16b56ae0-e4c2-48f6-8785-903c0d0f3c39" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../prescrypt/.mvn/wrapper/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../prescrypt/.mvn/wrapper/MavenWrapperDownloader.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../prescrypt/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../prescrypt/src/main/resources/application.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../prescrypt/src/main/resources/resources/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prescrypt/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../prescrypt/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prescrypt/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../prescrypt/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prescrypt/src/main/java/org/H4212/api/Authentication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../prescrypt/src/main/java/org/H4212/api/Authentication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prescrypt/src/main/java/org/H4212/api/BlockchainApi.java" beforeDir="false" afterPath="$PROJECT_DIR$/../prescrypt/src/main/java/org/H4212/api/BlockchainApi.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../prescrypt/src/main/java/org/H4212/services/ServiceUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/../prescrypt/src/main/java/org/H4212/services/ServiceUser.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Class" />
-      </list>
-    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
@@ -32,13 +29,19 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="Use Maven wrapper" />
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
     <option name="importingSettings">
       <MavenImportingSettings>
         <option name="workspaceImportEnabled" value="true" />
       </MavenImportingSettings>
     </option>
   </component>
-  <component name="ProjectId" id="2PH5zuOgoD1rghCOkSUjM1IC5Ex" />
+  <component name="ProjectId" id="2PHtblQzmWPWIsBu3ioeyzp0ZOc" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -48,30 +51,66 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/Malob/OneDrive/Documents/4IF/SMART/PLDsmart/back-end/prescrypt/src/main/java/org/H4212/api/jsonSerializers",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
+    "last_opened_file_path": "C:/Users/Malob/OneDrive/Documents/4IF/SMART/PLDsmart/back-end/getting-started",
+    "nodejs_package_manager_path": "npm",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\Malob\OneDrive\Documents\4IF\SMART\PLDsmart\back-end\prescrypt\src\main\java\org\H4212\api\jsonSerializers" />
-      <recent name="C:\Users\Malob\OneDrive\Documents\4IF\SMART\PLDsmart\back-end\prescrypt\src\main\java\org\H4212\api" />
-      <recent name="C:\Users\Malob\OneDrive\Documents\4IF\SMART\PLDsmart\back-end\prescrypt\src\main\java\org\H4212\entities" />
-    </key>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="getting-started" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="getting-started" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="prescrypt" type="QuarkusRunConfigurationType" factoryName="Quarkus" nameIsGenerated="true">
+      <module name="prescrypt" />
+      <QsMavenRunConfiguration>
+        <MavenSettings>
+          <option name="myGeneralSettings" />
+          <option name="myRunnerSettings" />
+          <option name="myRunnerParameters">
+            <MavenRunnerParameters>
+              <option name="profiles">
+                <set />
+              </option>
+              <option name="goals">
+                <list>
+                  <option value="quarkus:dev" />
+                </list>
+              </option>
+              <option name="pomFileName" value="pom.xml" />
+              <option name="profilesMap">
+                <map />
+              </option>
+              <option name="resolveToWorkspace" value="false" />
+              <option name="workingDirPath" value="$PROJECT_DIR$" />
+            </MavenRunnerParameters>
+          </option>
+        </MavenSettings>
+        <targetMavenLocalRepo />
+      </QsMavenRunConfiguration>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="5d02b09c-9272-4d85-a188-a7a78140c6dd" name="Changes" comment="" />
-      <created>1683101433312</created>
+      <changelist id="16b56ae0-e4c2-48f6-8785-903c0d0f3c39" name="Changes" comment="" />
+      <created>1683125908943</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1683101433312</updated>
-      <workItem from="1683101434454" duration="4597000" />
+      <updated>1683125908943</updated>
+      <workItem from="1683125910107" duration="56000" />
     </task>
     <servers />
   </component>

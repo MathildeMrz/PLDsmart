@@ -1,7 +1,7 @@
 package org.H4212.entities;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 

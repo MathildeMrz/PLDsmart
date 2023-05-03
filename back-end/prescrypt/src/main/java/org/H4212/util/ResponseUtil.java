@@ -1,10 +1,9 @@
 package org.H4212.util;
 
-import javax.validation.constraints.NotNull;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.Response;
+
 import java.net.URI;
-import java.util.Objects;
 
 public class ResponseUtil {
 

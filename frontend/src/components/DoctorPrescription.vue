@@ -79,6 +79,12 @@
             </div>
             <div id="prescription">
                 <h3>La prescription</h3>
+
+                <div class="column" >
+                <input type="text" name="" placeholder="90">
+                <p class="indications">La validité de l'ordonnance (jours)</p>
+                </div>
+
                 <table class="my-table">
                 <thead>
                     <tr>
@@ -88,6 +94,7 @@
                         <th>Renouvellement *</th>
                         <th>NR</th>
                         <th>Indications</th>
+                        <th>Supprimer</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -119,18 +126,26 @@
                         <td>
                             <textarea id="indication" rows="4" style="word-wrap: break-word;" name="">Prendre le traitement pendant le déjeuner</textarea>
                         </td>                    
+                        
+                        <td>
+                        <button class="buttonTable" type="delete">
+                            <img src="../assets/delete.png" alt="button delete prescription" />
+                        </button>
+                        </td>
                     </tr>
                 </tbody>
                 </table>
-
-                <button id="buttonTable" type="submit">
+                <button class="buttonTable" type="submit">
                     <img src="../assets/plus.png" alt="button add prescription" />
                 </button>
 
-                <button class="favorite styled"
-                type="button">Générer l'ordonnance</button>
-
+            
+                 
+            
+               
             </div>
+                <button class="ordonnance"
+                type="button">Générer l'ordonnance</button>
         </div>
     </body>
 </template>
@@ -148,11 +163,21 @@
 .navigation-bar {
     width: 100%;  /* i'm assuming full width */
     height: 80px; /* change it to desired width */
+    border-bottom: 1px solid black;
+    
 }
+
+td:nth-child(5){
+    width : 10%;
+}
+
 .logo {
     display: inline-block;
     vertical-align: top;
-    width: 4vw;
+    width: 200px; /*4vw*/
+    margin-left: 5vh;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 header img {
@@ -184,6 +209,8 @@ select
 #doctorPrescription
 {
     margin-left:10vh;
+    margin-top: 5vw;
+    
 }
 .indications
 {
@@ -219,6 +246,8 @@ select
   border-collapse: collapse; 
   font-size: 16px; 
   text-align: center; 
+  width : 95%;
+  margin-top: 3vh;
   
 }
 
@@ -230,22 +259,37 @@ select
 .my-table td {
   background-color: rgba(24,23,186,0.23); 
   color:white;
+
 }
 
 .my-table th {
   background-color: rgba(24,23,186,0.63); 
   color:white;
+
 }
 
-#buttonTable
+.buttonTable
 {
     border:none;
     background-color:transparent;
 }
 
-#buttonTable img
+.buttonTable img
 {
     width:2vw;
+}
+.ordonnance {
+    display: block;
+    margin: auto;
+    margin-top: 5vh;
+    padding: 15px 25px 15px 25px;
+    background: rgba(24, 23, 186, 0.46);
+    border: none;
+    color:white;
+    font-variant: small-caps;
+    font-size: 20px;
+    cursor: pointer;
+
 }
 
 </style>

@@ -1,7 +1,8 @@
 package org.H4212.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 
 @Entity
 
