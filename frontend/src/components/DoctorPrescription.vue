@@ -171,7 +171,6 @@
         var button = document.getElementById("generatePdfButton");
         button.addEventListener("click", function() {
 
-            console.log("Avant");
             const doctorName = document.getElementById("doctorName").textContent;
             const doctorJob = document.getElementById("doctorJob").textContent;
             const RPPSNum = document.getElementById("RPPSNum").textContent;
@@ -227,8 +226,6 @@
             let queryString = 'jsonPdf=' + encodeURIComponent(JSON.stringify(jsonPdf));
 
             let url = 'http://localhost:9000/generate-pdf?' + queryString;
-
-            console.log(url);
 
             fetch(url, {
                 method: 'GET'

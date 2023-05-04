@@ -19,8 +19,6 @@ public class GeneratePdfApi {
     public Response generatePdf(@QueryParam("jsonPdf") String jsonPdf) 
     {
         
-        System.out.println("jsonPdf : "+jsonPdf);
-
         // Utilisez les paramètres récupérés pour générer votre PDF
         try {
             byte[] pdfBytes = servicePdf.generatePdf(jsonPdf);

@@ -47,10 +47,7 @@ public class ServicePdf {
 
     private static void addContent(Document document, String jsonPdf) throws DocumentException, ParseException {
 
-        System.out.println("Dans addContent");
-        //Doctor
         // Convertir la chaîne JSON en objet JsonObject
-        
         JSONParser parser = new JSONParser(); 
         JSONObject json = (JSONObject) parser.parse(jsonPdf);
 
@@ -79,13 +76,29 @@ public class ServicePdf {
         addEmptyLine(officePart, 2);
 
         //Consultation
-        Paragraph consultationPart = new Paragraph(consultationDate, prescriptionFont);
+        Paragraph consultationPart = new Paragraph("Fait le : "+consultationDate, prescriptionFont);
         addEmptyLine(consultationPart, 2);
 
         //Patient
         //Check if age, weight, height empty
-        Paragraph patientPart = new Paragraph(patientName+" "+patientFirstName+"\n"+patientAge+" "+patientWeight+" "+patientHeight, prescriptionBoldFont);
-        addEmptyLine(patientPart, 2);
+        String patientString = patientName+" "+patientFirstName+"\n";
+        if(! patientAge.isEmpty())
+        {
+            patientString += patientAge+" ans ";
+        }
+
+        if(! patientHeight.isEmpty())
+        {
+            patientString += patientHeight+" cm ";
+        }
+
+        if(! patientWeight.isEmpty())
+        {
+            patientString += patientWeight+" kg ";
+        }
+
+        Paragraph patientPart = new Paragraph(patientString, prescriptionBoldFont);
+        
 
         //Medicine
         List list = new List(List.UNORDERED);
@@ -130,7 +143,6 @@ public class ServicePdf {
         document.add(patientPart);
         document.add(list);
 
-        System.out.println("Fin addContent");
     }
 
     private static void addEmptyLine(Paragraph paragraph, int number) {
