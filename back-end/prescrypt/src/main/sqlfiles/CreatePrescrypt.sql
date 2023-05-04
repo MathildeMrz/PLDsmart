@@ -1,3 +1,11 @@
+CREATE TABLE users
+(
+    userId bigint NOT NULL,
+    username VARCHAR(100),
+    password VARCHAR(100),
+    PRIMARY KEY (userId)
+);
+
 CREATE TABLE doctor
 (
     doctorId bigint NOT NULL,
@@ -20,7 +28,16 @@ CREATE TABLE pharmacist
 
 CREATE TABLE medication
 (
-    medicationId bigint NOT NULL,
+  medicationId bigint NOT NULL,
+  name VARCHAR(100),
+  dosage int,
+  instructions VARCHAR(1000),
+  PRIMARY KEY (medicationId)
+);
+
+CREATE TABLE prescription
+(
+    prescriptionId bigint NOT NULL,
     doctorId bigint,
     dateConsultation VARCHAR(100),
     medicationId bigint,
@@ -28,15 +45,7 @@ CREATE TABLE medication
     nbRenewals int,
     NR bit,
     notes VARCHAR(1000),
-    PRIMARY KEY (medicationId),
+    PRIMARY KEY (prescriptionId),
     FOREIGN KEY (doctorId) REFERENCES doctor(doctorId),
     FOREIGN KEY (medicationId) REFERENCES medication(medicationId)
-);
-
-CREATE TABLE users
-(
-    userId bigint NOT NULL,
-    username VARCHAR(100),
-    password VARCHAR(100),
-    PRIMARY KEY (`id`)
 );

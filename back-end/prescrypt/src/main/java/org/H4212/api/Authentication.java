@@ -10,6 +10,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.H4212.api.jsonSerializers.*;
+import org.H4212.entities.Doctor;
 import org.H4212.entities.Person;
 import org.H4212.services.ServiceUser;
 import org.jboss.logging.annotations.Param;
@@ -21,24 +22,24 @@ public class Authentication {
     @Consumes("application/json")
     @Produces("application/json")
     @Path("/auth")
-    public Response authenticate(JsonObject jsonObject){
+    public Response authenticateDoctor(JsonObject jsonObject){
 
         ServiceUser serviceUser = new ServiceUser();
 
         AuthenticateUserRequest authenticateUserRequest = new AuthenticateUserRequest(jsonObject);
 
-        Person person = new Person();
+        Doctor doctor = new Doctor();
 
-        AuthenticateUserResponse authenticateUserResponse = new AuthenticateUserResponse();
+        AuthenticateDoctorResponse authenticateUserResponse = new AuthenticateDoctorResponse();
 
         try
         {
-            person = serviceUser.authenticate(authenticateUserRequest.getUsername(), authenticateUserRequest.getPassword());
-            authenticateUserResponse.setUser(person);
+            doctor = serviceUser.authenticateDoctor(authenticateUserRequest.getUsername(), authenticateUserRequest.getPassword());
+            authenticateUserResponse.setUser(doctor);
         }
         catch(Exception e)
         {
-            person = null;
+            doctor = null;
             e.printStackTrace();
         }
 

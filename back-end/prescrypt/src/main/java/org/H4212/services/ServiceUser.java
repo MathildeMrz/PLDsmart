@@ -2,9 +2,6 @@ package org.H4212.services;
 
 import org.H4212.entities.*;
 
-import jakarta.inject.Inject;
-import org.hibernate.Session;
-import org.hibernate.query.Query;
 
 import java.sql.*;
 import java.util.*;
@@ -30,10 +27,11 @@ public class ServiceUser {
             throw new RuntimeException(e);
         }
     }
-    public Person authenticate(String username, String password) throws SQLException {
+
+    public Doctor authenticateDoctor(String username, String password) throws SQLException {
         String stringQuery =
                 """
-                    SELECT id, username, password from users WHERE username = ? AND password = ?;
+                    SELECT userId from users WHERE username = ? AND password = ?;
                 """;
 
         PreparedStatement preparedStatement = connection.prepareStatement(stringQuery) ;
@@ -47,6 +45,21 @@ public class ServiceUser {
             throw new RuntimeException(e);
         }
 
-        return new Person();
+        String fetchDoctorQuery =
+                """
+                SELECT * from doctor WHERE doctorId = ?;
+                """;
+
+        PreparedStatement preparedStatementDoctor = connection.prepareStatement(fetchDoctorQuery);
+        preparedStatementDoctor.setInt(1, resultSet.getInt(1));
+
+        ResultSet resultSetDoctor;
+        try {
+            resultSetDoctor = preparedStatementDoctor.executeQuery();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return new Doctor(resultSetDoctor.getString(2), resultSetDoctor.getString(3), (long) resultSetDoctor.getInt(4), resultSetDoctor.getString(5), resultSetDoctor.getString(6), resultSetDoctor.getString(7));
     }
 }

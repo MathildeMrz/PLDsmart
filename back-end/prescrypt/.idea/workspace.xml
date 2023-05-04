@@ -6,9 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="16b56ae0-e4c2-48f6-8785-903c0d0f3c39" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/H4212/api/Authentication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/H4212/api/Authentication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/H4212/entities/Person.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/H4212/entities/Person.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/H4212/api/MedicineApi.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/H4212/api/jsonSerializers/AuthenticateUserResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/H4212/api/jsonSerializers/AuthenticateDoctorResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/H4212/entities/Doctor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/H4212/entities/Doctor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/H4212/services/ServiceUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/H4212/services/ServiceUser.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/sqlfiles/CreatePrescrypt.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/sqlfiles/CreatePrescrypt.sql" afterDir="false" />
     </list>
@@ -112,7 +113,7 @@
       <workItem from="1683125910107" duration="56000" />
       <workItem from="1683126526034" duration="1654000" />
       <workItem from="1683128225238" duration="7532000" />
-      <workItem from="1683184266976" duration="5153000" />
+      <workItem from="1683184266976" duration="7677000" />
     </task>
     <servers />
   </component>

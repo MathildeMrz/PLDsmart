@@ -32,6 +32,15 @@ public class Doctor extends Person {
         this.telephone = telephone;
     }
 
+    public Doctor(String lastName, String firstName, Long idPSdoctor, String qualification, String officeAddress, String telephone)
+    {
+        super(lastName, firstName);
+        this.idPSdoctor = idPSdoctor;
+        this.qualification = qualification;
+        this.officeAddress = officeAddress;
+        this.telephone = telephone;
+    }
+
     public Doctor() {
 
     }
