@@ -12,17 +12,17 @@
                 </div>
                 <div class="information">
                     <div class="column">
-                        <p>DUBOIS Charline</p>
+                        <p id="doctorName">Docteur DUBOIS Charline</p>
                         <p class="indications">NOM Prénom</p>
                     </div>
 
                     <div class="column">
-                        <p>Médecin généraliste</p>
+                        <p id="doctorJob">Médecin généraliste</p>
                         <p class="indications">Qualification</p>
                     </div>
 
                     <div class="column">
-                        <p>10100169461</p>
+                        <p id="RPPSNum">10100169461</p>
                         <p class="indications">Numéro RPPS</p>
                     </div>
                 </div>
@@ -32,14 +32,14 @@
                 <h3>Le patient</h3>
                 <div class="prescription-box information">
                     <div class="column">
-                        <input type="text" name=""  required>
+                        <input id="patientName" type="text" name=""  required>
                         <p class="indications" style="margin-bottom:2vh;">NOM *</p>
-                        <input type="text" name="" required>
+                        <input id="patientFirstName" type="text" name="" required>
                         <p class="indications">Prénom *</p>
                     </div>
 
                     <div class="column">
-                        <input type="number" min="0" max="150" name="">
+                        <input id="patientAge" type="number" min="0" max="150" name="">
                         <p class="indications" style="margin-bottom:2vh;">Âge (ans)</p>
                         <select id="sexe" name="sexe">
                             <option value="" disabled selected hidden></option>
@@ -51,9 +51,9 @@
                     </div>
 
                     <div class="column">
-                        <input type="number" min="0" max="1000" name="">
+                        <input id="patientWeight" type="number" min="0" max="1000" name="">
                         <p class="indications" style="margin-bottom:2vh;">Poids (kg)</p>
-                        <input type="number" min="0" max="300" name="">
+                        <input id="patientHeight" type="number" min="0" max="300" name="">
                         <p class="indications">Taille (cm)</p>
                     </div>
                 </div>
@@ -62,17 +62,17 @@
                 <h3>La consultation</h3>
                 <div class="information">
                     <div class="column">
-                        <p>02/05/2023</p>
+                        <p id="prescriptionDate">02/05/2023</p>
                         <p class="indications">Date de l'ordonnance (JJ/MM/AAAA)</p>
                     </div>
 
                     <div class="column">
-                        <p>1, rue de la République</p>
+                        <p id="addressPrescription">1, rue de la République</p>
                         <p class="indications">Adresse du cabinet</p>
                     </div>
 
                     <div class="column">
-                        <p>0454234454</p>
+                        <p id="consultationPhoneNumber">0454234454</p>
                         <p class="indications">Tel. cabinet</p>
                     </div>
                 </div>
@@ -81,7 +81,7 @@
                 <h3>La prescription</h3>
 
                 <div class="column" >
-                <input type="text" name="" placeholder="90">
+                <input id="validityPrescriptionDays" type="text" name="" placeholder="90">
                 <p class="indications">La validité de l'ordonnance (jours)</p>
                 </div>
 
@@ -137,8 +137,7 @@
                     <img src="../assets/plus.png" alt="button add prescription" />
                 </button>
             </div>
-                <button class="ordonnance"
-                type="button">Générer l'ordonnance</button>
+            <button id="generatePdfButton" class="ordonnance">Générer l'ordonnance</button>
         </div>
     </body>
 </template>
@@ -151,27 +150,77 @@
         props: {}
     }
 
-    document.addEventListener("DOMContentLoaded", function() {
-
+    document.addEventListener("DOMContentLoaded", function() 
+    {
         //Ajout médicaments liste déroulante
         const data = require('../assets/medicine.json');
-        // La liste déroulante HTML
         const medicineSelect = document.getElementById("medicineAct");
-
         let result = [];
-
         for(let i=0; i<data.length; i++) {
             let concat = data[i].CODE_UCD.toString() + " " + data[i].NOM_COURT;
             result.push(concat);
-
             //Ajout liste déroulante
             let option = document.createElement("option");
             option.value = data[i].CODE_UCD;
             option.text = concat;
             medicineSelect.appendChild(option);
-
         }
+
+        //Listener generate pdf button
+        var button = document.getElementById("generatePdfButton");
+        button.addEventListener("click", function() {
+
+            console.log("Avant");
+            const doctorName = document.getElementById("doctorName");
+            const doctorJob = document.getElementById("doctorJob");
+            const RPPSNum = document.getElementById("RPPSNum");
+            const patientName = document.getElementById("patientName");
+            const patientAge = document.getElementById("patientAge");
+            const patientWeight = document.getElementById("patientWeight");
+            const patientHeight = document.getElementById("patientHeight");
+            const consultationDate = document.getElementById("consultationDate");
+            const consultationAddress = document.getElementById("consultationAddress");
+            const consultationPhoneNumber = document.getElementById("consultationPhoneNumber");
+            console.log("Après");
+                        
+            fetch('http://localhost:9000/generate-pdf')
+                .then(response => {
+                    if (!response.ok) {
+                    throw new Error('Erreur lors de la récupération du PDF');
+                    }
+                    return response.blob();
+                })
+
+            //window.open('http://localhost:9000/generate-pdf','_blank');
+        });
     });
+
+    function generatePdf()
+    {
+        
+        window.open('http://localhost:9000/generate-pdf','_blank')
+        /*console.log("Call backend");
+        //Call backend
+
+        fetch('http://localhost:9000/generate-pdf')
+        .then(response => {
+            if (!response.ok) {
+            throw new Error('Erreur lors de la récupération du PDF');
+            }
+            return response.blob();
+        })
+        .then(pdfBlob => {
+            // Faire quelque chose avec le blob PDF, comme l'afficher dans un élément <iframe>
+            const pdfUrl = URL.createObjectURL(pdfBlob);
+            const iframe = document.createElement('iframe');
+            iframe.src = pdfUrl;
+            document.body.appendChild(iframe);
+            console.log(pdfBlob);
+        })
+        .catch(error => {
+            console.error(error);
+        });*/
+    }
 
 
 </script>
