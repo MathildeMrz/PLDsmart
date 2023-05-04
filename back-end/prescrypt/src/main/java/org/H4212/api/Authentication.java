@@ -42,11 +42,6 @@ public class Authentication {
             e.printStackTrace();
         }
 
-        /*JsonBuilderFactory factory = Json.createBuilderFactory(null);
-        JsonObject value = factory.createObjectBuilder()
-                .add("firstName", "John")
-                .add("lastName", "Smith").build();*/
-
         return Response.ok(authenticateUserResponse.toJson()).build();
 
     }

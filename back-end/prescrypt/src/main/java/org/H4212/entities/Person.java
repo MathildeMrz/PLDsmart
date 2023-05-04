@@ -38,6 +38,12 @@ public class Person {
         this.password = password;
     }
 
+    public Person(String lastName, String firstName)
+    {
+        this.lastName = lastName;
+        this.firstName = firstName;
+    }
+
     public Person() {
 
     }
