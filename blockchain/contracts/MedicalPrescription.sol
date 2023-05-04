@@ -19,13 +19,29 @@ contract MedicalPrescription is AccessControl {
     }
 
     mapping(bytes32 => Prescription) private prescriptions;
+    mapping(address => bytes32[]) private doctorPrescriptions;
 
-    event PrescriptionAdded(address indexed doctor, bytes32 indexed prescriptionHash);
-    event PrescriptionRevoked(address indexed doctor, bytes32 indexed prescriptionHash);
-    event PrescriptionDelivered(address indexed pharmacist, bytes32 indexed prescriptionHash);
+    event PrescriptionAdded(address indexed doctor, bytes32 indexed prescriptionHash, uint256 expirationDate);
+    event PrescriptionRevoked(address indexed doctor, bytes32 indexed prescriptionHash, string reason);
+    event PrescriptionDelivered(address indexed pharmacist, bytes32 indexed prescriptionHash, uint256 deliveredAt);
+    event PrescriptionExpired(bytes32 indexed prescriptionHash);
 
     constructor() {
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
+    }
+
+    // Modifier to check prescription expiration
+    modifier checkPrescription(bytes32 prescriptionHash) {
+        Prescription storage p = prescriptions[prescriptionHash];
+        require(p.doctor != address(0), "Prescription does not exist");
+        if (p.status == PrescriptionStatus.Valid && block.timestamp > p.expirationDate) {
+            p.status = PrescriptionStatus.Expired;
+            emit PrescriptionExpired(prescriptionHash);
+        }
+        require(p.status != PrescriptionStatus.Expired, "Prescription has expired");
+        require(p.status != PrescriptionStatus.Delivered, "Prescription has already been delivered");
+        require(p.status != PrescriptionStatus.Revoked, "Prescription has been revoked");
+        _;
     }
 
     // Role management functions
@@ -47,35 +63,46 @@ contract MedicalPrescription is AccessControl {
 
     // Prescription management functions
     function addPrescription(bytes32 prescriptionHash, uint256 daysValid) public onlyRole(DOCTOR_ROLE) {
-        require(prescriptions[prescriptionHash].doctor == address(0), "Prescription with this hash already exist");
+        require(prescriptions[prescriptionHash].doctor == address(0), "Prescription with this hash already exists");
         prescriptions[prescriptionHash] = Prescription({
             doctor: msg.sender,
             status: PrescriptionStatus.Valid,
             expirationDate: block.timestamp.add(daysValid.mul(1 days))
         });
-        emit PrescriptionAdded(msg.sender, prescriptionHash);
+        doctorPrescriptions[msg.sender].push(prescriptionHash);
+        emit PrescriptionAdded(msg.sender, prescriptionHash, prescriptions[prescriptionHash].expirationDate);
     }
 
     function verifyPrescription(bytes32 prescriptionHash) public view onlyRole(PHARMACIST_ROLE) returns (bool) {
         Prescription memory p = prescriptions[prescriptionHash];
-        return p.status == PrescriptionStatus.Valid && (block.timestamp <= p.expirationDate);
+        if (p.status == PrescriptionStatus.Valid && block.timestamp > p.expirationDate) {
+            return false;
+        }
+        return p.status == PrescriptionStatus.Valid && block.timestamp <= p.expirationDate;
     }
 
-    function deliverPrescription(bytes32 prescriptionHash) public onlyRole(PHARMACIST_ROLE) {
+    function deliverPrescription(bytes32 prescriptionHash) public onlyRole(PHARMACIST_ROLE) checkPrescription(prescriptionHash) {
         Prescription storage p = prescriptions[prescriptionHash];
-        require(p.doctor != address(0), "Prescription does not exist");
-        require(p.status == PrescriptionStatus.Valid, "Prescription is not valid");
-        require(block.timestamp <= p.expirationDate, "Prescription has expired");
         p.status = PrescriptionStatus.Delivered;
-        emit PrescriptionDelivered(msg.sender, prescriptionHash);
+        emit PrescriptionDelivered(msg.sender, prescriptionHash, block.timestamp);
     }
 
-    function revokePrescription(bytes32 prescriptionHash) public onlyRole(DOCTOR_ROLE) {
+    function revokePrescription(bytes32 prescriptionHash, string memory reason) public onlyRole(DOCTOR_ROLE) checkPrescription(prescriptionHash) {
         Prescription storage p = prescriptions[prescriptionHash];
-        require(p.doctor != address(0), "Prescription does not exist");
         require(p.doctor == msg.sender, "Only the doctor who created the prescription can revoke it");
-        require(p.status == PrescriptionStatus.Valid, "Prescription is not valid or has already been delivered");
         p.status = PrescriptionStatus.Revoked;
-        emit PrescriptionRevoked(msg.sender, prescriptionHash);
+        emit PrescriptionRevoked(msg.sender, prescriptionHash, reason);
+    }
+
+    function getDoctorPrescriptions(address doctor) public view onlyRole(DOCTOR_ROLE) returns (bytes32[] memory) {
+        require(doctor == msg.sender, "Only a doctor can access their own prescription list");
+        return doctorPrescriptions[doctor];
+    }
+
+    function getPrescriptionDetails(bytes32 prescriptionHash) public view returns (address, PrescriptionStatus, uint256) {
+        require(hasRole(DOCTOR_ROLE, msg.sender) || hasRole(PHARMACIST_ROLE, msg.sender), "Caller must have Doctor or Pharmacist role");
+        Prescription storage prescription = prescriptions[prescriptionHash];
+        require(prescription.doctor != address(0), "Prescription does not exist");
+        return (prescription.doctor, prescription.status, prescription.expirationDate);
     }
 }
