@@ -85,7 +85,7 @@
                 <p class="indications">La validité de l'ordonnance (jours)</p>
                 </div>
 
-                <table class="my-table">
+                <table id="tablePrescription" class="my-table">
                 <thead>
                     <tr>
                         <th>Médicament / acte médical *</th>
@@ -100,8 +100,9 @@
                 <tbody>
                     <tr>
                         <td>
-                            <input type="text" id="pays" list="medicineAct">
-                            <datalist id="medicineAct">
+                            <input type="text" id="medicineAct" list="medicineActDatalist"/>
+                            <datalist id="medicineActDatalist">
+                                
                             </datalist>
 
                         </td>
@@ -154,14 +155,14 @@
     {
         //Ajout médicaments liste déroulante
         const data = require('../assets/medicine.json');
-        const medicineSelect = document.getElementById("medicineAct");
+        const medicineSelect = document.getElementById("medicineActDatalist");
         let result = [];
         for(let i=0; i<data.length; i++) {
             let concat = data[i].CODE_UCD.toString() + " " + data[i].NOM_COURT;
             result.push(concat);
             //Ajout liste déroulante
             let option = document.createElement("option");
-            option.value = data[i].CODE_UCD;
+            option.value = data[i].NOM_COURT;
             option.text = concat;
             medicineSelect.appendChild(option);
         }
@@ -171,57 +172,80 @@
         button.addEventListener("click", function() {
 
             console.log("Avant");
-            const doctorName = document.getElementById("doctorName");
-            const doctorJob = document.getElementById("doctorJob");
-            const RPPSNum = document.getElementById("RPPSNum");
-            const patientName = document.getElementById("patientName");
-            const patientAge = document.getElementById("patientAge");
-            const patientWeight = document.getElementById("patientWeight");
-            const patientHeight = document.getElementById("patientHeight");
-            const consultationDate = document.getElementById("consultationDate");
-            const consultationAddress = document.getElementById("consultationAddress");
-            const consultationPhoneNumber = document.getElementById("consultationPhoneNumber");
-            console.log("Après");
-                        
-            fetch('http://localhost:9000/generate-pdf')
-                .then(response => {
-                    if (!response.ok) {
-                    throw new Error('Erreur lors de la récupération du PDF');
-                    }
-                    return response.blob();
-                })
+            const doctorName = document.getElementById("doctorName").textContent;
+            const doctorJob = document.getElementById("doctorJob").textContent;
+            const RPPSNum = document.getElementById("RPPSNum").textContent;
+            const patientName = document.getElementById("patientName").value;
+            const patientFirstName = document.getElementById("patientFirstName").value;
+            const patientAge = document.getElementById("patientAge").value;
+            const patientWeight = document.getElementById("patientWeight").value;
+            const patientHeight = document.getElementById("patientHeight").value;
+            const prescriptionDate = document.getElementById("prescriptionDate").textContent;
+            const addressPrescription = document.getElementById("addressPrescription").textContent;
+            const consultationPhoneNumber = document.getElementById("consultationPhoneNumber").textContent;
 
-            //window.open('http://localhost:9000/generate-pdf','_blank');
-        });
-    });
+            const table = document.querySelector("table");
+            const rows = table.querySelectorAll("tbody tr");
 
-    function generatePdf()
-    {
-        
-        window.open('http://localhost:9000/generate-pdf','_blank')
-        /*console.log("Call backend");
-        //Call backend
+            const rowsMedicamentsActs = [];
 
-        fetch('http://localhost:9000/generate-pdf')
-        .then(response => {
+            rows.forEach(row => {
+                const medicineAct = row.querySelector("#medicineAct").value;
+                const posology = row.querySelector("#posology").value;
+                const treatmentPeriod = row.querySelector("#treatmentPeriod").value;
+                const renewal = row.querySelector("#renewal").value;
+                const refundable = row.querySelector("#refundable").checked;
+                const indication = row.querySelector("#indication").value;
+
+                const rowMedicamentAct = {
+                    "medicineAct": medicineAct,
+                    "posology": posology,
+                    "treatmentPeriod": treatmentPeriod,
+                    "renewal": renewal,
+                    "refundable": refundable,
+                    "indication": indication
+                };              
+
+                rowsMedicamentsActs.push(rowMedicamentAct);
+            });
+
+            let jsonPdf = {
+                "doctorName": doctorName,
+                "doctorJob": doctorJob,
+                "RPPSNum": RPPSNum,
+                "patientName": patientName,
+                "patientFirstName": patientFirstName,
+                "patientAge": patientAge,
+                "patientWeight": patientWeight,
+                "patientHeight": patientHeight,
+                "prescriptionDate": prescriptionDate,
+                "addressPrescription": addressPrescription,
+                "consultationPhoneNumber": consultationPhoneNumber,
+                "prescriptions": rowsMedicamentsActs 
+            };
+            
+            let queryString = 'jsonPdf=' + encodeURIComponent(JSON.stringify(jsonPdf));
+
+            let url = 'http://localhost:9000/generate-pdf?' + queryString;
+
+            console.log(url);
+
+            fetch(url, {
+                method: 'GET'
+            })
+            .then(response => {
             if (!response.ok) {
-            throw new Error('Erreur lors de la récupération du PDF');
+                throw new Error('Erreur lors de la récupération du PDF');
             }
             return response.blob();
-        })
-        .then(pdfBlob => {
-            // Faire quelque chose avec le blob PDF, comme l'afficher dans un élément <iframe>
-            const pdfUrl = URL.createObjectURL(pdfBlob);
-            const iframe = document.createElement('iframe');
-            iframe.src = pdfUrl;
-            document.body.appendChild(iframe);
-            console.log(pdfBlob);
-        })
-        .catch(error => {
-            console.error(error);
-        });*/
-    }
-
+            })
+            .then(blob => {
+                const url = URL.createObjectURL(blob);
+                window.open(url);
+            })
+            .catch(error => console.error(error));
+        });
+    });
 
 </script>
 
