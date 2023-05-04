@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ServiceUser {
 
-    @Inject Session session;
+    /*@Inject Session session;
     public Person authenticate(String username, String password)
     {
         String stringQuery =
@@ -21,5 +21,5 @@ public class ServiceUser {
         List resultSet = query.getResultList();
         
 
-    }
+    }*/
 }

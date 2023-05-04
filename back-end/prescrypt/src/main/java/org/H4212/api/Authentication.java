@@ -33,8 +33,8 @@ public class Authentication {
 
         try
         {
-            person = serviceUser.authenticate(authenticateUserRequest.getUsername(), authenticateUserRequest.getPassword());
-            authenticateUserResponse.setUser(person);
+            /*person = serviceUser.authenticate(authenticateUserRequest.getUsername(), authenticateUserRequest.getPassword());
+            authenticateUserResponse.setUser(person);*/
         }
         catch(Exception e)
         {
