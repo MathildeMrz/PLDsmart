@@ -13,9 +13,9 @@ import java.awt.image.BufferedImage;
 public class ServiceOCR {
     public String generateJSON(InputStream imageStream)
     {
-        File image = new File("C:/Users/LENOVO/Desktop/pld_smart/PLDsmart/back-end/prescrypt/src/main/java/org/H4212/services/a.png");
+        File image = new File("./back-end/prescrypt/src/main/java/org/H4212/services/a.png");
         Tesseract tesseract = new Tesseract();
-        tesseract.setDatapath("C:/Users/LENOVO/Desktop/pld_smart/PLDsmart/back-end/prescrypt/src/main/resources/tessdata");
+        tesseract.setDatapath("./back-end/prescrypt/src/main/resources/tessdata");
         System.out.println("chemin courant de Fatma la diva: "+System.getProperty("user.dir"));
         //tesseract.setLanguage("eng");
         tesseract.setPageSegMode(1);
