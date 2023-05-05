@@ -2,24 +2,27 @@
     <NavigationBar/>
 
     <div id="doctorPrescription">
-
+        <div id="import-prescription">
+            <img src="../assets/importPrescription.png" alt="">
+            <div id="import-prescription-text"> Importer une ordonnance</div>
+        </div>
         <div id="doctor">
             <div>
                 <h3>Le médecin</h3>
             </div>
             <div class="information">
                 <div class="column">
-                    <p id="doctorName">Docteur DUBOIS Charline</p>
+                    <input id="doctorName" type="text" min="0" max="150" name=""/>
                     <p class="indications">NOM Prénom</p>
                 </div>
 
                 <div class="column">
-                    <p id="doctorJob">Médecin généraliste</p>
+                    <input id="doctorJob" type="text" min="0" max="150" name=""/>
                     <p class="indications">Qualification</p>
                 </div>
 
                 <div class="column">
-                    <p id="RPPSNum">10100169461</p>
+                    <input id="RPPSNum" type="number" min="0" max="150" name=""/>
                     <p class="indications">Numéro RPPS</p>
                 </div>
             </div>
@@ -59,17 +62,17 @@
             <h3>La consultation</h3>
             <div class="information">
                 <div class="column">
-                    <p id="prescriptionDate">02/05/2023</p>
+                    <input id="prescriptionDate" type="date" min="0" max="150" name=""/>
                     <p class="indications">Date de l'ordonnance (JJ/MM/AAAA)</p>
                 </div>
 
                 <div class="column">
-                    <p id="addressPrescription">1, rue de la République</p>
+                    <input id="addressPrescription" type="text" min="0" max="150" name=""/>
                     <p class="indications">Adresse du cabinet</p>
                 </div>
 
                 <div class="column">
-                    <p id="consultationPhoneNumber">0454234454</p>
+                    <input id="consultationPhoneNumber" type="date" min="0" max="150" name=""/>
                     <p class="indications">Tel. cabinet</p>
                 </div>
             </div>
@@ -102,11 +105,7 @@
                 <img src="../assets/plus.png" alt="button add prescription" />
             </button>
         </div>
-        <button id="generatePdfButton" class="ordonnance">Générer l'ordonnance</button>
-        <form method="post" enctype="multipart/form-data">
-            <input type="file" id="myFile" name="filename">
-            <input id="submitImageToOCR" type="submit">
-        </form>
+        <button id="verifyPrescButton" class="ordonnance">Générer l'ordonnance</button>
     </div>
 </template>
 
@@ -116,7 +115,7 @@
     import NavigationBar from './NavigationBar.vue';
 
     export default {
-        name: 'DoctorPrescriptionComponent',
+        name: 'PharmacistPrescription',
         components: {
             NavigationBar,
             Medicament
@@ -133,12 +132,8 @@
                 },
             addMedicine() {
                 this.medicines.push({
-
                 });
                 },
-            disconnect() {
-                location.href = '/';
-            }
         },
         props: {},
     }
@@ -203,7 +198,7 @@
             };
             
             let queryString = 'jsonPdf=' + encodeURIComponent(JSON.stringify(jsonPdf));
-
+            // TODO: modify this to match the button
             let url = 'http://localhost:9000/generate-pdf?' + queryString;
 
             fetch(url, {
@@ -222,34 +217,13 @@
             .catch(error => console.error(error));
         });
 
-        button = document.getElementById("submitImageToOCR");
-        button.addEventListener("click", function() 
-        {
-            const input = document.getElementById("myFile");
-            const file = input.files[0];
-            const formData = new FormData();
-            formData.append('file', file);
-            let url = 'http://localhost:9000/OCR-api';
-            fetch(url, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => {
-                console.log(response);
-            })
-            .catch(error => {
-                console.error(error);
-            });
-
-           
-        
-        });
     });
 
 </script>
 
 
 <style>
+  
     td:nth-child(5){
         width : 10%;
     }
