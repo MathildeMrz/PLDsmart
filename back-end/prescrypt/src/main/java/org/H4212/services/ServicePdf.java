@@ -1,7 +1,12 @@
 package org.H4212.services;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -12,15 +17,13 @@ import com.itextpdf.text.ListItem;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 
-
 public class ServicePdf {
 
-    private static String FILE = "newPdf.pdf";
     private static Font prescriptionFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.NORMAL, BaseColor.BLACK);
     private static Font prescriptionBoldFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD, BaseColor.BLACK);
     private static Chunk bullet = new Chunk("\u2022", prescriptionFont);
 
-    public byte[] generatePdf(String doctorName) {
+    public byte[] generatePdf(String jsonPdf) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         
         try {
@@ -28,7 +31,7 @@ public class ServicePdf {
             PdfWriter.getInstance(document, outputStream);
             document.open();
             addMetaData(document);
-            addContent(document, doctorName);
+            addContent(document, jsonPdf);
             document.close();            
             
         } catch (Exception e) {
@@ -42,46 +45,104 @@ public class ServicePdf {
         document.addCreator("Prescrypt");
     }
 
-    private static void addContent(Document document, String doctorName) throws DocumentException {
+    private static void addContent(Document document, String jsonPdf) throws DocumentException, ParseException {
 
-        //Doctor
-        String doctor = doctorName;
-        Paragraph doctorPart = new Paragraph(doctor, prescriptionBoldFont);
+        // Convertir la chaîne JSON en objet JsonObject
+        JSONParser parser = new JSONParser(); 
+        JSONObject json = (JSONObject) parser.parse(jsonPdf);
+
+
+        // Récupérer la valeur de l'attribut "doctorName"
+        String doctorName = json.get("doctorName").toString();
+        String doctorJob = json.get("doctorJob").toString();
+        String RPPSNum = json.get("RPPSNum").toString();
+        String patientName = json.get("patientName").toString();
+        String patientFirstName = json.get("patientFirstName").toString();
+        String patientAge = json.get("patientAge").toString();
+        String patientWeight = json.get("patientWeight").toString();
+        String patientHeight = json.get("patientHeight").toString();
+        String consultationDate = json.get("prescriptionDate").toString();
+        String consultationAddress = json.get("addressPrescription").toString();
+        String consultationPhoneNumber = json.get("consultationPhoneNumber").toString();
+        String rowsMedicamentsActs = json.get("prescriptions").toString();
+
+        // Afficher la valeur de l'attribut "doctorName"
+        
+        Paragraph doctorPart = new Paragraph(doctorName+ "\n"+doctorJob+"\nRPPS : "+RPPSNum, prescriptionBoldFont);
         addEmptyLine(doctorPart, 2);
 
         //Office
-        String office = "1, rue de la République \n 13 000 Marseille \n Tél cabinet : 04 01 94 58 98";
-        Paragraph officePart = new Paragraph(office, prescriptionFont);
+        Paragraph officePart = new Paragraph(consultationAddress+"\nTel : "+consultationPhoneNumber, prescriptionFont);
         addEmptyLine(officePart, 2);
 
         //Consultation
-        String consultation = "Marseille, le 04 mai 2023";
-        Paragraph consultationPart = new Paragraph(consultation, prescriptionFont);
+        Paragraph consultationPart = new Paragraph("Fait le : "+consultationDate, prescriptionFont);
         addEmptyLine(consultationPart, 2);
 
         //Patient
-        String patient = "Madame DUPOND Nathalie \n 57 ans, 64kg";
-        Paragraph patientPart = new Paragraph(patient, prescriptionBoldFont);
-        addEmptyLine(patientPart, 2);
+        //Check if age, weight, height empty
+        String patientString = patientName+" "+patientFirstName+"\n";
+        if(! patientAge.isEmpty())
+        {
+            patientString += patientAge+" ans ";
+        }
+
+        if(! patientHeight.isEmpty())
+        {
+            patientString += patientHeight+" cm ";
+        }
+
+        if(! patientWeight.isEmpty())
+        {
+            patientString += patientWeight+" kg ";
+        }
+
+        Paragraph patientPart = new Paragraph(patientString, prescriptionBoldFont);
+        
 
         //Medicine
         List list = new List(List.UNORDERED);
-		list.setListSymbol(bullet);
-        String medicine1 = "Médicament A, 1 gélule matin, midi et soir pendant 4 jours - Non substituable \n";
-        String medicine2 = "Médicament B, 1 gélule matin, midi et soir pendant 4 jours - Non substituable";
-        list.add(new ListItem(medicine1));
-        list.add(new ListItem(medicine2));
-                
-        //Note
-        String note = "Eviter les aliments salés, ne pas ajouter de sel dans la préparation des plats";
-        Paragraph notePart = new Paragraph(note, prescriptionFont);
+        list.setListSymbol(bullet);
 
+        
+        JSONArray jsonArray = (JSONArray) parser.parse(rowsMedicamentsActs);
+
+        for (Object element : jsonArray) 
+        {
+            String medicineAct = ((JSONObject)element).get("medicineAct").toString();
+            String posology = ((JSONObject)element).get("posology").toString();
+            String treatmentPeriod = ((JSONObject)element).get("treatmentPeriod").toString();
+            String renewal = ((JSONObject)element).get("renewal").toString();
+            String refundable = ((JSONObject)element).get("refundable").toString();
+            String indication = ((JSONObject)element).get("indication").toString();            
+            String row = medicineAct+"\n" + posology +" pour une période de "+ treatmentPeriod;
+            int renewalInt = Integer.parseInt(renewal);
+            boolean refundableBool = Boolean.parseBoolean(refundable);
+            if(renewalInt == 0){
+                row +=" non renouvelable, ";
+            }
+            else{
+                row = row +" renouvelable "+renewal+" fois,";
+
+            }
+            if(refundableBool){
+                row += "non remboursable.";
+            }
+            else {
+                row += "remboursable.";
+            }
+            row+="\nIndication: "+indication;
+
+            ListItem item = new ListItem(row, prescriptionBoldFont);
+            list.add(item);
+        }
+                
         document.add(doctorPart);
         document.add(officePart);
         document.add(consultationPart);
         document.add(patientPart);
         document.add(list);
-        document.add(notePart);
+
     }
 
     private static void addEmptyLine(Paragraph paragraph, int number) {
