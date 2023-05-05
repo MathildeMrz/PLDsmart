@@ -1,6 +1,7 @@
 <template>
     <nav  class="navigation-bar">
         <img class="logo" src="../assets/entete.png">
+        <button id="disconnection-button" v-on:click="disconnect()">Se Déconnecter</button>
     </nav>
 
     <div id="doctorPrescription">
@@ -96,11 +97,11 @@
                     <th>Supprimer</th>
                 </tr>
             </thead>
-            <tbody>
-                <Medicament/>
+            <tbody id="drugList">
+                <Medicament v-for="(medicine, index) in medicines" :key="index" :medicine="medicine"/>
             </tbody>
             </table>
-            <button class="buttonTable" type="submit">
+            <button class="buttonTable" type="submit" @click="addMedicine">
                 <img src="../assets/plus.png" alt="button add prescription" />
             </button>
         </div>
@@ -117,25 +118,25 @@
         components: {
             Medicament
         },
-        props: {}
+        data() {
+        return {
+            medicines: []
+            };
+        },
+        methods: {
+        addMedicine() {
+            this.medicines.push({
+            });
+            },
+        disconnect() {
+            location.href = '/';
+        }
+        },
+        props: {},
     }
-
+    
     document.addEventListener("DOMContentLoaded", function() 
     {
-        //Ajout médicaments liste déroulante
-        const data = require('../assets/medicine.json');
-        const medicineSelect = document.getElementById("medicineActDatalist");
-        let result = [];
-        for(let i=0; i<data.length; i++) {
-            let concat = data[i].CODE_UCD.toString() + " " + data[i].NOM_COURT;
-            result.push(concat);
-            //Ajout liste déroulante
-            let option = document.createElement("option");
-            option.value = data[i].NOM_COURT;
-            option.text = concat;
-            medicineSelect.appendChild(option);
-        }
-
         //Listener generate pdf button
         var button = document.getElementById("generatePdfButton");
         button.addEventListener("click", function() {
@@ -221,7 +222,23 @@
         width: 100%;  /* i'm assuming full width */
         height: 80px; /* change it to desired width */
         border-bottom: 1px solid black;
-        
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    #disconnection-button {
+        position: relative;
+        vertical-align: middle;
+        padding: 15px 25px 15px 25px;
+        margin-bottom: 10px;
+        margin-right: 20px;
+        background: rgba(24, 23, 186, 0.46);
+        border: none;
+        color:white;
+        font-variant: small-caps;
+        font-size: 20px;
+        cursor: pointer;
     }
 
     td:nth-child(5){
@@ -233,7 +250,6 @@
         vertical-align: top;
         width: 200px; /*4vw*/
         margin-left: 5vh;
-        margin-top: 10px;
         margin-bottom: 10px;
     }
 
