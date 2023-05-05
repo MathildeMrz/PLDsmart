@@ -216,127 +216,142 @@
 </script>
 
 
-<style scoped>
-.navigation-bar {
-    width: 100%;  /* i'm assuming full width */
-    height: 80px; /* change it to desired width */
-    border-bottom: 1px solid black;
+<style>
+    .navigation-bar {
+        width: 100%;  /* i'm assuming full width */
+        height: 80px; /* change it to desired width */
+        border-bottom: 1px solid black;
+        
+    }
+
+    td:nth-child(5){
+        width : 10%;
+    }
+
+    .logo {
+        display: inline-block;
+        vertical-align: top;
+        width: 200px; /*4vw*/
+        margin-left: 5vh;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    header img {
+    float: left;
+    width:4vw;
+    }
+
+    input
+    {
+        border: none;
+        border-bottom: 2px solid #1817BA;
+        width:20vh;
+    }
+
+    textarea
+    {
+        border: none;
+        border-bottom: 2px solid #1817BA;
+        width:20vh;
+    }
+
+    select
+    {
+        border: none;
+        border-bottom: 2px solid #1817BA;
+        width:20vh;
+    }
+
+    #doctorPrescription
+    {
+        margin-left:10vh;
+        margin-top: 5vw;
+        
+    }
+    .indications
+    {
+        color : #A3A3A3;
+        font-size: 1.5vh;
+    }
+
+    #doctor #patient
+    {
+        display:flex;
+        flex-direction: column;
+    }
+
+    .information
+    {
+        display:flex;
+        justify-content: space-around;
+        margin-left:5vh;
+    }
+    .column
+    {
+        display:flex;
+        flex-direction: column;
+        width:33%;
+    }
+
+    .column p
+    {
+        margin-top:0;
+        margin-bottom: 0;
+    }
+    .my-table {
+    border-collapse: collapse; 
+    font-size: 16px; 
+    text-align: center; 
+    width : 95%;
+    margin-top: 3vh;
     
-}
+    }
 
-td:nth-child(5){
-    width : 10%;
-}
+    .my-table th, .my-table td {
+    border: 1px solid; 
+    padding: 8px;
+    }
 
-.logo {
-    display: inline-block;
-    vertical-align: top;
-    width: 200px; /*4vw*/
-    margin-left: 5vh;
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
-header img {
-  float: left;
-  width:4vw;
-}
-
-input
-{
-    border: none;
-    border-bottom: 2px solid #1817BA;
-    width:20vh;
-}
-
-textarea
-{
-    border: none;
-    border-bottom: 2px solid #1817BA;
-    width:20vh;
-}
-
-select
-{
-    border: none;
-    border-bottom: 2px solid #1817BA;
-    width:20vh;
-}
-
-#doctorPrescription
-{
-    margin-left:10vh;
-    margin-top: 5vw;
-    
-}
-.indications
-{
-    color : #A3A3A3;
-    font-size: 1.5vh;
-}
-
-#doctor #patient
-{
-    display:flex;
-    flex-direction: column;
-}
-
-.information
-{
-    display:flex;
-    justify-content: space-around;
-    margin-left:5vh;
-}
-.column
-{
-    display:flex;
-    flex-direction: column;
-    width:33%;
-}
-
-.column p
-{
-    margin-top:0;
-    margin-bottom: 0;
-}
-.my-table {
-  border-collapse: collapse; 
-  font-size: 16px; 
-  text-align: center; 
-  width : 95%;
-  margin-top: 3vh;
-  
-}
-
-.my-table th, .my-table td {
-  border: 1px solid; 
-  padding: 8px;
-}
-
-.my-table td {
-  background-color: rgba(24,23,186,0.23); 
-  color:white;
-
-}
-
-.my-table th {
-  background-color: rgba(24,23,186,0.63); 
-  color:white;
-
-}
-
-.ordonnance {
-    display: block;
-    margin: auto;
-    margin-top: 5vh;
-    padding: 15px 25px 15px 25px;
-    background: rgba(24, 23, 186, 0.46);
-    border: none;
+    .my-table td {
+    background-color: rgba(24,23,186,0.23); 
     color:white;
-    font-variant: small-caps;
-    font-size: 20px;
-    cursor: pointer;
 
-}
+    }
+
+    .my-table th {
+    background-color: rgba(24,23,186,0.63); 
+    color:white;
+
+    }
+
+    .ordonnance {
+        display: block;
+        margin: auto;
+        margin-top: 5vh;
+        padding: 15px 25px 15px 25px;
+        background: rgba(24, 23, 186, 0.46);
+        border: none;
+        color:white;
+        font-variant: small-caps;
+        font-size: 20px;
+        cursor: pointer;
+
+    }
+
+    input {
+        border: none;
+        border-bottom: 2px solid #1817BA;
+        width:20vh;
+    }
+
+    .buttonTable {
+        border:none;
+        background-color:transparent;
+    }
+
+    .buttonTable img {
+        width:2vw;
+    }
 
 </style>
