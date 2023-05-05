@@ -29,4 +29,19 @@ public class Inscription {
         return Response.ok().build();
     }
 
+    @POST
+    @Consumes("application/json")
+    @Produces("application/json")
+    @Path("/register/pharmacist")
+    public Response registerPharmacist(JsonObject jsonObject) throws SQLException {
+
+        ServiceUser serviceUser = new ServiceUser();
+
+        RegisterPharmacistRequest registerUserRequest = new RegisterPharmacistRequest(jsonObject);
+
+        serviceUser.registerPharmacist(registerUserRequest);
+
+        return Response.ok().build();
+    }
+
 }
