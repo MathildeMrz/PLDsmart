@@ -41,6 +41,22 @@
     }
 </script>
 
-<style>
+<style scoped>
+    input
+    {
+        border: none;
+        border-bottom: 2px solid #1817BA;
+        width:20vh;
+    }
+    
+    .buttonTable
+    {
+        border:none;
+        background-color:transparent;
+    }
 
+    .buttonTable img
+    {
+        width:2vw;
+    }
 </style>

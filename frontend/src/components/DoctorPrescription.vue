@@ -216,7 +216,7 @@
 </script>
 
 
-<style>
+<style scoped>
 .navigation-bar {
     width: 100%;  /* i'm assuming full width */
     height: 80px; /* change it to desired width */
@@ -325,16 +325,6 @@ select
 
 }
 
-.buttonTable
-{
-    border:none;
-    background-color:transparent;
-}
-
-.buttonTable img
-{
-    width:2vw;
-}
 .ordonnance {
     display: block;
     margin: auto;
