@@ -1,32 +1,46 @@
 package org.H4212.services;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
 import net.sourceforge.tess4j.Tesseract;
+import net.sourceforge.tess4j.TesseractException;
+import java.awt.image.BufferedImage;
 
 public class ServiceOCR {
     public String generateJSON(InputStream imageStream)
     {
+        File image = new File("C:/Users/LENOVO/Desktop/pld_smart/PLDsmart/back-end/prescrypt/src/main/java/org/H4212/services/a.png");
+        Tesseract tesseract = new Tesseract();
+        tesseract.setDatapath("C:/Users/LENOVO/Desktop/pld_smart/PLDsmart/back-end/prescrypt/src/main/resources/tessdata");
+        System.out.println("chemin courant de Fatma la diva: "+System.getProperty("user.dir"));
+        //tesseract.setLanguage("eng");
+        tesseract.setPageSegMode(1);
+        tesseract.setOcrEngineMode(1);
+
+        // Chargement de l'image à l'aide de Java Image IO
+        ImageIO.setUseCache(false);
+        BufferedImage bufferedImage;
+        String result = "initialized";
+
         try {
-            // Charger l'image
-            Tesseract tesseract = new Tesseract();
-            File imageFile = File.createTempFile("temp", null);
-            ImageIO.write(ImageIO.read(imageStream), "png", imageFile);
+            bufferedImage = ImageIO.read(image);
+            result = tesseract.doOCR(bufferedImage);
 
-            // Extraire du texte à partir de l'image
-            String result = tesseract.doOCR(imageFile);      
-            System.out.println("Très important : "+result);  
-
-            // Supprimer le fichier temporaire
-            imageFile.delete();
-
-            return result;
-        } catch (Exception e) {
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
-            return "";
         }
+        catch (TesseractException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        System.out.println("resulttttttttt "+result);
+    
+        return "";
     }
 }

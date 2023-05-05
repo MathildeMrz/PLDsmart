@@ -228,27 +228,21 @@
         {
             const input = document.getElementById("myFile");
             const file = input.files[0];
+            const formData = new FormData();
+            formData.append('file', file);
+            let url = 'http://localhost:9000/OCR-api';
+            fetch(url, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                console.log(response);
+            })
+            .catch(error => {
+                console.error(error);
+            });
 
-            const reader = new FileReader();
-            reader.readAsArrayBuffer(file);
-
-            reader.onload = function() {
-                const arrayBuffer = reader.result;
-                const byteArray = new Uint8Array(arrayBuffer);
-                const dataBlob = new Blob([byteArray]);
-
-                const xhr = new XMLHttpRequest();
-                xhr.open("POST", "/OCR-api");
-                xhr.setRequestHeader("Content-Type", "application/octet-stream");
-                xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    const response = xhr.responseText;
-                    console.log(response);
-                }
-                };
-                console.log("Attention : "+dataBlob);
-                xhr.send(dataBlob);
-            };
+           
         
         });
     });
