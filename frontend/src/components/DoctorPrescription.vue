@@ -260,7 +260,7 @@
     .navigation-bar {
         width: 100%;  /* i'm assuming full width */
         height: 80px; /* change it to desired width */
-        border-bottom: 1px solid black;
+        box-shadow: 0px 11px 10px -14px #111;        
         display: flex;
         align-items: center;
         justify-content: space-between;
