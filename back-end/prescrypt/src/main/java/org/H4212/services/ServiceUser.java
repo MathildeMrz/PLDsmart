@@ -1,5 +1,6 @@
 package org.H4212.services;
 
+import org.H4212.api.jsonSerializers.RegisterDoctorRequest;
 import org.H4212.entities.*;
 
 
@@ -110,5 +111,40 @@ public class ServiceUser {
         resultSetPharmacist.next();
 
         return new Pharmacist(resultSetPharmacist.getString(2), resultSetPharmacist.getString(3));
+    }
+
+    public void registerDoctor(RegisterDoctorRequest registerDoctorRequest) throws SQLException {
+
+        String hashedPassword = hashString(registerDoctorRequest.getDoctor().getPassword());
+
+        Long id = (long) (Math.random() * ( Long.MAX_VALUE - 0L ));
+
+        String stringQueryUsers =
+                """
+                    INSERT INTO users VALUES (?,?,?);
+                """;
+
+        PreparedStatement preparedStatementUsers = connection.prepareStatement(stringQueryUsers);
+        preparedStatementUsers.setLong(1, id);
+        preparedStatementUsers.setString(2, registerDoctorRequest.getDoctor().getUsername());
+        preparedStatementUsers.setString(3, hashedPassword);
+
+        preparedStatementUsers.executeUpdate();
+
+        String stringQueryDoctor =
+                """
+                    INSERT INTO doctor VALUES (?,?,?,?,?,?,?);
+                """;
+
+        PreparedStatement preparedStatementDoctor = connection.prepareStatement(stringQueryDoctor);
+        preparedStatementDoctor.setLong(1, id);
+        preparedStatementDoctor.setString(2, registerDoctorRequest.getDoctor().getLastName());
+        preparedStatementDoctor.setString(3, registerDoctorRequest.getDoctor().getFirstName());
+        preparedStatementDoctor.setLong(4, registerDoctorRequest.getDoctor().getIdPSdoctor());
+        preparedStatementDoctor.setString(5, registerDoctorRequest.getDoctor().getQualification());
+        preparedStatementDoctor.setString(6, registerDoctorRequest.getDoctor().getOfficeAddress());
+        preparedStatementDoctor.setString(7, registerDoctorRequest.getDoctor().getTelephone());
+
+        preparedStatementDoctor.executeUpdate();
     }
 }
