@@ -67,4 +67,33 @@ public class Authentication {
         return Response.ok(authenticateUserResponse.toJson()).build();
 
     }
+
+    @POST
+    @Consumes("application/json")
+    @Produces("application/json")
+    @Path("/auth/admin")
+    public Response authenticateAdmin(JsonObject jsonObject){
+
+        ServiceUser serviceUser = new ServiceUser();
+
+        AuthenticateUserRequest authenticateUserRequest = new AuthenticateUserRequest(jsonObject);
+
+        Person admin = new Person();
+
+        AuthenticateAdminResponse authenticateUserResponse = new AuthenticateAdminResponse();
+
+        try
+        {
+            admin = serviceUser.authenticateAdmin(authenticateUserRequest.getUsername(), authenticateUserRequest.getPassword());
+            authenticateUserResponse.setUser(admin);
+        }
+        catch(Exception e)
+        {
+            admin = null;
+            e.printStackTrace();
+        }
+
+        return Response.ok(authenticateUserResponse.toJson()).build();
+
+    }
 }

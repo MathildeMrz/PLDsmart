@@ -127,21 +127,61 @@
         <p>Just delete the <code>src/main/resources/META-INF/resources/index.html</code> file.</p>
     </div>
     <div class="right-column">
+        <h3>Available endpoints</h3>
+        <ul>
+            <li>POST /api/auth/pharmacist <br>body : {
+                "username": "Koko",
+                "password": "mdp"
+                }
+            <br>returns {
+                "firstName": "Korantin",
+                "lastName": "AIMÉ"
+                }</li>
+            <li>POST /api/auth/doctor <br> body : {
+                "username": "Malo",
+                "password": "mdp"
+                }
+            <br>returns {
+                "firstName": "Malo",
+                "lastName": "OLIVIER",
+                "idPSdoctor": 222,
+                "qualification": "str",
+                "officeAddress": "str",
+                "telephone": "str"
+                }</li>
+            <li>POST /api/auth/admin <br> body : {
+                "username": "admin",
+                "password": "admin"
+                }
+                <br>returns {
+                "firstName": "admin",
+                "lastName": "admin"
+                }</li>
+            <li>POST /api/register/pharmacist <br> body : {
+                "username": "Koko",
+                "password": "mdp",
+                "firstName": "Korantin",
+                "lastName": "AIMÉ"
+                }</li>
+            <li>POST /api/register/doctor <br> body : {
+                "username": "Malo",
+                "password": "mdp",
+                "firstName": "Malo",
+                "lastName": "OLIVIER",
+                "idPSdoctor": 222,
+                "qualification": "str",
+                "officeAddress": "str",
+                "telephone": "str"
+                }</li>
+            <li>DELETE /api/delete/pharmacist/{pharmacistId}</li>
+            <li>DELETE /api/delete/doctor/{doctorId}</li>
+        </ul>
         <div class="right-section">
             <h3>Application</h3>
             <ul>
-                <li>GroupId: org.acme</li>
-                <li>ArtifactId: getting-started</li>
+                <li>GroupId: org.H4212</li>
+                <li>ArtifactId: prescrypt</li>
                 <li>Version: 1.0.0-SNAPSHOT</li>
-                <li>Quarkus Version: 0.11.0</li>
-            </ul>
-        </div>
-        <div class="right-section">
-            <h3>Next steps</h3>
-            <ul>
-                <li><a href="https://quarkus.io/guides/maven-tooling.html">Setup your IDE</a></li>
-                <li><a href="https://quarkus.io/guides/getting-started-guide.html">Getting started</a></li>
-                <li><a href="https://quarkus.io">Quarkus Web Site</a></li>
             </ul>
         </div>
     </div>
