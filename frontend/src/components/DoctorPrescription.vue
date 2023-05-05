@@ -137,6 +137,10 @@
                 <button class="buttonTable" type="submit">
                     <img src="../assets/plus.png" alt="button add prescription" />
                 </button>
+                <form action="/action_page.php">
+                    <input type="file" id="myFile" name="filename">
+                    <input type="submit">
+                </form>
             </div>
             <button id="generatePdfButton" class="ordonnance">Générer l'ordonnance</button>
         </div>
