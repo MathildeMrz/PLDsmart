@@ -96,11 +96,11 @@
                     <th>Supprimer</th>
                 </tr>
             </thead>
-            <tbody>
-                <Medicament/>
+            <tbody id="drugList">
+                <Medicament v-for="(medicine, index) in medicines" :key="index" :medicine="medicine"/>
             </tbody>
             </table>
-            <button class="buttonTable" type="submit">
+            <button class="buttonTable" type="submit" @click="addMedicine">
                 <img src="../assets/plus.png" alt="button add prescription" />
             </button>
         </div>
@@ -117,25 +117,23 @@
         components: {
             Medicament
         },
+        data() {
+        return {
+            medicines: []
+            };
+        },
+        methods: {
+        addMedicine() {
+            this.medicines.push({
+            });
+            }
+        },
         props: {}
     }
 
+    
     document.addEventListener("DOMContentLoaded", function() 
     {
-        //Ajout médicaments liste déroulante
-        const data = require('../assets/medicine.json');
-        const medicineSelect = document.getElementById("medicineActDatalist");
-        let result = [];
-        for(let i=0; i<data.length; i++) {
-            let concat = data[i].CODE_UCD.toString() + " " + data[i].NOM_COURT;
-            result.push(concat);
-            //Ajout liste déroulante
-            let option = document.createElement("option");
-            option.value = data[i].NOM_COURT;
-            option.text = concat;
-            medicineSelect.appendChild(option);
-        }
-
         //Listener generate pdf button
         var button = document.getElementById("generatePdfButton");
         button.addEventListener("click", function() {
