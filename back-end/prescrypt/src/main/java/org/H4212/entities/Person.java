@@ -3,6 +3,7 @@ package org.H4212.entities;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
+import jakarta.json.JsonObjectBuilder;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -83,10 +84,10 @@ public class Person {
         this.password = password;
     }
 
-    public JsonObject toJson(){
+    public JsonObjectBuilder toJsonBuilder(){
         return Json.createBuilderFactory(null).createObjectBuilder()
                 .add("lastName", lastName)
-                .add("firstName", firstName).build();
+                .add("firstName", firstName);
     }
 
     @Override

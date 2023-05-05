@@ -26,8 +26,6 @@ public class AuthenticateDoctorResponse {
 
     public JsonObject toJson()
     {
-        return doctor.toJson();
-
-
+        return doctor.toJsonBuilder().build();
     }
 }
