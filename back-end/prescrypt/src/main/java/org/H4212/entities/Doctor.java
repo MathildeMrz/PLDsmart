@@ -26,6 +26,9 @@ public class Doctor extends Person {
     @NotNull
     private String telephone;
 
+    @Column(name = "Ethereum Address")
+    private String ethAddress;
+
     public Doctor(String lastName, String firstName, String pseudo, String password, Long idPSdoctor, String qualification, String officeAddress, String telephone) {
         super(lastName, firstName, pseudo, password);
         this.idPSdoctor = idPSdoctor;
@@ -79,12 +82,29 @@ public class Doctor extends Person {
         this.telephone = telephone;
     }
 
+    public String getEthAddress() {
+        return ethAddress;
+    }
+
+    public void setEthAddress(String ethAddress) {
+        this.ethAddress = ethAddress;
+    }
+
     @Override
     public JsonObjectBuilder toJsonBuilder() {
-        return super.toJsonBuilder().add("idPSdoctor",idPSdoctor)
-                .add("qualification", qualification)
-                .add("officeAddress", officeAddress)
-                .add("telephone", telephone);
+        try{
+            return super.toJsonBuilder().add("idPSdoctor",idPSdoctor)
+                    .add("qualification", qualification)
+                    .add("officeAddress", officeAddress)
+                    .add("telephone", telephone)
+                    .add("ethAddress", ethAddress);
+        }catch(Exception e){
+            return super.toJsonBuilder().add("idPSdoctor",idPSdoctor)
+                    .add("qualification", qualification)
+                    .add("officeAddress", officeAddress)
+                    .add("telephone", telephone)
+                    .add("ethAddress", "NA");
+        }
     }
 
     @Override
