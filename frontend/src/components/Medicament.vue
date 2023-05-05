@@ -27,7 +27,7 @@
         </td>                    
         
         <td>
-        <button class="buttonTable" type="button">
+        <button class="buttonTable" type="button" @click="deleteMedicine">
             <img src="../assets/delete.png" alt="button delete prescription" />
         </button>
         </td>
@@ -35,13 +35,19 @@
 </template>
 
 <script>
+
     export default {
         name: 'MedicamentComponent',
-        props: {},
+        props: ['medicine'],
         mounted() {
         this.loadData();
           },
         methods: {
+            deleteMedicine() {
+                console.log("delete medicine of child!!!!");
+
+                this.$emit('delete',this.index);
+            },
             loadData() {
             console.log('Component loaded!');
                 //Ajout médicaments liste déroulante

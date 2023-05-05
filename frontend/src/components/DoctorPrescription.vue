@@ -98,7 +98,7 @@
                 </tr>
             </thead>
             <tbody id="drugList">
-                <Medicament v-for="(medicine, index) in medicines" :key="index" :medicine="medicine"/>
+                <Medicament v-for="(medicine, index) in medicines" :key="index" :medicine="medicine" @delete="deleteMedicine"/>
             </tbody>
             </table>
             <button class="buttonTable" type="submit" @click="addMedicine">
@@ -124,13 +124,17 @@
             };
         },
         methods: {
-        addMedicine() {
-            this.medicines.push({
-            });
-            },
-        disconnect() {
-            location.href = '/';
-        }
+            deleteMedicine(index) {
+                console.log("delete medicine of parent!!!!");
+                this.medicines.splice(index, 1);
+                },
+            addMedicine() {
+                this.medicines.push({
+                });
+                },
+            disconnect() {
+                location.href = '/';
+            }
         },
         props: {},
     }
