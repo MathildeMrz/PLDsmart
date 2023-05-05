@@ -98,7 +98,7 @@
                 </tr>
             </thead>
             <tbody id="drugList">
-                <Medicament v-for="(medicine, index) in medicines" :key="index" :medicine="medicine" @delete="deleteMedicine"/>
+                <Medicament v-for="(index) in medicines" :key="index" :index="index" @delete="deleteMedicine"/>
             </tbody>
             </table>
             <button class="buttonTable" type="submit" @click="addMedicine">
@@ -134,6 +134,7 @@
                 },
             addMedicine() {
                 this.medicines.push({
+
                 });
                 },
             disconnect() {

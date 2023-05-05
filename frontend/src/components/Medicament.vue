@@ -38,7 +38,7 @@
 
     export default {
         name: 'MedicamentComponent',
-        props: ['medicine'],
+        props: ['index'],
         mounted() {
         this.loadData();
           },
