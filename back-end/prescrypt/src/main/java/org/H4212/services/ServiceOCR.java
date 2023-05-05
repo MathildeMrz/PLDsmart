@@ -1,34 +1,30 @@
 package org.H4212.services;
 
+import java.io.File;
+import java.io.InputStream;
+
 import javax.imageio.ImageIO;
 
-import org.json.JSONObject;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.bind.annotation.*;
-import net.sourceforge.tess4j.*;
-
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.image.*;
-import java.io.*;
-  
-
+import net.sourceforge.tess4j.Tesseract;
 
 public class ServiceOCR {
-    public String generateJSON(MultipartFile file)
+    public String generateJSON(InputStream imageStream)
     {
         try {
-            BufferedImage bufferedImage = ImageIO.read(file.getInputStream());
-            
-            ITesseract tesseract = new Tesseract();
-            tesseract.setDatapath("/usr/share/tesseract-ocr/4.00/tessdata");
-            String result = tesseract.doOCR(bufferedImage);
-            
-            System.out.println("result = "+result);
-            //String to json
+            // Charger l'image
+            Tesseract tesseract = new Tesseract();
+            File imageFile = File.createTempFile("temp", null);
+            ImageIO.write(ImageIO.read(imageStream), "png", imageFile);
+
+            // Extraire du texte à partir de l'image
+            String result = tesseract.doOCR(imageFile);      
+            System.out.println("Très important : "+result);  
+
+            // Supprimer le fichier temporaire
+            imageFile.delete();
+
             return result;
-        } 
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return "";
         }

@@ -3,25 +3,26 @@ package org.H4212.api;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.Response;
-
+import java.io.InputStream;
 import org.H4212.services.ServiceOCR;
-import org.springframework.web.multipart.MultipartFile;
-@Path("/OCRApi")
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
+
+@Path("/OCR-api")
 public class OCRApi {
 
     private final ServiceOCR serviceOCR = new ServiceOCR();
 
     @GET
-    @Produces("application/json")
-    public Response generateJsonOCR(@QueryParam("scanFile") MultipartFile file) 
+    public Response generateJsonOCR(@FormDataParam("image") InputStream imageStream) 
     {
+        System.out.println("imageStreammmmm : "+imageStream.toString());
         
         // Utilisez les paramètres récupérés pour générer votre PDF
         try {
-            String resultOCRJson = serviceOCR.generateJSON(file);
-            return Response.ok(resultOCRJson,"application/json").build();
+            String resultOCRJson = serviceOCR.generateJSON(imageStream);
+            return Response.ok(resultOCRJson).build();
 
         } catch (Exception e) {
             return Response.serverError().build();

@@ -22,6 +22,8 @@ CREATE TABLE doctor
 CREATE TABLE pharmacist
 (
     pharmacistId bigint NOT NULL,
+    lastName VARCHAR(100),
+    firstName VARCHAR(100),
     PRIMARY KEY (pharmacistId),
     FOREIGN KEY (pharmacistId) REFERENCES users(userId)
 );
