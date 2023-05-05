@@ -1,5 +1,6 @@
 package org.H4212.services;
 
+import org.H4212.api.jsonSerializers.*;
 import org.H4212.entities.*;
 
 
@@ -58,7 +59,7 @@ public class ServiceUser {
                 """;
 
         PreparedStatement preparedStatementDoctor = connection.prepareStatement(fetchDoctorQuery);
-        preparedStatementDoctor.setInt(1, resultSet.getInt(1));
+        preparedStatementDoctor.setLong(1, resultSet.getLong(1));
 
         ResultSet resultSetDoctor;
         try {
@@ -99,7 +100,7 @@ public class ServiceUser {
                 """;
 
         PreparedStatement preparedStatementPharmacist = connection.prepareStatement(fetchPharmacistQuery);
-        preparedStatementPharmacist.setInt(1, resultSet.getInt(1));
+        preparedStatementPharmacist.setLong(1, resultSet.getLong(1));
 
         ResultSet resultSetPharmacist;
         try {
@@ -110,5 +111,119 @@ public class ServiceUser {
         resultSetPharmacist.next();
 
         return new Pharmacist(resultSetPharmacist.getString(2), resultSetPharmacist.getString(3));
+    }
+
+    public void registerDoctor(RegisterDoctorRequest registerDoctorRequest) throws SQLException {
+
+        String hashedPassword = hashString(registerDoctorRequest.getDoctor().getPassword());
+
+        Long id = (long) (Math.random() * ( Long.MAX_VALUE - 0L ));
+
+        String stringQueryUsers =
+                """
+                    INSERT INTO users VALUES (?,?,?);
+                """;
+
+        PreparedStatement preparedStatementUsers = connection.prepareStatement(stringQueryUsers);
+        preparedStatementUsers.setLong(1, id);
+        preparedStatementUsers.setString(2, registerDoctorRequest.getDoctor().getUsername());
+        preparedStatementUsers.setString(3, hashedPassword);
+
+        preparedStatementUsers.executeUpdate();
+
+        String stringQueryDoctor =
+                """
+                    INSERT INTO doctor VALUES (?,?,?,?,?,?,?);
+                """;
+
+        PreparedStatement preparedStatementDoctor = connection.prepareStatement(stringQueryDoctor);
+        preparedStatementDoctor.setLong(1, id);
+        preparedStatementDoctor.setString(2, registerDoctorRequest.getDoctor().getLastName());
+        preparedStatementDoctor.setString(3, registerDoctorRequest.getDoctor().getFirstName());
+        preparedStatementDoctor.setLong(4, registerDoctorRequest.getDoctor().getIdPSdoctor());
+        preparedStatementDoctor.setString(5, registerDoctorRequest.getDoctor().getQualification());
+        preparedStatementDoctor.setString(6, registerDoctorRequest.getDoctor().getOfficeAddress());
+        preparedStatementDoctor.setString(7, registerDoctorRequest.getDoctor().getTelephone());
+
+        preparedStatementDoctor.executeUpdate();
+    }
+
+    public void registerPharmacist(RegisterPharmacistRequest registerPharmacistRequest) throws SQLException {
+
+        String hashedPassword = hashString(registerPharmacistRequest.getPharmacist().getPassword());
+
+        Long id = (long) (Math.random() * ( Long.MAX_VALUE - 0L ));
+
+        String stringQueryUsers =
+                """
+                    INSERT INTO users VALUES (?,?,?);
+                """;
+
+        PreparedStatement preparedStatementUsers = connection.prepareStatement(stringQueryUsers);
+        preparedStatementUsers.setLong(1, id);
+        preparedStatementUsers.setString(2, registerPharmacistRequest.getPharmacist().getUsername());
+        preparedStatementUsers.setString(3, hashedPassword);
+
+        preparedStatementUsers.executeUpdate();
+
+        String stringQueryPharmacist =
+                """
+                    INSERT INTO pharmacist VALUES (?,?,?);
+                """;
+
+        PreparedStatement preparedStatementPharmacist = connection.prepareStatement(stringQueryPharmacist);
+        preparedStatementPharmacist.setLong(1, id);
+        preparedStatementPharmacist.setString(2, registerPharmacistRequest.getPharmacist().getLastName());
+        preparedStatementPharmacist.setString(3, registerPharmacistRequest.getPharmacist().getFirstName());
+
+        preparedStatementPharmacist.executeUpdate();
+    }
+
+    public void deleteDoctor(Long doctorId) throws SQLException{
+
+        String stringQueryDoctor =
+                """
+                    DELETE FROM doctor WHERE doctorId = ?;
+                """;
+
+        PreparedStatement preparedStatementDoctor = connection.prepareStatement(stringQueryDoctor);
+        preparedStatementDoctor.setLong(1, doctorId);
+
+        preparedStatementDoctor.executeUpdate();
+
+        String stringQueryUsers =
+                """
+                    DELETE FROM users WHERE userId = ?;
+                """;
+
+        PreparedStatement preparedStatementUsers = connection.prepareStatement(stringQueryUsers);
+        preparedStatementUsers.setLong(1, doctorId);
+
+        preparedStatementUsers.executeUpdate();
+
+    }
+
+    public void deletePharmacist(Long pharmacistId) throws SQLException{
+
+        String stringQueryPharmacist =
+                """
+                    DELETE FROM pharmacist WHERE pharmacistId = ?;
+                """;
+
+        PreparedStatement preparedStatementPharmacist = connection.prepareStatement(stringQueryPharmacist);
+        preparedStatementPharmacist.setLong(1, pharmacistId);
+
+        preparedStatementPharmacist.executeUpdate();
+
+        String stringQueryUsers =
+                """
+                    DELETE FROM users WHERE userId = ?;
+                """;
+
+        PreparedStatement preparedStatementUsers = connection.prepareStatement(stringQueryUsers);
+        preparedStatementUsers.setLong(1, pharmacistId);
+
+        preparedStatementUsers.executeUpdate();
+
     }
 }

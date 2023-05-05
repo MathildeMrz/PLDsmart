@@ -15,6 +15,7 @@ CREATE TABLE doctor
     qualification VARCHAR(100),
     address VARCHAR(100),
     telephone VARCHAR(100),
+    ethAddress VARCHAR(100),
     PRIMARY KEY (doctorId),
     FOREIGN KEY (doctorId) REFERENCES users(userId)
 );
