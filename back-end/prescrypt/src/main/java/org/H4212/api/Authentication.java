@@ -1,19 +1,11 @@
 package org.H4212.api;
 
-import jakarta.inject.Inject;
-import jakarta.json.Json;
-import jakarta.json.JsonBuilderFactory;
 import jakarta.json.JsonObject;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.H4212.api.jsonSerializers.*;
-import org.H4212.entities.Doctor;
-import org.H4212.entities.Person;
+import org.H4212.entities.*;
 import org.H4212.services.ServiceUser;
-import org.jboss.logging.annotations.Param;
 
 @Path("/api/")
 public class Authentication {
@@ -21,7 +13,7 @@ public class Authentication {
     @POST
     @Consumes("application/json")
     @Produces("application/json")
-    @Path("/auth")
+    @Path("/auth/doctor")
     public Response authenticateDoctor(JsonObject jsonObject){
 
         ServiceUser serviceUser = new ServiceUser();
@@ -47,5 +39,32 @@ public class Authentication {
 
     }
 
+    @POST
+    @Consumes("application/json")
+    @Produces("application/json")
+    @Path("/auth/pharmacist")
+    public Response authenticatePharmacist(JsonObject jsonObject){
 
+        ServiceUser serviceUser = new ServiceUser();
+
+        AuthenticateUserRequest authenticateUserRequest = new AuthenticateUserRequest(jsonObject);
+
+        Pharmacist pharmacist = new Pharmacist();
+
+        AuthenticatePharmacistResponse authenticateUserResponse = new AuthenticatePharmacistResponse();
+
+        try
+        {
+            pharmacist = serviceUser.authenticatePharmacist(authenticateUserRequest.getUsername(), authenticateUserRequest.getPassword());
+            authenticateUserResponse.setUser(pharmacist);
+        }
+        catch(Exception e)
+        {
+            pharmacist = null;
+            e.printStackTrace();
+        }
+
+        return Response.ok(authenticateUserResponse.toJson()).build();
+
+    }
 }

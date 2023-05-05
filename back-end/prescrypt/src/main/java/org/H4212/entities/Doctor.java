@@ -1,6 +1,8 @@
 package org.H4212.entities;
 
 
+import jakarta.json.JsonObject;
+import jakarta.json.JsonObjectBuilder;
 import jakarta.validation.constraints.NotNull;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -75,6 +77,14 @@ public class Doctor extends Person {
 
     public void setTelephone(String telephone) {
         this.telephone = telephone;
+    }
+
+    @Override
+    public JsonObjectBuilder toJsonBuilder() {
+        return super.toJsonBuilder().add("idPSdoctor",idPSdoctor)
+                .add("qualification", qualification)
+                .add("officeAddress", officeAddress)
+                .add("telephone", telephone);
     }
 
     @Override
