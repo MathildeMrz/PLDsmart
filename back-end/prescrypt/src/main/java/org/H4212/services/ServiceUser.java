@@ -178,4 +178,52 @@ public class ServiceUser {
 
         preparedStatementPharmacist.executeUpdate();
     }
+
+    public void deleteDoctor(Long doctorId) throws SQLException{
+
+        String stringQueryDoctor =
+                """
+                    DELETE FROM doctor WHERE doctorId = ?;
+                """;
+
+        PreparedStatement preparedStatementDoctor = connection.prepareStatement(stringQueryDoctor);
+        preparedStatementDoctor.setLong(1, doctorId);
+
+        preparedStatementDoctor.executeUpdate();
+
+        String stringQueryUsers =
+                """
+                    DELETE FROM users WHERE userId = ?;
+                """;
+
+        PreparedStatement preparedStatementUsers = connection.prepareStatement(stringQueryUsers);
+        preparedStatementUsers.setLong(1, doctorId);
+
+        preparedStatementUsers.executeUpdate();
+
+    }
+
+    public void deletePharmacist(Long pharmacistId) throws SQLException{
+
+        String stringQueryPharmacist =
+                """
+                    DELETE FROM pharmacist WHERE pharmacistId = ?;
+                """;
+
+        PreparedStatement preparedStatementPharmacist = connection.prepareStatement(stringQueryPharmacist);
+        preparedStatementPharmacist.setLong(1, pharmacistId);
+
+        preparedStatementPharmacist.executeUpdate();
+
+        String stringQueryUsers =
+                """
+                    DELETE FROM users WHERE userId = ?;
+                """;
+
+        PreparedStatement preparedStatementUsers = connection.prepareStatement(stringQueryUsers);
+        preparedStatementUsers.setLong(1, pharmacistId);
+
+        preparedStatementUsers.executeUpdate();
+
+    }
 }
