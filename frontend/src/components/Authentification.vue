@@ -27,7 +27,7 @@
             <label for="role-admin">Administrateur</label>
           </div>
         </div>
-        <button id="connexion-button" v-on:click="authenticate()">ME CONNECTER</button>
+        <button id="connexion-button" v-on:click="authenticate()">Me Connecter</button>
       </form>
     </div>
     <div id="doctor-box">

@@ -1,7 +1,7 @@
 <template>
     <nav  class="navigation-bar">
         <img class="logo" src="../assets/entete.png">
-        <button id="disconnection-button" v-on:click="disconnect()">SE DECONNECTER</button>
+        <button id="disconnection-button" v-on:click="disconnect()">Se Déconnecter</button>
     </nav>
 
     <div id="doctorPrescription">
