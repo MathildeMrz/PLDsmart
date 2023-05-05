@@ -2,10 +2,7 @@ package org.H4212.services;
 
 import org.H4212.api.jsonSerializers.*;
 import org.H4212.entities.*;
-
-
 import java.sql.*;
-import java.util.*;
 
 import static org.H4212.util.HashingUtil.hashString;
 
@@ -111,6 +108,30 @@ public class ServiceUser {
         resultSetPharmacist.next();
 
         return new Pharmacist(resultSetPharmacist.getString(2), resultSetPharmacist.getString(3));
+    }
+
+    public Person authenticateAdmin(String username, String password) throws SQLException{
+        String hashedPassword = hashString(password);
+
+        String stringQuery =
+                """
+                    SELECT * from users WHERE username = ? AND password = ?;
+                """;
+
+        PreparedStatement preparedStatement = connection.prepareStatement(stringQuery) ;
+        preparedStatement.setString(1, username);
+        preparedStatement.setString(2, hashedPassword);
+
+        ResultSet resultSet;
+        try {
+            resultSet = preparedStatement.executeQuery();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        resultSet.next();
+
+        return new Person(resultSet.getString(2), resultSet.getString(2));
     }
 
     public void registerDoctor(RegisterDoctorRequest registerDoctorRequest) throws SQLException {
