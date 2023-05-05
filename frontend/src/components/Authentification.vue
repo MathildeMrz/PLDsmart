@@ -27,7 +27,7 @@
             <label for="role-admin">Administrateur</label>
           </div>
         </div>
-        <button id="connexion-button" onclick="location.href = 'prescription.html';">ME CONNECTER</button>
+        <button id="connexion-button" v-on:click="authenticate()">Me Connecter</button>
       </form>
     </div>
     <div id="doctor-box">
@@ -42,11 +42,15 @@
 </template>
 
 <script>
-export default {
-  name: 'AuthentificationComponent',
-  props: {
+  export default {
+    name: 'AuthentificationComponent',
+    props: {},
+    methods: {
+      authenticate() {
+        location.href = 'prescription.html';
+      }
+    }
   }
-}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

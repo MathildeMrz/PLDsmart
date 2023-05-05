@@ -1,6 +1,7 @@
 <template>
     <nav  class="navigation-bar">
         <img class="logo" src="../assets/entete.png">
+        <button id="disconnection-button" v-on:click="disconnect()">Se Déconnecter</button>
     </nav>
 
     <div id="doctorPrescription">
@@ -126,11 +127,13 @@
         addMedicine() {
             this.medicines.push({
             });
-            }
+            },
+        disconnect() {
+            location.href = '/';
+        }
         },
-        props: {}
+        props: {},
     }
-
     
     document.addEventListener("DOMContentLoaded", function() 
     {
@@ -219,7 +222,23 @@
         width: 100%;  /* i'm assuming full width */
         height: 80px; /* change it to desired width */
         border-bottom: 1px solid black;
-        
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    #disconnection-button {
+        position: relative;
+        vertical-align: middle;
+        padding: 15px 25px 15px 25px;
+        margin-bottom: 10px;
+        margin-right: 20px;
+        background: rgba(24, 23, 186, 0.46);
+        border: none;
+        color:white;
+        font-variant: small-caps;
+        font-size: 20px;
+        cursor: pointer;
     }
 
     td:nth-child(5){
@@ -231,7 +250,6 @@
         vertical-align: top;
         width: 200px; /*4vw*/
         margin-left: 5vh;
-        margin-top: 10px;
         margin-bottom: 10px;
     }
 
