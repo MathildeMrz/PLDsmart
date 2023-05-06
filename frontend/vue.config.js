@@ -7,7 +7,7 @@ module.exports = {
       chunks: ['chunk-vendors', 'chunk-common', 'index']
     },
     'prescription': {
-      entry: 'src/pages/prescription/main.js',
+      entry: 'src/pages/Doctor_prescription/main.js',
       template: 'public/prescription.html',
       title: 'Prescription Page',
       chunks: ['chunk-vendors', 'chunk-common', 'prescription']
