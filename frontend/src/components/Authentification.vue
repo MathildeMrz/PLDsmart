@@ -5,10 +5,10 @@
       <p style="font-size: 26px;">J'accède à mon <b>compte Prescrypt</b></p>
       <form>
         <div class="user-box">
-          <input class="bottomInput" type="text" placeholder="Mon adresse" name="" required="" checked="checked">
+          <input id="username" class="bottomInput" type="text" placeholder="Mon adresse" name="" required="" checked="checked">
         </div>
         <div class="user-box">
-          <input class="bottomInput" type="password" placeholder="Mot de passe"  name="" required="">
+          <input id="password" class="bottomInput" type="password" placeholder="Mot de passe"  name="" required="">
         </div>
 
         <div>
@@ -47,7 +47,23 @@
     props: {},
     methods: {
       authenticate() {
-        location.href = 'prescription.html';
+        fetch("http://localhost:9000/api/auth/doctor", {
+            method: 'POST',
+            body: JSON.stringify({
+                username: "Koko",//document.getElementById("username").value,
+                password: "mdp"//document.getElementById("password").value
+              }),
+            headers: {
+              'Content-Type': 'application/json; charset=UTF-8'
+            }
+          })
+        .then(console.log(JSON.stringify({
+                username: document.getElementById("username").value,
+                password: document.getElementById("password").value
+              })
+        ))
+        .then((response) => response.json())
+        .then((json) => console.log(json));
       }
     }
   }
