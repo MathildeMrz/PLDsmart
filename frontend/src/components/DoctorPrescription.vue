@@ -160,7 +160,7 @@
                 incorrectPrescription = Boolean(true);
                 alert("Au moins un médicament ou acte doit être renseigné");
                 console.log("Avant"+table.rows.length);
-                this.methods.addMedicine();
+                this.addMedicine;
                 console.log("Apres"+table.rows.length); 
             }
          
