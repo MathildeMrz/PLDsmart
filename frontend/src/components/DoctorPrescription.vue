@@ -1,8 +1,5 @@
 <template>
-    <nav  class="navigation-bar">
-        <img class="logo" src="../assets/entete.png">
-        <button id="disconnection-button" v-on:click="disconnect()">Se Déconnecter</button>
-    </nav>
+    <NavigationBar/>
 
     <div id="doctorPrescription">
 
@@ -98,7 +95,7 @@
                 </tr>
             </thead>
             <tbody id="drugList">
-                <Medicament v-for="(medicine, index) in medicines" :key="index" :medicine="medicine"/>
+                <Medicament v-for="(index) in medicines" :key="index" :index="index" @delete="deleteMedicine"/>
             </tbody>
             </table>
             <button class="buttonTable" type="submit" @click="addMedicine">
@@ -106,16 +103,22 @@
             </button>
         </div>
         <button id="generatePdfButton" class="ordonnance">Générer l'ordonnance</button>
+        <form method="post" enctype="multipart/form-data">
+            <input type="file" id="myFile" name="filename">
+            <input id="submitImageToOCR" type="submit">
+        </form>
     </div>
 </template>
 
 
 <script>
     import Medicament from './Medicament.vue';
+    import NavigationBar from './NavigationBar.vue';
 
     export default {
         name: 'DoctorPrescriptionComponent',
         components: {
+            NavigationBar,
             Medicament
         },
         data() {
@@ -124,13 +127,18 @@
             };
         },
         methods: {
-        addMedicine() {
-            this.medicines.push({
-            });
-            },
-        disconnect() {
-            location.href = '/';
-        }
+            deleteMedicine(index) {
+                console.log("delete medicine of parent!!!!");
+                this.medicines.splice(index, 1);
+                },
+            addMedicine() {
+                this.medicines.push({
+
+                });
+                },
+            disconnect() {
+                location.href = '/';
+            }
         },
         props: {},
     }
@@ -139,7 +147,8 @@
     {
         //Listener generate pdf button
         var button = document.getElementById("generatePdfButton");
-        button.addEventListener("click", function() {
+        button.addEventListener("click", function() 
+        {
 
             const doctorName = document.getElementById("doctorName").textContent;
             const doctorJob = document.getElementById("doctorJob").textContent;
@@ -212,35 +221,35 @@
             })
             .catch(error => console.error(error));
         });
+
+        button = document.getElementById("submitImageToOCR");
+        button.addEventListener("click", function() 
+        {
+            const input = document.getElementById("myFile");
+            const file = input.files[0];
+            const formData = new FormData();
+            formData.append('file', file);
+            let url = 'http://localhost:9000/OCR-api';
+            fetch(url, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                console.log(response);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+           
+        
+        });
     });
 
 </script>
 
 
 <style>
-    .navigation-bar {
-        width: 100%;  /* i'm assuming full width */
-        height: 80px; /* change it to desired width */
-        border-bottom: 1px solid black;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    #disconnection-button {
-        position: relative;
-        vertical-align: middle;
-        padding: 15px 25px 15px 25px;
-        margin-bottom: 10px;
-        margin-right: 20px;
-        background: rgba(24, 23, 186, 0.46);
-        border: none;
-        color:white;
-        font-variant: small-caps;
-        font-size: 20px;
-        cursor: pointer;
-    }
-
     td:nth-child(5){
         width : 10%;
     }

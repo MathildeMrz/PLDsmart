@@ -2,10 +2,7 @@ package org.H4212.services;
 
 import org.H4212.api.jsonSerializers.*;
 import org.H4212.entities.*;
-
-
 import java.sql.*;
-import java.util.*;
 
 import static org.H4212.util.HashingUtil.hashString;
 
@@ -113,6 +110,30 @@ public class ServiceUser {
         return new Pharmacist(resultSetPharmacist.getString(2), resultSetPharmacist.getString(3));
     }
 
+    public Person authenticateAdmin(String username, String password) throws SQLException{
+        String hashedPassword = hashString(password);
+
+        String stringQuery =
+                """
+                    SELECT * from users WHERE username = ? AND password = ?;
+                """;
+
+        PreparedStatement preparedStatement = connection.prepareStatement(stringQuery) ;
+        preparedStatement.setString(1, username);
+        preparedStatement.setString(2, hashedPassword);
+
+        ResultSet resultSet;
+        try {
+            resultSet = preparedStatement.executeQuery();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        resultSet.next();
+
+        return new Person(resultSet.getString(2), resultSet.getString(2));
+    }
+
     public void registerDoctor(RegisterDoctorRequest registerDoctorRequest) throws SQLException {
 
         String hashedPassword = hashString(registerDoctorRequest.getDoctor().getPassword());
@@ -177,5 +198,53 @@ public class ServiceUser {
         preparedStatementPharmacist.setString(3, registerPharmacistRequest.getPharmacist().getFirstName());
 
         preparedStatementPharmacist.executeUpdate();
+    }
+
+    public void deleteDoctor(Long doctorId) throws SQLException{
+
+        String stringQueryDoctor =
+                """
+                    DELETE FROM doctor WHERE doctorId = ?;
+                """;
+
+        PreparedStatement preparedStatementDoctor = connection.prepareStatement(stringQueryDoctor);
+        preparedStatementDoctor.setLong(1, doctorId);
+
+        preparedStatementDoctor.executeUpdate();
+
+        String stringQueryUsers =
+                """
+                    DELETE FROM users WHERE userId = ?;
+                """;
+
+        PreparedStatement preparedStatementUsers = connection.prepareStatement(stringQueryUsers);
+        preparedStatementUsers.setLong(1, doctorId);
+
+        preparedStatementUsers.executeUpdate();
+
+    }
+
+    public void deletePharmacist(Long pharmacistId) throws SQLException{
+
+        String stringQueryPharmacist =
+                """
+                    DELETE FROM pharmacist WHERE pharmacistId = ?;
+                """;
+
+        PreparedStatement preparedStatementPharmacist = connection.prepareStatement(stringQueryPharmacist);
+        preparedStatementPharmacist.setLong(1, pharmacistId);
+
+        preparedStatementPharmacist.executeUpdate();
+
+        String stringQueryUsers =
+                """
+                    DELETE FROM users WHERE userId = ?;
+                """;
+
+        PreparedStatement preparedStatementUsers = connection.prepareStatement(stringQueryUsers);
+        preparedStatementUsers.setLong(1, pharmacistId);
+
+        preparedStatementUsers.executeUpdate();
+
     }
 }
