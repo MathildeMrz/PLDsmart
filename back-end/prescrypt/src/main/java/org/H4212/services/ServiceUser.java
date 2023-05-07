@@ -72,9 +72,56 @@ public class ServiceUser {
 
         if(resultSetDoctor.next())
         {
-            return new Doctor((long) resultSetDoctor.getInt(1), resultSetDoctor.getString(2), resultSetDoctor.getString(3), (long) resultSetDoctor.getInt(4), resultSetDoctor.getString(5), resultSetDoctor.getString(6), resultSetDoctor.getString(7));
+            return new Doctor((long) resultSetDoctor.getInt(1), resultSetDoctor.getString(2), resultSetDoctor.getString(3), (long) resultSetDoctor.getInt(4), resultSetDoctor.getString(5), resultSetDoctor.getString(6), resultSetDoctor.getString(7), resultSetDoctor.getString(8));
         }else{
             System.out.println("ResultSet is empty");
+            return new Doctor();
+        }
+    }
+
+    public Doctor getDoctor(long doctorId) throws SQLException {
+        String stringQuery =
+                """
+                    SELECT userId from users WHERE userId = ?;
+                """;
+
+        PreparedStatement preparedStatement = connection.prepareStatement(stringQuery) ;
+        preparedStatement.setLong(1, doctorId);
+
+        ResultSet resultSet;
+        try {
+            resultSet = preparedStatement.executeQuery();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        PreparedStatement preparedStatementDoctor;
+
+        if(resultSet.next()) {
+            String fetchDoctorQuery =
+                    """
+                SELECT * from doctor WHERE doctorId = ?;
+                """;
+
+            preparedStatementDoctor = connection.prepareStatement(fetchDoctorQuery);
+            preparedStatementDoctor.setLong(1, resultSet.getLong(1));
+        }else{
+            System.out.println("ResultSet is empty");
+            return new Doctor();
+        }
+
+        ResultSet resultSetDoctor;
+        try {
+            resultSetDoctor = preparedStatementDoctor.executeQuery();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        if(resultSetDoctor.next())
+        {
+            return new Doctor((long) resultSetDoctor.getInt(1), resultSetDoctor.getString(2), resultSetDoctor.getString(3), (long) resultSetDoctor.getInt(4), resultSetDoctor.getString(5), resultSetDoctor.getString(6), resultSetDoctor.getString(7), resultSetDoctor.getString(8));
+        }else{
+            System.out.println("ResultSetDoctor is empty");
             return new Doctor();
         }
     }
@@ -157,7 +204,30 @@ public class ServiceUser {
             return new Person();
         }
     }
+    public Patient getPatient(long patientId) throws SQLException {
+        String stringQuery =
+                """
+                    SELECT * from patient WHERE patientId = ?;
+                """;
 
+        PreparedStatement preparedStatement = connection.prepareStatement(stringQuery) ;
+        preparedStatement.setLong(1, patientId);
+
+        ResultSet resultSet;
+        try {
+            resultSet = preparedStatement.executeQuery();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        if(resultSet.next())
+        {
+            return new Patient((long) resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getInt(4), resultSet.getInt(5), resultSet.getBoolean(6), resultSet.getInt(7));
+        }else{
+            System.out.println("ResultSet is empty");
+            return new Patient();
+        }
+    }
     public void registerDoctor(RegisterDoctorRequest registerDoctorRequest) throws SQLException {
 
         String hashedPassword = hashString(registerDoctorRequest.getDoctor().getPassword());

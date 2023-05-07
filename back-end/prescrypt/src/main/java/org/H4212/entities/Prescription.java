@@ -1,9 +1,13 @@
 package org.H4212.entities;
 
+import jakarta.json.Json;
+import jakarta.json.JsonObjectBuilder;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import java.time.Duration;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Prescription {
@@ -11,7 +15,7 @@ public class Prescription {
     @Id
     @GeneratedValue
     @NotNull
-    private Long id;
+    private long id;
 
     @ManyToOne
     @JoinColumn(name = "DoctorId", referencedColumnName = "id")
@@ -29,15 +33,10 @@ public class Prescription {
     @NotNull
     private OffsetDateTime consultationDate;
 
-    @ManyToOne
-    @JoinColumn(name = "MedicationId", referencedColumnName = "id")
-    @Column(name = "Medication")
+    @OneToMany
+    @Column(name = "Medication list")
     @NotNull
-    private Medication medication;
-
-    @Column(name = "Treatment duration")
-    @NotNull
-    private Duration duration;
+    private List<Medication> medicationList;
 
     @Column(name = "Number of renewals")
     @NotNull
@@ -50,33 +49,47 @@ public class Prescription {
     @Column(name = "Notes", nullable = true)
     private String notes;
 
-    public Prescription(Doctor doctor, Patient patient, OffsetDateTime consultationDate, Medication medication, Duration duration, int nbRenewals, boolean NR, String notes) {
+    public Prescription(long id, Doctor doctor, Patient patient, OffsetDateTime consultationDate, List<Medication> medicationList, int nbRenewals, boolean NR, String notes) {
+        this.id = id;
         this.doctor = doctor;
         this.patient = patient;
         this.consultationDate = consultationDate;
-        this.medication = medication;
-        this.duration = duration;
+        this.medicationList = medicationList;
         this.nbRenewals = nbRenewals;
         this.NR = NR;
         this.notes = notes;
     }
 
-    public Prescription(Doctor doctor, Patient patient, OffsetDateTime consultationDate, Medication medication, Duration duration, int nbRenewals, boolean NR) {
+    public Prescription(long id, Doctor doctor, Patient patient, OffsetDateTime consultationDate, List<Medication> medicationList, int nbRenewals, boolean NR) {
+        this.id = id;
         this.doctor = doctor;
         this.patient = patient;
         this.consultationDate = consultationDate;
-        this.medication = medication;
-        this.duration = duration;
+        this.medicationList = medicationList;
         this.nbRenewals = nbRenewals;
         this.NR = NR;
+    }
+    public Prescription(long id, Doctor doctor, Patient patient, OffsetDateTime consultationDate, Medication medication, int nbRenewals, boolean NR) {
+        this.id = id;
+        this.doctor = doctor;
+        this.patient = patient;
+        this.consultationDate = consultationDate;
+        this.nbRenewals = nbRenewals;
+        this.NR = NR;
+        this.medicationList = new ArrayList<Medication>();
+        this.medicationList.add(medication);
     }
 
     public Prescription(){
 
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public Doctor getDoctor() {
@@ -103,20 +116,12 @@ public class Prescription {
         this.consultationDate = consultationDate;
     }
 
-    public Medication getMedication() {
-        return medication;
+    public List<Medication> getMedicationList() {
+        return medicationList;
     }
 
-    public void setMedication(Medication medication) {
-        this.medication = medication;
-    }
-
-    public Duration getDuration() {
-        return duration;
-    }
-
-    public void setDuration(Duration duration) {
-        this.duration = duration;
+    public void setMedicationList(List<Medication> medicationList) {
+        this.medicationList = medicationList;
     }
 
     public int getNbRenewals() {
@@ -142,6 +147,37 @@ public class Prescription {
     public void setNotes(String notes) {
         this.notes = notes;
     }
+    public JsonObjectBuilder toJsonBuilder(){
+        JsonObjectBuilder ret;
+        try{
+            ret = Json.createBuilderFactory(null).createObjectBuilder()
+                    .add("id", id)
+                    .add("doctorId", doctor.getId())
+                    .add("doctorFirstName", doctor.getFirstName())
+                    .add("doctorLastName", doctor.getLastName())
+                    .add("doctorQualification", doctor.getQualification())
+                    .add("doctorIdPS", doctor.getIdPSdoctor())
+                    .add("patientId", patient.getId())
+                    .add("patientFirstName", patient.getFirstName())
+                    .add("patientLastName", patient.getLastName())
+                    .add("consultationDate", String.valueOf(consultationDate));
+                    for(Medication medication : medicationList)
+                    {
+                        ret.add("medicationId", medication.getId())
+                                .add("medicationName", medication.getName())
+                                .add("medicationDosage", medication.getDosage())
+                                .add("medicationInstructions", medication.getInstructions())
+                                .add("medicationDuration", String.valueOf(medication.getDuration()));
+                    }
+                    ret.add("nbRenewals", nbRenewals)
+                            .add("NR", NR)
+                            .add("notes", notes);
+        }catch(Exception e){
+            System.out.println(e);
+            ret = Json.createBuilderFactory(null).createObjectBuilder();
+        }
+        return ret;
+    }
 
     @Override
     public String toString() {
@@ -150,8 +186,7 @@ public class Prescription {
                 ", doctor=" + doctor +
                 ", patient=" + patient +
                 ", consultationDate=" + consultationDate +
-                ", medication=" + medication +
-                ", duration=" + duration +
+                ", medicationList=" + medicationList +
                 ", nbRenewals=" + nbRenewals +
                 ", NR=" + NR +
                 ", notes='" + notes + '\'' +

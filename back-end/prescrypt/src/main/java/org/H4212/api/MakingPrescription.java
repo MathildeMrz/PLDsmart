@@ -1,5 +1,7 @@
 package org.H4212.api;
 
+import jakarta.json.Json;
+import jakarta.json.*;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 import org.H4212.api.jsonSerializers.*;
@@ -19,6 +21,17 @@ public class MakingPrescription {
 
         List<GetPrescriptionResponse> getPrescriptionsResponseList;
 
-        return Response.ok().build();
+        getPrescriptionsResponseList = servicePrescription.getPrescriptions(doctorId);
+
+        if(!getPrescriptionsResponseList.isEmpty()){
+            JsonArrayBuilder jsonBuilder = Json.createBuilderFactory(null).createArrayBuilder();
+            for(GetPrescriptionResponse getPrescriptionResponse : getPrescriptionsResponseList)
+            {
+                jsonBuilder.add(getPrescriptionResponse.getJsonObjectBuilder());
+            }
+            return Response.ok(jsonBuilder.build()).build();
+        }else{
+            return Response.serverError().build();
+        }
     }
 }

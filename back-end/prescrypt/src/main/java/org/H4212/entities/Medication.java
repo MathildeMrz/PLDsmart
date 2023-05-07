@@ -6,13 +6,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 
+import java.time.Duration;
+
 @Entity
 public class Medication {
 
     @Id
     @GeneratedValue
     @NotNull
-    private Long id;
+    private long id;
 
     @Column(name = "Name")
     @NotNull
@@ -24,20 +26,28 @@ public class Medication {
 
     @Column(name = "Instructions", nullable = true)
     private String instructions;
+    @Column(name = "Treatment duration")
+    @NotNull
+    private Duration duration;
 
-    public Medication(String name, int dosage, String instructions) {
+    public Medication(long id, String name, int dosage, String instructions, Duration duration) {
+        this.id = id;
         this.name = name;
         this.dosage = dosage;
         this.instructions = instructions;
-    }
-
-    public Medication(String name, int dosage) {
-        this.name = name;
-        this.dosage = dosage;
+        this.duration = duration;
     }
 
     public Medication(){
 
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -60,6 +70,14 @@ public class Medication {
         return instructions;
     }
 
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
     public void setInstructions(String instructions) {
         this.instructions = instructions;
     }
@@ -71,6 +89,7 @@ public class Medication {
                 ", name='" + name + '\'' +
                 ", dosage=" + dosage +
                 ", instructions='" + instructions + '\'' +
+                ", duration=" + duration +
                 '}';
     }
 }

@@ -20,8 +20,8 @@ public class Patient extends Person{
     @Column(name="Height", nullable = true)
     private int height;
 
-    public Patient(String lastName, String firstName, String pseudo, String password, int age, int weight, boolean sex, int height) {
-        super(lastName, firstName, pseudo, password);
+    public Patient(long id, String lastName, String firstName, String pseudo, String password, int age, int weight, boolean sex, int height) {
+        super(id, lastName, firstName, pseudo, password);
         this.age = age;
         this.weight = weight;
         this.sex = sex;
@@ -30,6 +30,18 @@ public class Patient extends Person{
 
     public Patient(String lastName, String firstName, String pseudo, String password) {
         super(lastName, firstName, pseudo, password);
+    }
+    public Patient(long id, String lastName, String firstName, int age, int weight, boolean sex, int height) {
+        super(id, lastName, firstName);
+        this.age = age;
+        this.weight = weight;
+        this.sex = sex;
+        this.height = height;
+    }
+    public Patient(long id, String lastName, String firstName) {
+        super(id, lastName, firstName);
+    }
+    public Patient() {
     }
 
     public int getAge() {
