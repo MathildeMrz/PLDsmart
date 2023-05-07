@@ -175,6 +175,31 @@
                 }</li>
             <li>DELETE /api/delete/pharmacist/{pharmacistId}</li>
             <li>DELETE /api/delete/doctor/{doctorId}</li>
+            <li>GET /api/prescription/doctor/{doctorId} <br>
+            returns [{
+                "id": 1,
+                "doctorId": 1,
+                "doctorFirstName": "Malo",
+                "doctorLastName": "OLIVIER",
+                "doctorQualification": "str",
+                "doctorIdPS": 111,
+                "patientId": 1,
+                "patientFirstName": "Gérard",
+                "patientLastName": "DEPARDIEU",
+                "consultationDate": "1977-04-22T06:00Z",
+                "medicationId": 1,
+                "medicationName": "paracetamol",
+                "medicationDosage": 10,
+                "medicationInstructions": "str",
+                "medicationDuration": "PT20.345S",
+                "nbRenewals": 3,
+                "NR": true,
+                "notes": "str"
+                },
+                {
+                ...
+                }
+            ]</li>
         </ul>
         <div class="right-section">
             <h3>Application</h3>
