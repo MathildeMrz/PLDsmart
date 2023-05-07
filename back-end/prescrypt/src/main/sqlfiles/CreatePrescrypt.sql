@@ -13,7 +13,7 @@ CREATE TABLE patient
     firstName VARCHAR(100),
     age int,
     weight int,
-    sex bit,
+    sex boolean,
     height int,
     PRIMARY KEY (patientId)
 );
@@ -65,7 +65,7 @@ CREATE TABLE prescription
     dateConsultation VARCHAR(100),
     medicationPrescriptionId bigint,
     nbRenewals int,
-    NR bit,
+    NR boolean,
     notes VARCHAR(1000),
     PRIMARY KEY (prescriptionId),
     FOREIGN KEY (doctorId) REFERENCES doctor(doctorId),
@@ -80,3 +80,16 @@ ADD    medicationId bigint REFERENCES medication(medicationId)
 ALTER TABLE medicationPrescription
 ADD    prescriptionId bigint
 ;
+
+----------------------------- INSERT INTO TABLES
+INSERT INTO users VALUES (1, 'Malo', 'f4f263e439cf40925e6a412387a9472a6773c2580212a4fb50d224d3a817de17');
+INSERT INTO users VALUES (2, 'Koko', 'f4f263e439cf40925e6a412387a9472a6773c2580212a4fb50d224d3a817de17');
+INSERT INTO users VALUES (3, 'admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918');
+
+INSERT INTO doctor VALUES (1, 'OLIVIER', 'Malo', 111, 'str', 'str', 'str', '0xstr');
+INSERT INTO pharmacist VALUES (2, 'AIMÉ', 'Korantin');
+INSERT INTO patient VALUES (10, 'DEPARDIEU', 'Gérard', 60, 100, TRUE, 190);
+
+INSERT INTO medication VALUES (12, 'paracetamol', 10, 'str', 'PT20S');
+INSERT INTO medicationPrescription VALUES (20, 12, 11);
+INSERT INTO prescription VALUES (11, 1, 10, '1977-04-22T06:00:00Z', 20, 3, FALSE, 'str');
