@@ -15,7 +15,7 @@ public class Person {
     @Id
     @GeneratedValue
     @NotNull
-    private Long id;
+    private long id;
     @Column(name = "LastName")
     @NotNull
     private String lastName;
@@ -29,6 +29,14 @@ public class Person {
     @NotNull
     private String password;
 
+    public Person(long id, String lastName, String firstName, String username, String password) {
+        this.id = id;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.username = username;
+        this.password = password;
+    }
+
     public Person(String lastName, String firstName, String username, String password) {
         this.lastName = lastName;
         this.firstName = firstName;
@@ -36,8 +44,9 @@ public class Person {
         this.password = password;
     }
 
-    public Person(String lastName, String firstName)
+    public Person(long id, String lastName, String firstName)
     {
+        this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
     }
@@ -85,6 +94,7 @@ public class Person {
         JsonObjectBuilder ret;
         try{
             ret = Json.createBuilderFactory(null).createObjectBuilder()
+                    .add("id", id)
                     .add("lastName", lastName)
                     .add("firstName", firstName);
         }catch(Exception e){

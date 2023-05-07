@@ -29,6 +29,14 @@ public class Doctor extends Person {
     @Column(name = "Ethereum Address")
     private String ethAddress;
 
+    public Doctor(long id, String lastName, String firstName, String pseudo, String password, Long idPSdoctor, String qualification, String officeAddress, String telephone) {
+        super(id, lastName, firstName, pseudo, password);
+        this.idPSdoctor = idPSdoctor;
+        this.qualification = qualification;
+        this.officeAddress = officeAddress;
+        this.telephone = telephone;
+    }
+
     public Doctor(String lastName, String firstName, String pseudo, String password, Long idPSdoctor, String qualification, String officeAddress, String telephone) {
         super(lastName, firstName, pseudo, password);
         this.idPSdoctor = idPSdoctor;
@@ -37,9 +45,9 @@ public class Doctor extends Person {
         this.telephone = telephone;
     }
 
-    public Doctor(String lastName, String firstName, Long idPSdoctor, String qualification, String officeAddress, String telephone)
+    public Doctor(long id, String lastName, String firstName, Long idPSdoctor, String qualification, String officeAddress, String telephone)
     {
-        super(lastName, firstName);
+        super(id, lastName, firstName);
         this.idPSdoctor = idPSdoctor;
         this.qualification = qualification;
         this.officeAddress = officeAddress;

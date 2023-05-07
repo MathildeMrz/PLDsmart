@@ -72,7 +72,7 @@ public class ServiceUser {
 
         if(resultSetDoctor.next())
         {
-            return new Doctor(resultSetDoctor.getString(2), resultSetDoctor.getString(3), (long) resultSetDoctor.getInt(4), resultSetDoctor.getString(5), resultSetDoctor.getString(6), resultSetDoctor.getString(7));
+            return new Doctor((long) resultSetDoctor.getInt(1), resultSetDoctor.getString(2), resultSetDoctor.getString(3), (long) resultSetDoctor.getInt(4), resultSetDoctor.getString(5), resultSetDoctor.getString(6), resultSetDoctor.getString(7));
         }else{
             System.out.println("ResultSet is empty");
             return new Doctor();
@@ -123,7 +123,7 @@ public class ServiceUser {
 
         if(resultSetPharmacist.next())
         {
-            return new Pharmacist(resultSetPharmacist.getString(2), resultSetPharmacist.getString(3));
+            return new Pharmacist((long) resultSetPharmacist.getInt(1), resultSetPharmacist.getString(2), resultSetPharmacist.getString(3));
         }else{
             System.out.println("ResultSet is empty");
             return new Pharmacist();
@@ -151,7 +151,7 @@ public class ServiceUser {
 
         if(resultSet.next())
         {
-            return new Person(resultSet.getString(2), resultSet.getString(2));
+            return new Person((long) resultSet.getInt(1), resultSet.getString(2), resultSet.getString(2));
         }else{
             System.out.println("ResultSet is empty");
             return new Person();
