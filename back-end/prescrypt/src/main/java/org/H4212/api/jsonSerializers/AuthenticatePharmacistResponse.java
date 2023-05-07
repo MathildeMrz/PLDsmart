@@ -22,7 +22,13 @@ public class AuthenticatePharmacistResponse {
     public void setUser(Pharmacist user){
         this.pharmacist = user;
     }
-
+    public boolean isNull(){
+        if(this.pharmacist.getLastName() == null)
+        {
+            return true;
+        }
+        return false;
+    }
     public JsonObject toJson()
     {
         return pharmacist.toJsonBuilder().build();

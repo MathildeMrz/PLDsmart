@@ -12,7 +12,6 @@ import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Person {
-
     @Id
     @GeneratedValue
     @NotNull
@@ -23,11 +22,9 @@ public class Person {
     @Column(name = "FirstName")
     @NotNull
     private String firstName;
-
     @Column(name = "Username")
     @NotNull
     private String username;
-
     @Column(name = "User password")
     @NotNull
     private String password;
@@ -85,9 +82,16 @@ public class Person {
     }
 
     public JsonObjectBuilder toJsonBuilder(){
-        return Json.createBuilderFactory(null).createObjectBuilder()
-                .add("lastName", lastName)
-                .add("firstName", firstName);
+        JsonObjectBuilder ret;
+        try{
+            ret = Json.createBuilderFactory(null).createObjectBuilder()
+                    .add("lastName", lastName)
+                    .add("firstName", firstName);
+        }catch(Exception e){
+            System.out.println(e);
+            ret = Json.createBuilderFactory(null).createObjectBuilder();
+        }
+        return ret;
     }
 
     @Override

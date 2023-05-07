@@ -48,15 +48,20 @@ public class ServiceUser {
             throw new RuntimeException(e);
         }
 
-        resultSet.next();
+        PreparedStatement preparedStatementDoctor;
 
-        String fetchDoctorQuery =
-                """
+        if(resultSet.next()) {
+            String fetchDoctorQuery =
+                    """
                 SELECT * from doctor WHERE doctorId = ?;
                 """;
 
-        PreparedStatement preparedStatementDoctor = connection.prepareStatement(fetchDoctorQuery);
-        preparedStatementDoctor.setLong(1, resultSet.getLong(1));
+            preparedStatementDoctor = connection.prepareStatement(fetchDoctorQuery);
+            preparedStatementDoctor.setLong(1, resultSet.getLong(1));
+        }else{
+            System.out.println("ResultSet is empty");
+            return new Doctor();
+        }
 
         ResultSet resultSetDoctor;
         try {
@@ -64,9 +69,14 @@ public class ServiceUser {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        resultSetDoctor.next();
 
-        return new Doctor(resultSetDoctor.getString(2), resultSetDoctor.getString(3), (long) resultSetDoctor.getInt(4), resultSetDoctor.getString(5), resultSetDoctor.getString(6), resultSetDoctor.getString(7));
+        if(resultSetDoctor.next())
+        {
+            return new Doctor(resultSetDoctor.getString(2), resultSetDoctor.getString(3), (long) resultSetDoctor.getInt(4), resultSetDoctor.getString(5), resultSetDoctor.getString(6), resultSetDoctor.getString(7));
+        }else{
+            System.out.println("ResultSet is empty");
+            return new Doctor();
+        }
     }
 
     public Pharmacist authenticatePharmacist(String username, String password) throws SQLException {
@@ -89,15 +99,20 @@ public class ServiceUser {
             throw new RuntimeException(e);
         }
 
-        resultSet.next();
+        PreparedStatement preparedStatementPharmacist;
 
-        String fetchPharmacistQuery =
-                """
+        if(resultSet.next()) {
+            String fetchPharmacistQuery =
+                    """
                 SELECT * from pharmacist WHERE pharmacistId = ?;
                 """;
 
-        PreparedStatement preparedStatementPharmacist = connection.prepareStatement(fetchPharmacistQuery);
+        preparedStatementPharmacist = connection.prepareStatement(fetchPharmacistQuery);
         preparedStatementPharmacist.setLong(1, resultSet.getLong(1));
+        }else{
+            System.out.println("ResultSet is empty");
+            return new Pharmacist();
+        }
 
         ResultSet resultSetPharmacist;
         try {
@@ -105,9 +120,14 @@ public class ServiceUser {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        resultSetPharmacist.next();
 
-        return new Pharmacist(resultSetPharmacist.getString(2), resultSetPharmacist.getString(3));
+        if(resultSetPharmacist.next())
+        {
+            return new Pharmacist(resultSetPharmacist.getString(2), resultSetPharmacist.getString(3));
+        }else{
+            System.out.println("ResultSet is empty");
+            return new Pharmacist();
+        }
     }
 
     public Person authenticateAdmin(String username, String password) throws SQLException{
@@ -129,9 +149,13 @@ public class ServiceUser {
             throw new RuntimeException(e);
         }
 
-        resultSet.next();
-
-        return new Person(resultSet.getString(2), resultSet.getString(2));
+        if(resultSet.next())
+        {
+            return new Person(resultSet.getString(2), resultSet.getString(2));
+        }else{
+            System.out.println("ResultSet is empty");
+            return new Person();
+        }
     }
 
     public void registerDoctor(RegisterDoctorRequest registerDoctorRequest) throws SQLException {

@@ -35,7 +35,11 @@ public class Authentication {
             e.printStackTrace();
         }
 
-        return Response.ok(authenticateUserResponse.toJson()).build();
+        if(!authenticateUserResponse.isNull()){
+            return Response.ok(authenticateUserResponse.toJson()).build();
+        }else{
+            return Response.serverError().build();
+        }
 
     }
 
@@ -64,7 +68,11 @@ public class Authentication {
             e.printStackTrace();
         }
 
-        return Response.ok(authenticateUserResponse.toJson()).build();
+        if(!authenticateUserResponse.isNull()){
+            return Response.ok(authenticateUserResponse.toJson()).build();
+        }else{
+            return Response.serverError().build();
+        }
 
     }
 
@@ -93,7 +101,11 @@ public class Authentication {
             e.printStackTrace();
         }
 
-        return Response.ok(authenticateUserResponse.toJson()).build();
+        if(!authenticateUserResponse.isNull()){
+            return Response.ok(authenticateUserResponse.toJson()).build();
+        }else{
+            return Response.serverError().build();
+        }
 
     }
 }

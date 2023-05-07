@@ -23,6 +23,14 @@ public class AuthenticateAdminResponse {
         this.person = user;
     }
 
+    public boolean isNull(){
+        if(this.person.getLastName() == null)
+        {
+            return true;
+        }
+        return false;
+    }
+
     public JsonObject toJson()
     {
         return person.toJsonBuilder().build();

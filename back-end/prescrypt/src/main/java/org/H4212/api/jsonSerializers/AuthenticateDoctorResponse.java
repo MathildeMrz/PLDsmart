@@ -23,7 +23,13 @@ public class AuthenticateDoctorResponse {
     public void setUser(Doctor user){
         this.doctor = user;
     }
-
+    public boolean isNull(){
+        if(this.doctor.getLastName() == null)
+        {
+            return true;
+        }
+        return false;
+    }
     public JsonObject toJson()
     {
         return doctor.toJsonBuilder().build();
