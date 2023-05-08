@@ -37,7 +37,7 @@ import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 @Path("/OCR-api")
 public class OCRApi {
 
-    //private final ServiceOCR serviceOCR = new ServiceOCR();
+ private final ServiceOCR serviceOCR = new ServiceOCR();
 
     @POST
     @Path("/")
