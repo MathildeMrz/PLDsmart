@@ -103,15 +103,14 @@
             </button>
         </div>
         <button id="generatePdfButton" class="ordonnance" @click="verifyValidity">Générer l'ordonnance</button>
-        <form method="post" enctype="multipart/form-data">
             <input type="file" id="myFile" name="filename">
-            <input id="submitImageToOCR" type="submit">
-        </form>
+            <input id="submitImageToOCR" type="submit" style="margin-left: 200px;">
     </div>
 </template>
 
 
 <script>
+    //import { read } from 'xlsx';
     import Medicament from './Medicament.vue';
     import NavigationBar from './NavigationBar.vue';
 
@@ -255,19 +254,63 @@
         {
             const input = document.getElementById("myFile");
             const file = input.files[0];
-            const formData = new FormData();
-            formData.append('file', file);
+            const type = file.type;
+
+            /* Contrôler le type */
+            if(type == "application/pdf")
+            {
+                console.log("PDF détecté");
+                /* Transformer pdf en png */
+                
+
+            }
+
+            else
+            {
+                 const reader = new FileReader();
+                reader.onload = function(event) {
+                const byteArray = new Uint8Array(event.target.result);
+
+                const url = 'http://localhost:9000/OCR-api';
+                fetch(url, {
+                    method: 'POST',
+                    body: byteArray.buffer, // encode le tableau de bytes en ArrayBuffer
+                })
+                .then(response => {
+                    console.log(response);
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+                };
+                reader.readAsArrayBuffer(file);
+
+            }
+
+
+           
+
+
+            //const byteArray = reader.readAsArrayBuffer(file);
+            /*const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'http://localhost:9000/OCR-api');
+            xhr.setRequestHeader('Content-Type', 'application/octet-stream');
+            xhr.setRequestHeader('Content-Disposition', `attachment; filename=${file.name}`);
+            xhr.send(byteArray);*/
+            
+            //const formData = new FormData();
+            /*formData.append('file', file);
             let url = 'http://localhost:9000/OCR-api';
             fetch(url, {
                 method: 'POST',
-                body: formData
+                body: bytesArray
             })
             .then(response => {
                 console.log(response);
             })
             .catch(error => {
                 console.error(error);
-            });
+            });*/
 
            
         
