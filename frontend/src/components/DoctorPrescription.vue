@@ -102,7 +102,7 @@
                 <img src="../assets/plus.png" alt="button add prescription" />
             </button>
         </div>
-        <button id="generatePdfButton" class="ordonnance">Générer l'ordonnance</button>
+        <button id="generatePdfButton" class="ordonnance" @click="verifyValidity">Générer l'ordonnance</button>
         <form method="post" enctype="multipart/form-data">
             <input type="file" id="myFile" name="filename">
             <input id="submitImageToOCR" type="submit">
@@ -129,12 +129,10 @@
         methods: {
             deleteMedicine(index) 
             {
-                console.log("delete medicine of parent!!!!");
                 this.medicines.splice(index, 1);
             },
             addMedicine() 
             {
-                console.log("addMedicine");
                 this.medicines.push({
 
                 });
@@ -142,138 +140,117 @@
             disconnect() 
             {
                 location.href = '/';
+            },
+            verifyValidity()
+            {
+               const table = document.querySelector("table");
+
+                    if(table.rows.length == 1)
+                    {
+                        incorrectPrescription = Boolean(true);
+                        alert("Au moins un médicament ou acte doit être renseigné");
+                        this.addMedicine();
+                    }
+                
+                    var incorrectPrescription = Boolean(false);
+                    const inputs = document.querySelectorAll("input");
+                    
+                    for (let i = 0; i < inputs.length; i++) 
+                    {
+                        const input = inputs[i];
+                        input.classList.remove("red-border");
+                        if (! (input.id == "patientAge" || input.id == "patientHeight" ||  input.id == "patientWeight" ||
+                            input.id == "refundable" || input.id == "indication") && input.value === '') 
+                        {
+                            incorrectPrescription = Boolean(true);
+                            input.classList.add("red-border");
+                        }
+                    }
+                    
+                    if(!incorrectPrescription)
+                    {
+                        const doctorName = document.getElementById("doctorName").textContent;
+                        const doctorJob = document.getElementById("doctorJob").textContent;
+                        const RPPSNum = document.getElementById("RPPSNum").textContent;
+                        const patientName = document.getElementById("patientName").value;
+                        const patientFirstName = document.getElementById("patientFirstName").value;
+                        const patientAge = document.getElementById("patientAge").value;
+                        const patientWeight = document.getElementById("patientWeight").value;
+                        const patientHeight = document.getElementById("patientHeight").value;
+                        const prescriptionDate = document.getElementById("prescriptionDate").textContent;
+                        const addressPrescription = document.getElementById("addressPrescription").textContent;
+                        const consultationPhoneNumber = document.getElementById("consultationPhoneNumber").textContent;
+
+                        const table = document.querySelector("table");
+                        const rows = table.querySelectorAll("tbody tr");
+
+                        const rowsMedicamentsActs = [];
+
+                        rows.forEach(row => {
+                            const medicineAct = row.querySelector("#medicineAct").value;
+                            const posology = row.querySelector("#posology").value;
+                            const treatmentPeriod = row.querySelector("#treatmentPeriod").value;
+                            const renewal = row.querySelector("#renewal").value;
+                            const refundable = row.querySelector("#refundable").checked;
+                            const indication = row.querySelector("#indication").value;
+
+                            const rowMedicamentAct = {
+                                "medicineAct": medicineAct,
+                                "posology": posology,
+                                "treatmentPeriod": treatmentPeriod,
+                                "renewal": renewal,
+                                "refundable": refundable,
+                                "indication": indication
+                            };              
+
+                            rowsMedicamentsActs.push(rowMedicamentAct);
+                        });
+
+                        let jsonPdf = {
+                            "doctorName": doctorName,
+                            "doctorJob": doctorJob,
+                            "RPPSNum": RPPSNum,
+                            "patientName": patientName,
+                            "patientFirstName": patientFirstName,
+                            "patientAge": patientAge,
+                            "patientWeight": patientWeight,
+                            "patientHeight": patientHeight,
+                            "prescriptionDate": prescriptionDate,
+                            "addressPrescription": addressPrescription,
+                            "consultationPhoneNumber": consultationPhoneNumber,
+                            "prescriptions": rowsMedicamentsActs 
+                        };
+                            
+                        let queryString = 'jsonPdf=' + encodeURIComponent(JSON.stringify(jsonPdf));
+
+                        let url = 'http://localhost:9000/generate-pdf?' + queryString;
+
+                        fetch(url, {
+                            method: 'GET'
+                        })
+                        .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Erreur lors de la récupération du PDF');
+                        }
+                        return response.blob();
+                        })
+                        .then(blob => {
+                            const url = URL.createObjectURL(blob);
+                            window.open(url);
+                        })
+                        .catch(error => console.error(error));
+                    }
+                
             }
         },
         props: {},
     }
-    
+  
     document.addEventListener("DOMContentLoaded", function() 
     {
-        //Listener generate pdf button
-        var button = document.getElementById("generatePdfButton");
-        button.addEventListener("click", function() 
-        {
-            const table = document.querySelector("table");
+        //Listener generate pdf button                  
 
-            if(table.rows.length == 1)
-            {
-                incorrectPrescription = Boolean(true);
-                alert("Au moins un médicament ou acte doit être renseigné");
-                console.log("Avant"+table.rows.length);
-                this.addMedicine;
-                console.log("Apres"+table.rows.length); 
-            }
-         
-            var incorrectPrescription = Boolean(false);
-            const inputs = document.querySelectorAll("input");
-            
-            for (let i = 0; i < inputs.length; i++) 
-            {
-                const input = inputs[i];
-                input.classList.remove("red-border");
-                if (! (input.id == "patientAge" || input.id == "patientHeight" ||  input.id == "patientWeight" ||
-                       input.id == "refundable" || input.id == "indication") && input.value === '') 
-                {
-                    incorrectPrescription = Boolean(true);
-                    input.classList.add("red-border");
-                }
-            }
-
-            
-                /*const newRow = table.insertRow(); // Ajoute une nouvelle ligne
-
-                const medicineAct = newRow.insertCell();
-                const posology = newRow.insertCell();
-                const treatmentPeriod = newRow.insertCell();
-                const renewal = newRow.insertCell();
-                const refundable = newRow.insertCell();
-                const indication = newRow.insertCell();
-
-                medicineAct.innerHTML = "";
-                posology.innerHTML = "";
-                treatmentPeriod.innerHTML = "";
-                renewal.innerHTML = "";
-                refundable.innerHTML = "";
-                indication.innerHTML = "";   */             
-        
-            
-            if(!incorrectPrescription)
-            {
-                const doctorName = document.getElementById("doctorName").textContent;
-                const doctorJob = document.getElementById("doctorJob").textContent;
-                const RPPSNum = document.getElementById("RPPSNum").textContent;
-                const patientName = document.getElementById("patientName").value;
-                const patientFirstName = document.getElementById("patientFirstName").value;
-                const patientAge = document.getElementById("patientAge").value;
-                const patientWeight = document.getElementById("patientWeight").value;
-                const patientHeight = document.getElementById("patientHeight").value;
-                const prescriptionDate = document.getElementById("prescriptionDate").textContent;
-                const addressPrescription = document.getElementById("addressPrescription").textContent;
-                const consultationPhoneNumber = document.getElementById("consultationPhoneNumber").textContent;
-
-                const table = document.querySelector("table");
-                const rows = table.querySelectorAll("tbody tr");
-
-                const rowsMedicamentsActs = [];
-
-                rows.forEach(row => {
-                    const medicineAct = row.querySelector("#medicineAct").value;
-                    const posology = row.querySelector("#posology").value;
-                    const treatmentPeriod = row.querySelector("#treatmentPeriod").value;
-                    const renewal = row.querySelector("#renewal").value;
-                    const refundable = row.querySelector("#refundable").checked;
-                    const indication = row.querySelector("#indication").value;
-
-                    const rowMedicamentAct = {
-                        "medicineAct": medicineAct,
-                        "posology": posology,
-                        "treatmentPeriod": treatmentPeriod,
-                        "renewal": renewal,
-                        "refundable": refundable,
-                        "indication": indication
-                    };              
-
-                    rowsMedicamentsActs.push(rowMedicamentAct);
-                });
-
-                    let jsonPdf = {
-                        "doctorName": doctorName,
-                        "doctorJob": doctorJob,
-                        "RPPSNum": RPPSNum,
-                        "patientName": patientName,
-                        "patientFirstName": patientFirstName,
-                        "patientAge": patientAge,
-                        "patientWeight": patientWeight,
-                        "patientHeight": patientHeight,
-                        "prescriptionDate": prescriptionDate,
-                        "addressPrescription": addressPrescription,
-                        "consultationPhoneNumber": consultationPhoneNumber,
-                        "prescriptions": rowsMedicamentsActs 
-                    };
-                    
-                    let queryString = 'jsonPdf=' + encodeURIComponent(JSON.stringify(jsonPdf));
-
-                    let url = 'http://localhost:9000/generate-pdf?' + queryString;
-
-                    fetch(url, {
-                        method: 'GET'
-                    })
-                    .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Erreur lors de la récupération du PDF');
-                    }
-                    return response.blob();
-                    })
-                    .then(blob => {
-                        const url = URL.createObjectURL(blob);
-                        window.open(url);
-                    })
-                    .catch(error => console.error(error));
-                }
-           
-        });            
-
-        button = document.getElementById("submitImageToOCR");
+        const button = document.getElementById("submitImageToOCR");
         button.addEventListener("click", function() 
         {
             const input = document.getElementById("myFile");
