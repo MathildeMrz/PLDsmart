@@ -42,7 +42,7 @@ public class ServiceMedication {
 
         if(resultSet.next())
         {
-            return new Medication((long) resultSet.getInt(1), resultSet.getString(2), resultSet.getInt(3), resultSet.getString(4), Duration.parse(resultSet.getString(5)));
+            return new Medication((long) resultSet.getLong(1), resultSet.getString(2), resultSet.getInt(3), resultSet.getString(4), Duration.parse(resultSet.getString(5)));
         }else{
             System.out.println("ResultSet for getting a medication is empty");
             return new Medication();

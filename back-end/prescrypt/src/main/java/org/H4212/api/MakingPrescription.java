@@ -1,6 +1,5 @@
 package org.H4212.api;
 
-import jakarta.json.Json;
 import jakarta.json.*;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
@@ -15,7 +14,7 @@ public class MakingPrescription {
     @GET
     @Produces("application/json")
     @Path("/prescription/doctor/{doctorId}")
-    public Response getPrescriptions(@PathParam("doctorId") Long doctorId) throws SQLException {
+    public Response getPrescriptions(@PathParam("doctorId") long doctorId) throws SQLException {
 
         ServicePrescription servicePrescription = new ServicePrescription();
 
@@ -33,5 +32,19 @@ public class MakingPrescription {
         }else{
             return Response.serverError().build();
         }
+    }
+
+    @POST
+    @Consumes("application/json")
+    @Produces("application/json")
+    @Path("/prescription/doctor/{doctorId}")
+    public Response createPrescription(@PathParam("doctorId") long doctorId, JsonObject jsonObject) throws SQLException{
+        ServicePrescription servicePrescription = new ServicePrescription();
+
+        CreatePrescriptionRequest createPrescriptionRequest = new CreatePrescriptionRequest(doctorId, jsonObject);
+
+        servicePrescription.createPrescription(createPrescriptionRequest);
+
+        return Response.ok().build();
     }
 }

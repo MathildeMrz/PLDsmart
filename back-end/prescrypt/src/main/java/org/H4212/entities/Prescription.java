@@ -57,6 +57,16 @@ public class Prescription {
         this.notes = notes;
     }
 
+    public Prescription(Doctor doctor, Patient patient, OffsetDateTime consultationDate, List<Medication> medicationList, int nbRenewals, boolean NR, String notes) {
+        this.doctor = doctor;
+        this.patient = patient;
+        this.consultationDate = consultationDate;
+        this.medicationList = medicationList;
+        this.nbRenewals = nbRenewals;
+        this.NR = NR;
+        this.notes = notes;
+    }
+
     public Prescription(long id, Doctor doctor, Patient patient, OffsetDateTime consultationDate, List<Medication> medicationList, int nbRenewals, boolean NR) {
         this.id = id;
         this.doctor = doctor;
