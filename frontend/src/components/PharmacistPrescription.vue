@@ -3,8 +3,8 @@
 
     <div id="doctorPrescription">
         <div id="import-prescription">
-            <img src="../assets/importPrescription.png" alt="">
-            <div id="import-prescription-text"> Importer une ordonnance</div>
+            <img id="import-prescription-img" src="../assets/importPrescription.png" alt="">
+            <div id="import-prescription-text" @click="handleFileImport"> <h3>Importer une ordonnance</h3></div>
         </div>
         <div id="doctor">
             <div>
@@ -126,6 +126,18 @@
             };
         },
         methods: {
+            handleFileImport(){
+                console.log("in the method handleFileImport!");
+                let input = document.createElement('input');
+                input.type = 'file';
+                input.multiple = false;
+                input.onchange = () => {
+                    // you can use this method to get file and perform respective operations
+                            let files =   Array.from(input.files);
+                            console.log(files);
+                        };
+                input.click();
+            },
             deleteMedicine(index) {
                 console.log("delete medicine of parent!!!!");
                 this.medicines.splice(index, 1);
@@ -223,7 +235,22 @@
 
 
 <style>
-  
+    #import-prescription{
+        display: flex;
+        align-items: center;
+    }
+    
+    #import-prescription-text{
+        font-size: 1.17em;
+        font-weight: bold;
+        text-decoration-line: underline;  
+        text-decoration-color: #1817BA;  
+        margin-left: 10px;
+        cursor: pointer;
+
+
+   }
+
     td:nth-child(5){
         width : 10%;
     }
