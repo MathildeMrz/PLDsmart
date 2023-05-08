@@ -53,8 +53,7 @@ CREATE TABLE medication
 
 CREATE TABLE medicationPrescription
 (
-    medicationPrescriptionId bigint NOT NULL,
-    PRIMARY KEY (medicationPrescriptionId)
+    medicationPrescriptionId bigint NOT NULL
 );
 
 CREATE TABLE prescription
@@ -69,8 +68,7 @@ CREATE TABLE prescription
     notes VARCHAR(1000),
     PRIMARY KEY (prescriptionId),
     FOREIGN KEY (doctorId) REFERENCES doctor(doctorId),
-    FOREIGN KEY (patientId) REFERENCES patient(patientId),
-    FOREIGN KEY (medicationPrescriptionId) REFERENCES medicationPrescription(medicationPrescriptionId)
+    FOREIGN KEY (patientId) REFERENCES patient(patientId)
 );
 
 ALTER TABLE medicationPrescription

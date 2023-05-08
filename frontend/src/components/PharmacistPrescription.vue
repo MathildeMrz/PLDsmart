@@ -72,7 +72,7 @@
                 </div>
 
                 <div class="column">
-                    <input id="consultationPhoneNumber" type="date" min="0" max="150" name=""/>
+                    <input id="consultationPhoneNumber" type="number" min="0" max="9999999999" name=""/>
                     <p class="indications">Tel. cabinet</p>
                 </div>
             </div>

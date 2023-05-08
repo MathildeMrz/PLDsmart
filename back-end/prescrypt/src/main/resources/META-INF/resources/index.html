@@ -134,6 +134,7 @@
                 "password": "mdp"
                 }
             <br>returns {
+                "id" : 2,
                 "firstName": "Korantin",
                 "lastName": "AIMÉ"
                 }</li>
@@ -142,6 +143,7 @@
                 "password": "mdp"
                 }
             <br>returns {
+                "id" : 1,
                 "firstName": "Malo",
                 "lastName": "OLIVIER",
                 "idPSdoctor": 222,
@@ -154,6 +156,7 @@
                 "password": "admin"
                 }
                 <br>returns {
+                "id" : 3,
                 "firstName": "admin",
                 "lastName": "admin"
                 }</li>
@@ -187,11 +190,17 @@
                 "patientFirstName": "Gérard",
                 "patientLastName": "DEPARDIEU",
                 "consultationDate": "1977-04-22T06:00Z",
-                "medicationId": 1,
+                "medications" : [
+                {"medicationId": 1,
                 "medicationName": "paracetamol",
                 "medicationDosage": 10,
                 "medicationInstructions": "str",
-                "medicationDuration": "PT20.345S",
+                "medicationDuration": "PT20.345S"
+                },
+                {
+                ...
+                }
+                ],
                 "nbRenewals": 3,
                 "NR": true,
                 "notes": "str"
@@ -200,6 +209,33 @@
                 ...
                 }
             ]</li>
+            <li>DELETE /api//delete/doctor/{doctorId}/prescription/{prescriptionId}</li>
+            <li>POST /api/prescription/doctor/{doctorId} <br> body :
+                {
+                "patientLastName" : "DEPARDIEU",
+                "patientFirstName" : "Sylvie",
+                "patientAge" : 30,
+                "patientWeight" : 60,
+                "patientSex" : false,
+                "patientHeight" : 165,
+                "medications" : [
+                {
+                "medicationName" : "cocaïne",
+                "medicationDosage" : 1000,
+                "medicationInstructions" : "str",
+                "medicationDuration" : "PT20S"
+                },
+                {
+                "medicationName" : "lisopaïne",
+                "medicationDosage" : 100,
+                "medicationInstructions" : "str",
+                "medicationDuration" : "PT40S"
+                }
+                ],
+                "nbRenewals" : 3,
+                "NR" : true,
+                "notes" : "str"
+                }</li>
         </ul>
         <div class="right-section">
             <h3>Application</h3>
