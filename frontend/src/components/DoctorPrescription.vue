@@ -59,8 +59,8 @@
             <h3>La consultation</h3>
             <div class="information">
                 <div class="column">
-                    <p id="prescriptionDate">02/05/2023</p>
-                    <p class="indications">Date de l'ordonnance (JJ/MM/AAAA)</p>
+                    <p id="prescriptionDate"></p>
+                    <p class="indications">Date de l'ordonnance (JJ/MM/AAAA HH:MM)</p>
                 </div>
 
                 <div class="column">
@@ -78,7 +78,7 @@
             <h3>La prescription</h3>
 
             <div class="column" >
-            <input id="validityPrescriptionDays" type="text" name="" placeholder="90">
+            <input id="validityPrescriptionDays" type="text" name="" value="90">
             <p class="indications">La validité de l'ordonnance (jours)</p>
             </div>
 
@@ -103,10 +103,6 @@
             </button>
         </div>
         <button id="generatePdfButton" class="ordonnance" @click="verifyValidity">Générer l'ordonnance</button>
-        <form method="post" enctype="multipart/form-data">
-            <input type="file" id="myFile" name="filename">
-            <input id="submitImageToOCR" type="submit">
-        </form>
     </div>
 </template>
 
@@ -248,7 +244,15 @@
   
     document.addEventListener("DOMContentLoaded", function() 
     {
-        //Listener generate pdf button                  
+        //Listener generate pdf button
+        
+        const n = new Date();
+        const y = n.getFullYear();
+        const m = n.getMonth() + 1;
+        const d = n.getDate();
+        const h = n.getHours();
+        const min = n.getMinutes();
+        document.getElementById("prescriptionDate").innerHTML = ('0' + d).slice(-2) + "/" + ('0' + m).slice(-2) + "/" + y + " " + h + ":" + min;
 
         const button = document.getElementById("submitImageToOCR");
         button.addEventListener("click", function() 
