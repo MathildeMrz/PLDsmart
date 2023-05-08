@@ -1,5 +1,9 @@
 package org.H4212.entities;
 
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonObjectBuilder;
+import jakarta.json.JsonValue;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -36,6 +40,12 @@ public class Medication {
         this.dosage = dosage;
         this.instructions = instructions;
         this.duration = duration;
+    }
+    public Medication(JsonObject jsonObject){
+        this.name = jsonObject.getString("medicationName");
+        this.dosage = jsonObject.getInt("medicationDosage");
+        this.instructions = jsonObject.getString("medicationInstructions");
+        this.duration = Duration.parse(jsonObject.getString("medicationDuration"));
     }
 
     public Medication(){
@@ -80,6 +90,15 @@ public class Medication {
 
     public void setInstructions(String instructions) {
         this.instructions = instructions;
+    }
+
+    public JsonObjectBuilder getJsonObjectBuilder(){
+        return Json.createBuilderFactory(null).createObjectBuilder()
+                .add("medicationId", id)
+                .add("medicationName", name)
+                .add("medicationDosage", dosage)
+                .add("medicationInstructions", instructions)
+                .add("medicationDuration", String.valueOf(duration));
     }
 
     @Override

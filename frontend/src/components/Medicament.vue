@@ -39,17 +39,19 @@
     export default {
         name: 'MedicamentComponent',
         props: ['index'],
-        mounted() {
+        mounted() 
+        {
             this.loadData();
-          },
-        methods: {
+        },
+        methods: 
+        {
             deleteMedicine() 
             {
                 this.$emit('delete',this.index);
             },
             loadData() 
             {
-            //Ajout médicaments liste déroulante
+                //Ajout médicaments liste déroulante
                 const data = require('../assets/medicine.json');
                 const medicineSelect = document.getElementById("medicineActDatalist");
                 let result = [];

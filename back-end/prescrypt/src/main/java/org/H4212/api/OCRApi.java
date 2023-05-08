@@ -1,10 +1,12 @@
 package org.H4212.api;
 
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import net.sourceforge.tess4j.TesseractException;
@@ -35,7 +37,7 @@ import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 @Path("/OCR-api")
 public class OCRApi {
 
-    private final ServiceOCR serviceOCR = new ServiceOCR();
+    //private final ServiceOCR serviceOCR = new ServiceOCR();
 
     @POST
     @Path("/")

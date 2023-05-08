@@ -51,6 +51,11 @@ public class Person {
         this.firstName = firstName;
     }
 
+    public Person(String lastName, String firstName) {
+        this.lastName = lastName;
+        this.firstName = firstName;
+    }
+
     public Person() {
 
     }

@@ -1,13 +1,10 @@
 package org.H4212.entities;
 
-import jakarta.json.Json;
-import jakarta.json.JsonObjectBuilder;
+import jakarta.json.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import java.time.Duration;
-import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.*;
+import java.util.*;
 
 @Entity
 public class Prescription {
@@ -51,6 +48,16 @@ public class Prescription {
 
     public Prescription(long id, Doctor doctor, Patient patient, OffsetDateTime consultationDate, List<Medication> medicationList, int nbRenewals, boolean NR, String notes) {
         this.id = id;
+        this.doctor = doctor;
+        this.patient = patient;
+        this.consultationDate = consultationDate;
+        this.medicationList = medicationList;
+        this.nbRenewals = nbRenewals;
+        this.NR = NR;
+        this.notes = notes;
+    }
+
+    public Prescription(Doctor doctor, Patient patient, OffsetDateTime consultationDate, List<Medication> medicationList, int nbRenewals, boolean NR, String notes) {
         this.doctor = doctor;
         this.patient = patient;
         this.consultationDate = consultationDate;
@@ -149,6 +156,7 @@ public class Prescription {
     }
     public JsonObjectBuilder toJsonBuilder(){
         JsonObjectBuilder ret;
+        JsonArrayBuilder medicationsArray;
         try{
             ret = Json.createBuilderFactory(null).createObjectBuilder()
                     .add("id", id)
@@ -161,14 +169,12 @@ public class Prescription {
                     .add("patientFirstName", patient.getFirstName())
                     .add("patientLastName", patient.getLastName())
                     .add("consultationDate", String.valueOf(consultationDate));
+            medicationsArray = Json.createBuilderFactory(null).createArrayBuilder();
                     for(Medication medication : medicationList)
                     {
-                        ret.add("medicationId", medication.getId())
-                                .add("medicationName", medication.getName())
-                                .add("medicationDosage", medication.getDosage())
-                                .add("medicationInstructions", medication.getInstructions())
-                                .add("medicationDuration", String.valueOf(medication.getDuration()));
+                        medicationsArray.add(medication.getJsonObjectBuilder());
                     }
+                    ret.add("medications", medicationsArray);
                     ret.add("nbRenewals", nbRenewals)
                             .add("NR", NR)
                             .add("notes", notes);

@@ -17,6 +17,12 @@ module.exports = {
       template: 'public/pharmacist.html',
       title: 'Pharmacist Prescription Page',
       chunks: ['chunk-vendors', 'chunk-common', 'pharmacist']
+    },
+    'admin': {
+      entry: 'src/pages/Admin_professionals_management/main.js',
+      template: 'public/admin.html',
+      title: 'Admin Professionals Management Page',
+      chunks: ['chunk-vendors', 'chunk-common', 'admin']
     }
   }
 }

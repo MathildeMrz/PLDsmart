@@ -24,11 +24,6 @@ public class RegisterDoctorRequest {
         }
     }
 
-    /*public RegisterDoctorRequest(JsonObject jsonObject){
-        this.doctor = new Doctor(jsonObject.getString("lastName"), jsonObject.getString("firstName"),
-                jsonObject.getString("pseudo"), jsonObject.getString("password"));
-    }*/
-
     public RegisterDoctorRequest(){
 
     }
