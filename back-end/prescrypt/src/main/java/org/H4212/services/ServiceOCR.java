@@ -11,7 +11,7 @@ import net.sourceforge.tess4j.TesseractException;
 import java.awt.image.BufferedImage;
 
 public class ServiceOCR {
-    public String generateJSON(InputStream imageStream)
+    public String generateJSON(BufferedImage imageStream)
     {
         File image = new File("./back-end/prescrypt/src/main/java/org/H4212/services/a.png");
         Tesseract tesseract = new Tesseract();
