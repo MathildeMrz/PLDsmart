@@ -90,7 +90,7 @@ public class ServicePdf {
 
         if(! patientSexe.isEmpty())
         {
-            patientString += "Sexe: " + patientSexe;
+            patientString += "Sexe: " + patientSexe + " ";
         }
 
         if(! patientHeight.isEmpty())
@@ -130,7 +130,7 @@ public class ServicePdf {
                 row +=" non renouvelable, ";
             }
             else{
-                row = row +" renouvelable "+renewal+" fois,";
+                row = row +" renouvelable "+renewal+" fois, ";
 
             }
             if(refundableBool){
