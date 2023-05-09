@@ -38,7 +38,7 @@ public class Authentication {
         if(!authenticateUserResponse.isNull()){
             return Response.ok(authenticateUserResponse.toJson()).build();
         }else{
-            return Response.serverError().build();
+            return Response.status(500).entity("{}").build();
         }
 
     }
@@ -71,7 +71,7 @@ public class Authentication {
         if(!authenticateUserResponse.isNull()){
             return Response.ok(authenticateUserResponse.toJson()).build();
         }else{
-            return Response.serverError().build();
+            return Response.status(500).entity("{}").build();
         }
 
     }
@@ -104,7 +104,7 @@ public class Authentication {
         if(!authenticateUserResponse.isNull()){
             return Response.ok(authenticateUserResponse.toJson()).build();
         }else{
-            return Response.serverError().build();
+            return Response.status(500).entity("{}").build();
         }
 
     }
