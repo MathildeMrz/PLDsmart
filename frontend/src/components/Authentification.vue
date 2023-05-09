@@ -2,7 +2,8 @@
   <div id="index-page">
     <div id="login-box">
       <img id="logo-image-login" src="../assets/logo_Prescrypt.png" alt="Prescrypt logo">
-      <p style="font-size: 26px;">J'accède à mon <b>compte Prescrypt</b></p>
+      <p style="font-size: 26px; margin: 0; margin-bottom: 15px;">J'accède à mon <b>compte Prescrypt</b></p>
+      <span id="error-span"></span>
       <form>
         <div class="user-box">
           <input id="username" class="bottomInput" type="text" placeholder="Mon adresse" name="" required="" checked="checked">
@@ -82,11 +83,12 @@
           let response = await handleAuth.json();
           console.log(response);
 
-          if(response.length != 0) {
+          if(handleAuth.status == 200) {
             location.href = job + ".html";
           }
           else {
             console.log("User not registered");
+            document.getElementById("error-span").innerHTML = "Nom d'utilisateur ou mot de passe incorrect";
           }
         }
         catch (error) {
@@ -145,13 +147,22 @@
 
   input
   {
+    font-size: 18px;
     margin-bottom: 30px;
+  }
+
+  #error-span {
+    font-size: 20px;
+    color: red;
+    font-style: italic;
+    margin-bottom: 5px;
+    height: 20px;
   }
 
   #logo-image-login
   {
     width: 350px;
-    margin-bottom: 50px;
+    margin-bottom: 40px;
   }
 
   .radio
