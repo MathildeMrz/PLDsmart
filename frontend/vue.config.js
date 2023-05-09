@@ -6,11 +6,11 @@ module.exports = {
       title: 'Home Page',
       chunks: ['chunk-vendors', 'chunk-common', 'index']
     },
-    'prescription': {
+    'doctor': {
       entry: 'src/pages/Doctor_prescription/main.js',
-      template: 'public/prescription.html',
+      template: 'public/doctor.html',
       title: 'Prescription Page',
-      chunks: ['chunk-vendors', 'chunk-common', 'prescription']
+      chunks: ['chunk-vendors', 'chunk-common', 'doctor']
     },
     'pharmacist': {
       entry: 'src/pages/pharmacist_prescription/main.js',

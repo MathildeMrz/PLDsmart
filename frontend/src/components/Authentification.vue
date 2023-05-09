@@ -2,7 +2,8 @@
   <div id="index-page">
     <div id="login-box">
       <img id="logo-image-login" src="../assets/logo_Prescrypt.png" alt="Prescrypt logo">
-      <p style="font-size: 26px;">J'accède à mon <b>compte Prescrypt</b></p>
+      <p style="font-size: 26px; margin: 0; margin-bottom: 15px;">J'accède à mon <b>compte Prescrypt</b></p>
+      <span id="error-span"></span>
       <form>
         <div class="user-box">
           <input id="username" class="bottomInput" type="text" placeholder="Mon adresse" name="" required="" checked="checked">
@@ -13,7 +14,7 @@
 
         <div>
           <div class="radio">
-            <input type="radio" id="role-doctor" name="role" value="Médecin" />
+            <input type="radio" id="role-doctor" name="role" value="Médecin" checked/>
             <label for="role-doctor">Médecin</label>
           </div>
 
@@ -27,7 +28,7 @@
             <label for="role-admin">Administrateur</label>
           </div>
         </div>
-        <button id="connexion-button" v-on:click="authenticate()">Me Connecter</button>
+        <button id="connexion-button" v-on:click="authenticate(event)">Me Connecter</button>
       </form>
     </div>
     <div id="doctor-box">
@@ -46,24 +47,53 @@
     name: 'AuthentificationComponent',
     props: {},
     methods: {
-      authenticate() {
-        fetch("http://localhost:9000/api/auth/doctor", {
-            method: 'POST',
-            body: JSON.stringify({
-                username: "Koko",//document.getElementById("username").value,
-                password: "mdp"//document.getElementById("password").value
-              }),
-            headers: {
-              'Content-Type': 'application/json; charset=UTF-8'
-            }
-          })
-        .then(console.log(JSON.stringify({
-                username: document.getElementById("username").value,
-                password: document.getElementById("password").value
-              })
-        ))
-        .then((response) => response.json())
-        .then((json) => console.log(json));
+      async authenticate(e) {
+        e = e || window.event;
+        e.preventDefault();
+        
+        var jobSelected = document.querySelectorAll("input[type='radio'][name='role']:checked");
+        var job = "";
+
+        switch(jobSelected[0].value) {
+          case "Médecin":
+            job = "doctor";
+            console.log("Authentification en tant que médecin");
+            break;
+          case "Pharmacien":
+            job = "pharmacist";
+            console.log("Authentification en tant que pharmacien");
+            break;
+          case "Administrateur":
+            job = "admin";
+            console.log("Authentification en tant qu'administrateur");
+            break;
+        }
+
+        try {
+          let handleAuth = await fetch("http://localhost:9000/api/auth/" + job, {
+              method: 'POST',
+              body: JSON.stringify({
+                  username: document.getElementById("username").value,
+                  password: document.getElementById("password").value
+                }),
+              headers: {
+                'Content-Type': 'application/json; charset=UTF-8'
+              }
+            });
+          let response = await handleAuth.json();
+          console.log(response);
+
+          if(handleAuth.status == 200) {
+            location.href = job + ".html";
+          }
+          else {
+            console.log("User not registered");
+            document.getElementById("error-span").innerHTML = "Nom d'utilisateur ou mot de passe incorrect";
+          }
+        }
+        catch (error) {
+          console.log(error);
+        }
       }
     }
   }
@@ -117,13 +147,22 @@
 
   input
   {
+    font-size: 18px;
     margin-bottom: 30px;
+  }
+
+  #error-span {
+    font-size: 20px;
+    color: red;
+    font-style: italic;
+    margin-bottom: 5px;
+    height: 20px;
   }
 
   #logo-image-login
   {
     width: 350px;
-    margin-bottom: 50px;
+    margin-bottom: 40px;
   }
 
   .radio

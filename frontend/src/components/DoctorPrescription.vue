@@ -35,7 +35,9 @@
                 </div>
 
                 <div class="column">
-                    <input id="patientAge" type="number" min="0" max="150" name="">
+                    <input id="patientAge" type="number" min="0" max="150" name="" 
+                    onkeydown="return event.key !== ' ' && event.key !== '-' && event.key !== '+' && !['e', 'E'].includes(event.key);"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="3">
                     <p class="indications" style="margin-bottom:2vh;">Âge (ans)</p>
                     <select id="sexe" name="sexe">
                         <option value="" disabled selected hidden></option>
@@ -47,9 +49,13 @@
                 </div>
 
                 <div class="column">
-                    <input id="patientWeight" type="number" min="0" max="1000" name="">
+                    <input id="patientWeight" type="number" min="0" max="1000" name="" 
+                    onkeydown="return event.key !== ' ' && event.key !== '-' && event.key !== '+' && !['e', 'E'].includes(event.key);"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="3">
                     <p class="indications" style="margin-bottom:2vh;">Poids (kg)</p>
-                    <input id="patientHeight" type="number" min="0" max="300" name="">
+                    <input id="patientHeight" type="number" min="0" max="300" name="" 
+                    onkeydown="return event.key !== ' ' && event.key !== '-' && event.key !== '+' && !['e', 'E'].includes(event.key);"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="3">
                     <p class="indications">Taille (cm)</p>
                 </div>
             </div>
@@ -171,6 +177,7 @@
                         const patientName = document.getElementById("patientName").value;
                         const patientFirstName = document.getElementById("patientFirstName").value;
                         const patientAge = document.getElementById("patientAge").value;
+                        const patientSexe = document.getElementById("sexe").value;
                         const patientWeight = document.getElementById("patientWeight").value;
                         const patientHeight = document.getElementById("patientHeight").value;
                         const prescriptionDate = document.getElementById("prescriptionDate").textContent;
@@ -186,6 +193,7 @@
                             const medicineAct = row.querySelector("#medicineAct").value;
                             const posology = row.querySelector("#posology").value;
                             const treatmentPeriod = row.querySelector("#treatmentPeriod").value;
+                            const treatmentPeriodTexte = row.querySelector("#treatmentPeriodTexte").value;
                             const renewal = row.querySelector("#renewal").value;
                             const refundable = row.querySelector("#refundable").checked;
                             const indication = row.querySelector("#indication").value;
@@ -194,6 +202,7 @@
                                 "medicineAct": medicineAct,
                                 "posology": posology,
                                 "treatmentPeriod": treatmentPeriod,
+                                "treatmentPeriodTexte": treatmentPeriodTexte,
                                 "renewal": renewal,
                                 "refundable": refundable,
                                 "indication": indication
@@ -209,6 +218,7 @@
                             "patientName": patientName,
                             "patientFirstName": patientFirstName,
                             "patientAge": patientAge,
+                            "patientSexe" : patientSexe,
                             "patientWeight": patientWeight,
                             "patientHeight": patientHeight,
                             "prescriptionDate": prescriptionDate,
@@ -243,9 +253,7 @@
     }
   
     document.addEventListener("DOMContentLoaded", function() 
-    {
-        //Listener generate pdf button
-        
+    {       
         const n = new Date();
         const y = n.getFullYear();
         const m = n.getMonth() + 1;
@@ -254,6 +262,72 @@
         const min = n.getMinutes();
         document.getElementById("prescriptionDate").innerHTML = ('0' + d).slice(-2) + "/" + ('0' + m).slice(-2) + "/" + y + " " + ('0' + h).slice(-2) + ":" + ('0' + min).slice(-2);
 
+        const button = document.getElementById("submitImageToOCR");
+        button.addEventListener("click", function() 
+        {
+            const input = document.getElementById("myFile");
+            const file = input.files[0];
+            const type = file.type;
+
+            /* Contrôler le type */
+            if(type == "application/pdf")
+            {
+                console.log("PDF détecté");
+                /* Transformer pdf en png */
+                
+
+            }
+
+            else
+            {
+                 const reader = new FileReader();
+                reader.onload = function(event) {
+                const byteArray = new Uint8Array(event.target.result);
+
+                const url = 'http://localhost:9000/OCR-api';
+                fetch(url, {
+                    method: 'POST',
+                    body: byteArray.buffer, // encode le tableau de bytes en ArrayBuffer
+                })
+                .then(response => {
+                    console.log(response);
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+                };
+                reader.readAsArrayBuffer(file);
+
+            }
+
+
+           
+
+
+            //const byteArray = reader.readAsArrayBuffer(file);
+            /*const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'http://localhost:9000/OCR-api');
+            xhr.setRequestHeader('Content-Type', 'application/octet-stream');
+            xhr.setRequestHeader('Content-Disposition', `attachment; filename=${file.name}`);
+            xhr.send(byteArray);*/
+            
+            //const formData = new FormData();
+            /*formData.append('file', file);
+            let url = 'http://localhost:9000/OCR-api';
+            fetch(url, {
+                method: 'POST',
+                body: bytesArray
+            })
+            .then(response => {
+                console.log(response);
+            })
+            .catch(error => {
+                console.error(error);
+            });*/
+
+           
+        
+        });
     });
 
 </script>
