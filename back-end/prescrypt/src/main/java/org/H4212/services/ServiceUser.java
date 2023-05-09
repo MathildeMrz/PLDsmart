@@ -3,6 +3,8 @@ package org.H4212.services;
 import org.H4212.api.jsonSerializers.*;
 import org.H4212.entities.*;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.H4212.util.HashingUtil.hashString;
 
@@ -124,6 +126,25 @@ public class ServiceUser {
             System.out.println("ResultSetDoctor is empty");
             return new Doctor();
         }
+    }
+
+    public List<GetDoctorResponse> getDoctors() throws SQLException{
+        List<GetDoctorResponse> getDoctorResponseList = new ArrayList<GetDoctorResponse>();
+        String stringQueryDoctors =
+                """
+                    SELECT doctorId FROM doctor;
+                """;
+        PreparedStatement preparedStatementDoctors = connection.prepareStatement(stringQueryDoctors);
+        ResultSet resultSetDoctors;
+        try {
+            resultSetDoctors = preparedStatementDoctors.executeQuery();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        while(resultSetDoctors.next()) {
+            getDoctorResponseList.add(new GetDoctorResponse(getDoctor(resultSetDoctors.getLong(1))));
+        }
+        return getDoctorResponseList;
     }
 
     public Pharmacist authenticatePharmacist(String username, String password) throws SQLException {

@@ -1,11 +1,13 @@
 package org.H4212.api;
 
-import jakarta.json.JsonObject;
+import jakarta.json.*;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 import org.H4212.api.jsonSerializers.*;
 import org.H4212.entities.*;
 import org.H4212.services.ServiceUser;
+import java.sql.SQLException;
+import java.util.List;
 
 @Path("/api/")
 public class Authentication {
@@ -107,5 +109,24 @@ public class Authentication {
             return Response.status(500).entity("{}").build();
         }
 
+    }
+
+    @GET
+    @Produces("application/json")
+    @Path("/admin/getDoctors")
+    public Response getDoctors() throws SQLException{
+        ServiceUser serviceUser = new ServiceUser();
+        List<GetDoctorResponse> getDoctorResponseList;
+        getDoctorResponseList = serviceUser.getDoctors();
+        if(!getDoctorResponseList.isEmpty()){
+            JsonArrayBuilder jsonBuilder = Json.createBuilderFactory(null).createArrayBuilder();
+            for(GetDoctorResponse getDoctorResponse : getDoctorResponseList)
+            {
+                jsonBuilder.add(getDoctorResponse.getJsonObjectBuilder());
+            }
+            return Response.ok(jsonBuilder.build()).build();
+        }else{
+            return Response.status(500).entity("{}").build();
+        }
     }
 }
