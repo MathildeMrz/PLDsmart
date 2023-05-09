@@ -122,7 +122,7 @@
     .searchnav {
         display: flex;
         justify-content: space-between;
-        margin-top: 20px;
+        margin-top: 30px;
     }
 
     .toggle {
@@ -172,7 +172,7 @@
     .searchbar {
         display: flex;
         align-items: center;
-        margin-right: 10vw;
+        margin-right: 39px;
         border: 2px solid rgba(24,23,186,0.63);
         border-radius: 20px;
     }
