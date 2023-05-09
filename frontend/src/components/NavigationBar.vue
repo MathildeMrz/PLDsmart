@@ -32,7 +32,7 @@ export default {
         padding: 15px 25px 15px 25px;
         margin-right: 20px;
         background: none;
-        border: 2px solid rgba(24, 23, 186, 0.7);
+        border: 2px solid rgba(24, 23, 186, 0.63);
         color: rgba(24, 23, 186, 0.7);
         font-variant: small-caps;
         font-size: 20px;
@@ -42,6 +42,7 @@ export default {
 
     #disconnection-button:hover {
         background: rgba(24, 23, 186, 0.63);
+        background-clip: padding-box;
         color: white;
     }
 
