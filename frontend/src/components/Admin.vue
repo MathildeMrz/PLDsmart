@@ -110,15 +110,6 @@
         outline: none;
     }
 
-    .buttonTable {
-        border:none;
-        background-color:transparent;
-    }
-
-    .buttonTable img {
-        width:2vw;
-    }
-
     .searchnav {
         display: flex;
         justify-content: space-between;
