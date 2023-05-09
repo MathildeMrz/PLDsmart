@@ -198,6 +198,72 @@ public class ServiceUser {
         }
     }
 
+    public Pharmacist getPharmacist(long pharmacistId) throws SQLException {
+        String stringQuery =
+                """
+                    SELECT userId from users WHERE userId = ?;
+                """;
+
+        PreparedStatement preparedStatement = connection.prepareStatement(stringQuery) ;
+        preparedStatement.setLong(1, pharmacistId);
+
+        ResultSet resultSet;
+        try {
+            resultSet = preparedStatement.executeQuery();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        PreparedStatement preparedStatementPharmacist;
+
+        if(resultSet.next()) {
+            String fetchDoctorQuery =
+                    """
+                SELECT * from pharmacist WHERE pharmacistId = ?;
+                """;
+
+            preparedStatementPharmacist = connection.prepareStatement(fetchDoctorQuery);
+            preparedStatementPharmacist.setLong(1, resultSet.getLong(1));
+        }else{
+            System.out.println("ResultSet is empty");
+            return new Pharmacist();
+        }
+
+        ResultSet resultSetPharmacist;
+        try {
+            resultSetPharmacist = preparedStatementPharmacist.executeQuery();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        if(resultSetPharmacist.next())
+        {
+            return new Pharmacist((long) resultSetPharmacist.getLong(1), resultSetPharmacist.getString(2), resultSetPharmacist.getString(3));
+        }else{
+            System.out.println("resultSetPharmacist is empty");
+            return new Pharmacist();
+        }
+    }
+
+    public List<GetPharmacistResponse> getPharmacists() throws SQLException{
+        List<GetPharmacistResponse> getPharmacistResponseList = new ArrayList<GetPharmacistResponse>();
+        String stringQueryPharmacists =
+                """
+                    SELECT pharmacistId FROM pharmacist;
+                """;
+        PreparedStatement preparedStatementPharmacists = connection.prepareStatement(stringQueryPharmacists);
+        ResultSet resultSetPharmacists;
+        try {
+            resultSetPharmacists = preparedStatementPharmacists.executeQuery();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        while(resultSetPharmacists.next()) {
+            getPharmacistResponseList.add(new GetPharmacistResponse(getPharmacist(resultSetPharmacists.getLong(1))));
+        }
+        return getPharmacistResponseList;
+    }
+
     public Person authenticateAdmin(String username, String password) throws SQLException{
         String hashedPassword = hashString(password);
 

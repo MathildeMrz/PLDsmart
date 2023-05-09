@@ -1,5 +1,5 @@
 <template>
-    <nav  class="navigation-bar">
+    <nav class="navigation-bar">
         <img class="logo" src="../assets/entete.png">
         <button id="disconnection-button" v-on:click="disconnect()">Se Déconnecter</button>
     </nav>
@@ -17,9 +17,10 @@ export default {
 </script>
 <style>
   .navigation-bar {
+        margin: 0;
         width: 100%;  /* i'm assuming full width */
         height: 80px; /* change it to desired width */
-        box-shadow: 0px 11px 10px -14px #111;        
+        background: rgba(24, 23, 186, 0.1);
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -29,13 +30,25 @@ export default {
         position: relative;
         vertical-align: middle;
         padding: 15px 25px 15px 25px;
-        margin-bottom: 10px;
         margin-right: 20px;
-        background: rgba(24, 23, 186, 0.46);
-        border: none;
-        color:white;
+        background: none;
+        border: 2px solid rgba(24, 23, 186, 0.63);
+        color: rgba(24, 23, 186, 0.7);
         font-variant: small-caps;
         font-size: 20px;
         cursor: pointer;
+        transition: 0.3s;
+    }
+
+    #disconnection-button:hover {
+        background: rgba(24, 23, 186, 0.63);
+        background-clip: padding-box;
+        color: white;
+    }
+
+    .logo {
+        display: inline-block;
+        width: 200px; /*4vw*/
+        margin-left: 5vh;
     }
     </style>

@@ -129,4 +129,23 @@ public class Authentication {
             return Response.status(500).entity("{}").build();
         }
     }
+
+    @GET
+    @Produces("application/json")
+    @Path("/admin/getPharmacists")
+    public Response getPharmacists() throws SQLException{
+        ServiceUser serviceUser = new ServiceUser();
+        List<GetPharmacistResponse> getDoctorResponseList;
+        getDoctorResponseList = serviceUser.getPharmacists();
+        if(!getDoctorResponseList.isEmpty()){
+            JsonArrayBuilder jsonBuilder = Json.createBuilderFactory(null).createArrayBuilder();
+            for(GetPharmacistResponse getPharmacistResponse : getDoctorResponseList)
+            {
+                jsonBuilder.add(getPharmacistResponse.getJsonObjectBuilder());
+            }
+            return Response.ok(jsonBuilder.build()).build();
+        }else{
+            return Response.status(500).entity("{}").build();
+        }
+    }
 }
