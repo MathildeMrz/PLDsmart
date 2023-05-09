@@ -69,80 +69,84 @@ public class ServicePdf {
 
         // Afficher la valeur de l'attribut "doctorName"
         
-        Paragraph doctorPart = new Paragraph(doctorName+ "\n"+doctorJob+"\nRPPS : "+RPPSNum, prescriptionBoldFont);
-        addEmptyLine(doctorPart, 2);
+        Paragraph doctorPart = new Paragraph("Nom docteur : "+doctorName+ "\nQualification : "+doctorJob+"\nRPPS : "+RPPSNum+";", prescriptionBoldFont);
+        addEmptyLine(doctorPart, 1);
 
         //Office
-        Paragraph officePart = new Paragraph(consultationAddress+"\nTel : "+consultationPhoneNumber, prescriptionFont);
-        addEmptyLine(officePart, 2);
+        Paragraph officePart = new Paragraph("Adresse : " + consultationAddress+"\nTel : "+consultationPhoneNumber+";", prescriptionFont);
+        addEmptyLine(officePart, 1);
 
         //Consultation
-        Paragraph consultationPart = new Paragraph("Fait le : "+consultationDate, prescriptionFont);
-        addEmptyLine(consultationPart, 2);
+        Paragraph consultationPart = new Paragraph("Fait le : "+consultationDate+";", prescriptionFont);
+        addEmptyLine(consultationPart, 1);
 
         //Patient
         //Check if age, weight, height empty
-        String patientString = patientName+" "+patientFirstName+"\n";
+        String patientString = "Nom patient : "+patientName+";\nPrénom patient : "+patientFirstName+";\n";
         if(! patientAge.isEmpty())
         {
-            patientString += patientAge+" ans ";
+            patientString += "Age : " +patientAge+" ans;";
         }
+
 
         if(! patientSexe.isEmpty())
         {
-            patientString += "Sexe: " + patientSexe + " ";
+            patientString += "\nSexe: " + patientSexe + ";";
         }
 
         if(! patientHeight.isEmpty())
         {
-            patientString += patientHeight+" cm ";
+            patientString += "\nTaille : "+patientHeight+" cm;";
         }
 
         if(! patientWeight.isEmpty())
         {
-            patientString += patientWeight+" kg ";
+            patientString += "\nPoids : "+patientWeight+" kg;";
         }
 
-        Paragraph patientPart = new Paragraph(patientString, prescriptionBoldFont);
-        
+        Paragraph patientPart = new Paragraph(patientString, prescriptionBoldFont);     
+        addEmptyLine(patientPart, 1);   
 
         //Medicine
         List list = new List(List.UNORDERED);
         list.setListSymbol(bullet);
 
-        
         JSONArray jsonArray = (JSONArray) parser.parse(rowsMedicamentsActs);
+
+        int counter = 1;
 
         for (Object element : jsonArray) 
         {
             String medicineAct = ((JSONObject)element).get("medicineAct").toString();
             String posology = ((JSONObject)element).get("posology").toString();
             String treatmentPeriod = ((JSONObject)element).get("treatmentPeriod").toString();
-            Object treatmentPeriodTexteObj = ((JSONObject)element).get("treatmentPeriodTexte");
-            String treatmentPeriodTexte = treatmentPeriodTexteObj != null ? treatmentPeriodTexteObj.toString() : "null";
+            String treatmentPeriodTexteObj = ((JSONObject)element).get("treatmentPeriodTexte").toString();
             String renewal = ((JSONObject)element).get("renewal").toString();
             String refundable = ((JSONObject)element).get("refundable").toString();
-            String indication = ((JSONObject)element).get("indication").toString();            
-            String row = medicineAct+"\n" + posology +" pour une période de "+ treatmentPeriod + " " + treatmentPeriodTexte;
+            String indication = ((JSONObject)element).get("indication").toString();
+            String row = "Médicament"+counter+" : "+medicineAct+";\nPosologie : " + posology +";\nPériode : "+ treatmentPeriod + " " + treatmentPeriodTexteObj;            
             int renewalInt = Integer.parseInt(renewal);
+            row+= "\nRenouvelable : ";
             boolean refundableBool = Boolean.parseBoolean(refundable);
             if(renewalInt == 0){
-                row +=" non renouvelable, ";
-            }
+                row +="Non;";
+            } 
             else{
-                row = row +" renouvelable "+renewal+" fois, ";
+                row = row +"Oui;"+renewal+" fois;";
 
             }
+            row+= "\nRemboursable : ";
             if(refundableBool){
-                row += "non remboursable.";
+                row += "Non;";
             }
             else {
-                row += "remboursable.";
+                row += "Oui;";
             }
-            row+="\nIndication: "+indication;
+            row+="\nIndication : "+indication+";\n\n";
 
-            ListItem item = new ListItem(row, prescriptionBoldFont);
+            ListItem item = new ListItem(row, prescriptionFont);
             list.add(item);
+            counter = counter+1;
         }
                 
         document.add(doctorPart);
