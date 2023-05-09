@@ -37,7 +37,7 @@
 
                 <div class="column">
                     <input id="patientAge" type="number" min="0" max="150" name="" 
-                    onkeydown="return event.key !== ' ' && event.key !== '-' && !['e', 'E'].includes(event.key);"
+                    onkeydown="return event.key !== ' ' && event.key !== '-' && event.key !== '+' && !['e', 'E'].includes(event.key);"
                     oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="3">
                     <p class="indications" style="margin-bottom:2vh;">Âge (ans)</p>
                     <select id="sexe" name="sexe">
@@ -51,11 +51,11 @@
 
                 <div class="column">
                     <input id="patientWeight" type="number" min="0" max="1000" name="" 
-                    onkeydown="return event.key !== ' ' && event.key !== '-' && !['e', 'E'].includes(event.key);"
+                    onkeydown="return event.key !== ' ' && event.key !== '-' && event.key !== '+' && !['e', 'E'].includes(event.key);"
                     oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="3">
                     <p class="indications" style="margin-bottom:2vh;">Poids (kg)</p>
                     <input id="patientHeight" type="number" min="0" max="300" name="" 
-                    onkeydown="return event.key !== ' ' && event.key !== '-' && !['e', 'E'].includes(event.key);"
+                    onkeydown="return event.key !== ' ' && event.key !== '-' && event.key !== '+' && !['e', 'E'].includes(event.key);"
                     oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="3">
                     <p class="indications">Taille (cm)</p>
                 </div>
