@@ -153,7 +153,7 @@
     document.addEventListener("DOMContentLoaded", function() 
     {
         //Listener generate pdf button
-        var button = document.getElementById("generatePdfButton");
+        var button = document.getElementById("verifyPrescButton");
         button.addEventListener("click", function() 
         {
 
