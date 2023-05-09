@@ -13,7 +13,7 @@
 
         <div>
           <div class="radio">
-            <input type="radio" id="role-doctor" name="role" value="Médecin" />
+            <input type="radio" id="role-doctor" name="role" value="Médecin" checked/>
             <label for="role-doctor">Médecin</label>
           </div>
 
@@ -27,7 +27,7 @@
             <label for="role-admin">Administrateur</label>
           </div>
         </div>
-        <button id="connexion-button" v-on:click="authenticate()">Me Connecter</button>
+        <button id="connexion-button" v-on:click="authenticate(event)">Me Connecter</button>
       </form>
     </div>
     <div id="doctor-box">
@@ -46,24 +46,56 @@
     name: 'AuthentificationComponent',
     props: {},
     methods: {
-      authenticate() {
-        fetch("http://localhost:9000/api/auth/doctor", {
-            method: 'POST',
-            body: JSON.stringify({
-                username: "Koko",//document.getElementById("username").value,
-                password: "mdp"//document.getElementById("password").value
-              }),
-            headers: {
-              'Content-Type': 'application/json; charset=UTF-8'
-            }
-          })
-        .then(console.log(JSON.stringify({
-                username: document.getElementById("username").value,
-                password: document.getElementById("password").value
-              })
-        ))
-        .then((response) => response.json())
-        .then((json) => console.log(json));
+      async authenticate(e) {
+        e = e || window.event;
+        e.preventDefault();
+        
+        var jobSelected = document.querySelectorAll("input[type='radio'][name='role']:checked");
+        var url = "http://localhost:9000/api/auth/";
+        var job = "";
+
+        switch(jobSelected[0].value) {
+          case "Médecin":
+            url = url + "doctor";
+            job = "doctor";
+            console.log("Authentification en tant que médecin");
+            break;
+          case "Pharmacien":
+            url = url + "pharmacist";
+            job = "pharmacist";
+            console.log("Authentification en tant que pharmacien");
+            break;
+          case "Administrateur":
+            url = url + "admin";
+            job = "admin";
+            console.log("Authentification en tant qu'administrateur");
+            break;
+        }
+
+        try {
+          let handleAuth = await fetch(url, {
+              method: 'POST',
+              body: JSON.stringify({
+                  username: document.getElementById("username").value,
+                  password: document.getElementById("password").value
+                }),
+              headers: {
+                'Content-Type': 'application/json; charset=UTF-8'
+              }
+            });
+          let response = await handleAuth.json();
+          console.log(response);
+
+          if(response.length != 0) {
+            location.href = job + ".html";
+          }
+          else {
+            console.log("User not registered");
+          }
+        }
+        catch (error) {
+          console.log(error);
+        }
       }
     }
   }
