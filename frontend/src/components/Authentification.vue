@@ -51,29 +51,25 @@
         e.preventDefault();
         
         var jobSelected = document.querySelectorAll("input[type='radio'][name='role']:checked");
-        var url = "http://localhost:9000/api/auth/";
         var job = "";
 
         switch(jobSelected[0].value) {
           case "Médecin":
-            url = url + "doctor";
             job = "doctor";
             console.log("Authentification en tant que médecin");
             break;
           case "Pharmacien":
-            url = url + "pharmacist";
             job = "pharmacist";
             console.log("Authentification en tant que pharmacien");
             break;
           case "Administrateur":
-            url = url + "admin";
             job = "admin";
             console.log("Authentification en tant qu'administrateur");
             break;
         }
 
         try {
-          let handleAuth = await fetch(url, {
+          let handleAuth = await fetch("http://localhost:9000/api/auth/" + job, {
               method: 'POST',
               body: JSON.stringify({
                   username: document.getElementById("username").value,
