@@ -255,7 +255,7 @@
         const d = n.getDate();
         const h = n.getHours();
         const min = n.getMinutes();
-        document.getElementById("prescriptionDate").innerHTML = ('0' + d).slice(-2) + "/" + ('0' + m).slice(-2) + "/" + y + " " + h + ":" + min;
+        document.getElementById("prescriptionDate").innerHTML = ('0' + d).slice(-2) + "/" + ('0' + m).slice(-2) + "/" + y + " " + ('0' + h).slice(-2) + ":" + ('0' + min).slice(-2);
 
         const button = document.getElementById("submitImageToOCR");
         button.addEventListener("click", function() 
