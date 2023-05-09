@@ -220,14 +220,21 @@
     #doctor-box {
       display: none;
     }
+    #index-page
+    {
+      justify-content: center;
+    }
   }
 
   @media screen and (max-height:600px) {
     #doctor-box {
       display: none;
     }
+    #index-page
+    {
+      justify-content: center;
+    }
   }
 
-  
 
 </style>
