@@ -62,8 +62,8 @@
             <h3>La consultation</h3>
             <div class="information">
                 <div class="column">
-                    <input id="prescriptionDate" type="date" min="0" max="150" name=""/>
-                    <p class="indications">Date de l'ordonnance (JJ/MM/AAAA)</p>
+                    <input id="prescriptionDate" type="datetime-local" min="0" max="150" name=""/>
+                    <p class="indications">Date de l'ordonnance (JJ/MM/AAAA HH:MM)</p>
                 </div>
 
                 <div class="column">
