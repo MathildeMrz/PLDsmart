@@ -59,6 +59,7 @@ public class ServicePdf {
         String patientName = json.get("patientName").toString();
         String patientFirstName = json.get("patientFirstName").toString();
         String patientAge = json.get("patientAge").toString();
+        String patientSexe = json.get("patientSexe").toString();
         String patientWeight = json.get("patientWeight").toString();
         String patientHeight = json.get("patientHeight").toString();
         String consultationDate = json.get("prescriptionDate").toString();
@@ -87,6 +88,11 @@ public class ServicePdf {
             patientString += patientAge+" ans ";
         }
 
+        if(! patientSexe.isEmpty())
+        {
+            patientString += "Sexe: " + patientSexe;
+        }
+
         if(! patientHeight.isEmpty())
         {
             patientString += patientHeight+" cm ";
@@ -112,10 +118,12 @@ public class ServicePdf {
             String medicineAct = ((JSONObject)element).get("medicineAct").toString();
             String posology = ((JSONObject)element).get("posology").toString();
             String treatmentPeriod = ((JSONObject)element).get("treatmentPeriod").toString();
+            Object treatmentPeriodTexteObj = ((JSONObject)element).get("treatmentPeriodTexte");
+            String treatmentPeriodTexte = treatmentPeriodTexteObj != null ? treatmentPeriodTexteObj.toString() : "null";
             String renewal = ((JSONObject)element).get("renewal").toString();
             String refundable = ((JSONObject)element).get("refundable").toString();
             String indication = ((JSONObject)element).get("indication").toString();            
-            String row = medicineAct+"\n" + posology +" pour une période de "+ treatmentPeriod;
+            String row = medicineAct+"\n" + posology +" pour une période de "+ treatmentPeriod + " " + treatmentPeriodTexte;
             int renewalInt = Integer.parseInt(renewal);
             boolean refundableBool = Boolean.parseBoolean(refundable);
             if(renewalInt == 0){
