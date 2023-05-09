@@ -2,7 +2,6 @@
     <NavigationBar/>
 
     <div id="doctorPrescription">
-
         <div id="doctor">
             <div>
                 <h3>Le médecin</h3>
@@ -108,9 +107,7 @@
                 <img src="../assets/plus.png" alt="button add prescription" />
             </button>
         </div>
-        <button id="generatePdfButton" class="ordonnance" @click="verifyValidity">Générer l'ordonnance</button>
-            <!--<input type="file" id="myFile" name="filename">
-            <input id="submitImageToOCR" type="submit" style="margin-left: 200px;">-->
+        <button class="ordonnance" @click="verifyValidity">Générer l'ordonnance</button>
     </div>
 </template>
 
@@ -265,19 +262,18 @@
         const min = n.getMinutes();
         document.getElementById("prescriptionDate").innerHTML = ('0' + d).slice(-2) + "/" + ('0' + m).slice(-2) + "/" + y + " " + ('0' + h).slice(-2) + ":" + ('0' + min).slice(-2);
 
-        //Listener generate pdf button
-        /*const button = document.getElementById("submitImageToOCR");
+        const button = document.getElementById("submitImageToOCR");
         button.addEventListener("click", function() 
         {
             const input = document.getElementById("myFile");
             const file = input.files[0];
             const type = file.type;
 
-            // Contrôler le type 
+            /* Contrôler le type */
             if(type == "application/pdf")
             {
                 console.log("PDF détecté");
-                // Transformer pdf en png 
+                /* Transformer pdf en png */
                 
 
             }
@@ -309,7 +305,7 @@
 
 
             //const byteArray = reader.readAsArrayBuffer(file);
-            const xhr = new XMLHttpRequest();
+            /*const xhr = new XMLHttpRequest();
             xhr.open('POST', 'http://localhost:9000/OCR-api');
             xhr.setRequestHeader('Content-Type', 'application/octet-stream');
             xhr.setRequestHeader('Content-Disposition', `attachment; filename=${file.name}`);
@@ -327,11 +323,11 @@
             })
             .catch(error => {
                 console.error(error);
-            });
+            });*/
 
            
         
-        });*/
+        });
     });
 
 </script>
