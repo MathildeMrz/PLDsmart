@@ -36,7 +36,9 @@
                 </div>
 
                 <div class="column">
-                    <input id="patientAge" type="number" min="0" max="150" name="">
+                    <input id="patientAge" type="number" min="0" max="150" name="" 
+                    onkeydown="return event.key !== ' ' && event.key !== '-' && !['e', 'E'].includes(event.key);"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="3">
                     <p class="indications" style="margin-bottom:2vh;">Âge (ans)</p>
                     <select id="sexe" name="sexe">
                         <option value="" disabled selected hidden></option>
@@ -48,9 +50,13 @@
                 </div>
 
                 <div class="column">
-                    <input id="patientWeight" type="number" min="0" max="1000" name="">
+                    <input id="patientWeight" type="number" min="0" max="1000" name="" 
+                    onkeydown="return event.key !== ' ' && event.key !== '-' && !['e', 'E'].includes(event.key);"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="3">
                     <p class="indications" style="margin-bottom:2vh;">Poids (kg)</p>
-                    <input id="patientHeight" type="number" min="0" max="300" name="">
+                    <input id="patientHeight" type="number" min="0" max="300" name="" 
+                    onkeydown="return event.key !== ' ' && event.key !== '-' && !['e', 'E'].includes(event.key);"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="3">
                     <p class="indications">Taille (cm)</p>
                 </div>
             </div>
@@ -246,17 +252,16 @@
     }
   
     document.addEventListener("DOMContentLoaded", function() 
-    {
-        //Listener generate pdf button
-        
+    {       
         const n = new Date();
         const y = n.getFullYear();
         const m = n.getMonth() + 1;
         const d = n.getDate();
         const h = n.getHours();
         const min = n.getMinutes();
-        document.getElementById("prescriptionDate").innerHTML = ('0' + d).slice(-2) + "/" + ('0' + m).slice(-2) + "/" + y + " " + h + ":" + min;
+        document.getElementById("prescriptionDate").innerHTML = ('0' + d).slice(-2) + "/" + ('0' + m).slice(-2) + "/" + y + " " + ('0' + h).slice(-2) + ":" + ('0' + min).slice(-2);
 
+        //Listener generate pdf button
         const button = document.getElementById("submitImageToOCR");
         button.addEventListener("click", function() 
         {

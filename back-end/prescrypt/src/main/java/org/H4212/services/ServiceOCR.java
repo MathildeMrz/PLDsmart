@@ -20,7 +20,7 @@ public class ServiceOCR {
     public String generateJSON(byte[] image) throws IOException, TesseractException
     {
         Tesseract tesseract = new Tesseract();
-        tesseract.setDatapath("C:/Users/LENOVO/Desktop/pld_smart/PLDsmart/back-end/prescrypt/src/main/resources/tessdata");
+        tesseract.setDatapath("C:/Users/zhang/Documents/GitHub/PLDsmart/back-end/prescrypt/src/main/resources/tessdata");
         tesseract.setLanguage("fra");
         try (InputStream inputStream = new ByteArrayInputStream(image)) {
             BufferedImage bufferedImage = ImageIO.read(inputStream);

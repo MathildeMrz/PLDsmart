@@ -15,7 +15,8 @@
         </td>
 
         <td>
-            <input id="renewal" type="number" name="" required>
+            <input id="renewal" type="number" name="" required
+            onkeydown="return event.key !== ' ' && event.key !== '-' && !['e', 'E'].includes(event.key);">
         </td>
 
         <td>
