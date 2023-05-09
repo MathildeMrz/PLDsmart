@@ -11,12 +11,21 @@
         </td>
 
         <td>
-            <input id="treatmentPeriod" type="text" name="" required>
+            <input id="treatmentPeriod" type="number" min="0" name="" required
+            onkeydown="return event.key !== ' ' && event.key !== '-' && !['e', 'E'].includes(event.key);"
+            oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="3"
+            style="width: 7vh; border-right: 2px solid #1817BA;">
+            <select id="treatmentPeriodTexte" required style="width: 12vh; height: 2.7vh;">
+                <option value="" disabled selected hidden></option>
+                <option value="jours">jours</option>
+                <option value="mois">mois</option>
+            </select>
         </td>
 
         <td>
-            <input id="renewal" type="number" name="" required
-            onkeydown="return event.key !== ' ' && event.key !== '-' && !['e', 'E'].includes(event.key);">
+            <input id="renewal" type="number" min="0" max="100" name="" required
+            onkeydown="return event.key !== ' ' && event.key !== '-' && !['e', 'E'].includes(event.key);"
+            oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="2">
         </td>
 
         <td>
