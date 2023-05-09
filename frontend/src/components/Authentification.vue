@@ -32,7 +32,7 @@
       </form>
     </div>
     <div id="doctor-box">
-        <img id="doctor-image" src="../assets/doctor.jpg" alt="Doctor smiling">
+        <img id="doctor-image" src="../assets/doctor.png" alt="Doctor smiling">
         <div class="centered">
           <p id="slogan">Votre vérificateur d’ordonnances</p>
           <p id="secured">100% sécurisé</p>
@@ -182,13 +182,13 @@
 
   #slogan {
     color:white;
-    font-size: 50px;
+    font-size: 3vw;
     font-weight: 600;
   }
 
   #secured {
     color: black;
-    font-size: 30px;
+    font-size: 2vw;
     font-weight: 600;
     padding: 0;
     margin: 0;
@@ -210,9 +210,31 @@
   }
 
   #doctor-image {
-    height: 100vh;
     width: 40vw;
+    height : 100vh;
     z-index: -1;
+    max-width: 100%;
   }
+/*331 */
+  @media screen and (max-width:1200px) {
+    #doctor-box {
+      display: none;
+    }
+    #index-page
+    {
+      justify-content: center;
+    }
+  }
+
+  @media screen and (max-height:600px) {
+    #doctor-box {
+      display: none;
+    }
+    #index-page
+    {
+      justify-content: center;
+    }
+  }
+
 
 </style>

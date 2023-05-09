@@ -11,8 +11,8 @@
         </td>
 
         <td>
-            <input id="treatmentPeriod" type="number" min="0" name="" required
-            onkeydown="return event.key !== ' ' && event.key !== '-' && !['e', 'E'].includes(event.key);"
+            <input id="treatmentPeriod" type="number" min="1" name="" required
+            onkeydown="return event.key !== ' ' && event.key !== '-' && event.key !== '+' && !['e', 'E'].includes(event.key);"
             oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="3"
             style="width: 7vh; border-right: 2px solid #1817BA;">
             <select id="treatmentPeriodTexte" required style="width: 12vh; height: 2.7vh;">
@@ -24,7 +24,7 @@
 
         <td>
             <input id="renewal" type="number" min="0" max="100" name="" required
-            onkeydown="return event.key !== ' ' && event.key !== '-' && !['e', 'E'].includes(event.key);"
+            onkeydown="return event.key !== ' ' && event.key !== '-' && event.key !== '+' && !['e', 'E'].includes(event.key);"
             oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="2">
         </td>
 

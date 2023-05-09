@@ -2,7 +2,6 @@
     <NavigationBar/>
 
     <div id="doctorPrescription">
-
         <div id="doctor">
             <div>
                 <h3>Le médecin</h3>
@@ -37,7 +36,7 @@
 
                 <div class="column">
                     <input id="patientAge" type="number" min="0" max="150" name="" 
-                    onkeydown="return event.key !== ' ' && event.key !== '-' && !['e', 'E'].includes(event.key);"
+                    onkeydown="return event.key !== ' ' && event.key !== '-' && event.key !== '+' && !['e', 'E'].includes(event.key);"
                     oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="3">
                     <p class="indications" style="margin-bottom:2vh;">Âge (ans)</p>
                     <select id="sexe" name="sexe">
@@ -51,11 +50,11 @@
 
                 <div class="column">
                     <input id="patientWeight" type="number" min="0" max="1000" name="" 
-                    onkeydown="return event.key !== ' ' && event.key !== '-' && !['e', 'E'].includes(event.key);"
+                    onkeydown="return event.key !== ' ' && event.key !== '-' && event.key !== '+' && !['e', 'E'].includes(event.key);"
                     oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="3">
                     <p class="indications" style="margin-bottom:2vh;">Poids (kg)</p>
                     <input id="patientHeight" type="number" min="0" max="300" name="" 
-                    onkeydown="return event.key !== ' ' && event.key !== '-' && !['e', 'E'].includes(event.key);"
+                    onkeydown="return event.key !== ' ' && event.key !== '-' && event.key !== '+' && !['e', 'E'].includes(event.key);"
                     oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="3">
                     <p class="indications">Taille (cm)</p>
                 </div>
@@ -108,9 +107,7 @@
                 <img src="../assets/plus.png" alt="button add prescription" />
             </button>
         </div>
-        <button id="generatePdfButton" class="ordonnance" @click="verifyValidity">Générer l'ordonnance</button>
-            <input type="file" id="myFile" name="filename">
-            <input id="submitImageToOCR" type="submit" style="margin-left: 200px;">
+        <button class="ordonnance" @click="verifyValidity">Générer l'ordonnance</button>
     </div>
 </template>
 
@@ -180,6 +177,7 @@
                         const patientName = document.getElementById("patientName").value;
                         const patientFirstName = document.getElementById("patientFirstName").value;
                         const patientAge = document.getElementById("patientAge").value;
+                        const patientSexe = document.getElementById("sexe").value;
                         const patientWeight = document.getElementById("patientWeight").value;
                         const patientHeight = document.getElementById("patientHeight").value;
                         const prescriptionDate = document.getElementById("prescriptionDate").textContent;
@@ -195,6 +193,7 @@
                             const medicineAct = row.querySelector("#medicineAct").value;
                             const posology = row.querySelector("#posology").value;
                             const treatmentPeriod = row.querySelector("#treatmentPeriod").value;
+                            const treatmentPeriodTexte = row.querySelector("#treatmentPeriodTexte").value;
                             const renewal = row.querySelector("#renewal").value;
                             const refundable = row.querySelector("#refundable").checked;
                             const indication = row.querySelector("#indication").value;
@@ -203,6 +202,7 @@
                                 "medicineAct": medicineAct,
                                 "posology": posology,
                                 "treatmentPeriod": treatmentPeriod,
+                                "treatmentPeriodTexte": treatmentPeriodTexte,
                                 "renewal": renewal,
                                 "refundable": refundable,
                                 "indication": indication
@@ -218,6 +218,7 @@
                             "patientName": patientName,
                             "patientFirstName": patientFirstName,
                             "patientAge": patientAge,
+                            "patientSexe" : patientSexe,
                             "patientWeight": patientWeight,
                             "patientHeight": patientHeight,
                             "prescriptionDate": prescriptionDate,
@@ -261,7 +262,6 @@
         const min = n.getMinutes();
         document.getElementById("prescriptionDate").innerHTML = ('0' + d).slice(-2) + "/" + ('0' + m).slice(-2) + "/" + y + " " + ('0' + h).slice(-2) + ":" + ('0' + min).slice(-2);
 
-        //Listener generate pdf button
         const button = document.getElementById("submitImageToOCR");
         button.addEventListener("click", function() 
         {
