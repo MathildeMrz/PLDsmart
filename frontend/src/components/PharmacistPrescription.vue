@@ -255,14 +255,6 @@
         width : 10%;
     }
 
-    .logo {
-        display: inline-block;
-        vertical-align: top;
-        width: 200px; /*4vw*/
-        margin-left: 5vh;
-        margin-bottom: 10px;
-    }
-
     header img {
     float: left;
     width:4vw;
@@ -291,9 +283,7 @@
 
     #doctorPrescription
     {
-        margin-left:10vh;
-        margin-top: 5vw;
-        
+        margin: 1vw 10vh 3vw 10vh;
     }
     .indications
     {
