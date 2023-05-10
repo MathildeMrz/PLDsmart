@@ -65,7 +65,7 @@
             <div class="information">
                 <div class="column">
                     <p id="prescriptionDate"></p>
-                    <p class="indications">Date de l'ordonnance (JJ/MM/AAAA HH:MM)</p>
+                    <p class="indications">Date de l'ordonnance (yyyy-MM-ddThh:mm)</p>
                 </div>
 
                 <div class="column">
@@ -273,8 +273,8 @@
         const d = n.getDate();
         const h = n.getHours();
         const min = n.getMinutes();
-        document.getElementById("prescriptionDate").innerHTML = ('0' + d).slice(-2) + "/" + ('0' + m).slice(-2) + "/" + y + " " + ('0' + h).slice(-2) + ":" + ('0' + min).slice(-2);
-
+        //document.getElementById("prescriptionDate").innerHTML = ('0' + d).slice(-2) + "/" + ('0' + m).slice(-2) + "/" + y + " " + ('0' + h).slice(-2) + ":" + ('0' + min).slice(-2);
+        document.getElementById("prescriptionDate").innerHTML  = `${y}-${('0' + m).slice(-2)}-${('0' + d).slice(-2)}T${('0' + h).slice(-2)}:${('0' + min).slice(-2)}`;
     });
 
 </script>

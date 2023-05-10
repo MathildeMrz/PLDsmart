@@ -21,8 +21,9 @@ public class ServiceOCR {
         tesseract.setDatapath("C:/Users/zhang/Documents/GitHub/PLDsmart/back-end/prescrypt/src/main/resources/tessdata");//datapath chez Yi
         tesseract.setLanguage("fra");
         tesseract.setVariable("user_words_suffix", ".user-words");
-        tesseract.setVariable("user_words_file", "C:/Users/33660/Documents/PLD_SMART/PLDsmart/back-end/prescrypt/src/main/resources/tessdata/dictionaries/fra.user-words");
+        //tesseract.setVariable("user_words_file", "C:/Users/33660/Documents/PLD_SMART/PLDsmart/back-end/prescrypt/src/main/resources/tessdata/dictionaries/fra.user-words");
         JSONObject prescriptionJson = new JSONObject();
+        
 
         try (InputStream inputStream = new ByteArrayInputStream(image)) {
             BufferedImage bufferedImage = ImageIO.read(inputStream);
@@ -109,7 +110,7 @@ public class ServiceOCR {
             prescriptionJson.put("PrenomPatient", prenomPatient);
 
             /* Age */
-            Pattern agePattern = Pattern.compile("Age : (.+?);");
+            Pattern agePattern = Pattern.compile("Age :(\\d+)");
             Matcher ageMatcher = agePattern.matcher(result);
             String age = "";
             if (ageMatcher.find()) {
@@ -127,7 +128,7 @@ public class ServiceOCR {
             prescriptionJson.put("Sexe", sexe);
 
             /* Taille */
-            Pattern taillePattern = Pattern.compile("Taille : (.+?);");
+            Pattern taillePattern = Pattern.compile("Taille : (\\d+)");
             Matcher tailleMatcher = taillePattern.matcher(result);
             String taille = "";
             if (tailleMatcher.find()) {
@@ -136,7 +137,7 @@ public class ServiceOCR {
             prescriptionJson.put("Taille", taille);
 
             /* Poids */        
-            Pattern poidsPattern = Pattern.compile("Poids : (.+?);");
+            Pattern poidsPattern = Pattern.compile("Poids : (\\d+)");
             Matcher poidsMatcher = poidsPattern.matcher(result);
             if (poidsMatcher.find()) {
                 String poids = poidsMatcher.group(1);

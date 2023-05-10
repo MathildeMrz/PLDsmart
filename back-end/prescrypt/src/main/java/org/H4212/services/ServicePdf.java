@@ -85,39 +85,39 @@ public class ServicePdf {
 
         // Afficher la valeur de l'attribut "doctorName"
         
-        Paragraph doctorPart = new Paragraph("Nom docteur : "+doctorName+ "\nQualification : "+doctorJob+"\nRPPS : "+RPPSNum+";", prescriptionBoldFont);
+        Paragraph doctorPart = new Paragraph("Nom docteur : "+doctorName+ "; \nQualification : "+doctorJob+"; \nRPPS : "+RPPSNum+"; ", prescriptionBoldFont);
         addEmptyLine(doctorPart, 1);
 
         //Office
-        Paragraph officePart = new Paragraph("Adresse : " + consultationAddress+"\nTel : "+consultationPhoneNumber+";", prescriptionFont);
+        Paragraph officePart = new Paragraph("Adresse : " + consultationAddress+"; \nTel : "+consultationPhoneNumber+"; ", prescriptionFont);
         addEmptyLine(officePart, 1);
 
         //Consultation
-        Paragraph consultationPart = new Paragraph("Fait le : "+consultationDate+";", prescriptionFont);
+        Paragraph consultationPart = new Paragraph("Fait le : "+consultationDate+"; ", prescriptionFont);
         addEmptyLine(consultationPart, 1);
 
         //Patient
         //Check if age, weight, height empty
-        String patientString = "Nom patient : "+patientName+";\nPrénom patient : "+patientFirstName+";\n";
+        String patientString = "Nom patient : "+patientName+";\nPrénom patient : "+patientFirstName+"; \n";
         if(! patientAge.isEmpty())
         {
-            patientString += "Age : " +patientAge+" ans;";
+            patientString += "Age  : " +patientAge+" ans; ";
         }
 
 
         if(! patientSexe.isEmpty())
         {
-            patientString += "\nSexe: " + patientSexe + ";";
+            patientString += "\nSexe : " + patientSexe + "; ";
         }
 
         if(! patientHeight.isEmpty())
         {
-            patientString += "\nTaille : "+patientHeight+" cm;";
+            patientString += "\nTaille : "+patientHeight+" cm; ";
         }
 
         if(! patientWeight.isEmpty())
         {
-            patientString += "\nPoids : "+patientWeight+" kg;";
+            patientString += "\nPoids : "+patientWeight+" kg; ";
         }
 
         Paragraph patientPart = new Paragraph(patientString, prescriptionBoldFont);     
@@ -140,25 +140,25 @@ public class ServicePdf {
             String renewal = ((JSONObject)element).get("renewal").toString();
             String refundable = ((JSONObject)element).get("refundable").toString();
             String indication = ((JSONObject)element).get("indication").toString();
-            String row = "Médicament"+counter+" : "+medicineAct+";\nPosologie : " + posology +";\nPériode : "+ treatmentPeriod + " " + treatmentPeriodTexteObj;            
+            String row = "Médicament"+counter+" : "+medicineAct+"; \nPosologie : " + posology +"; \nPériode : "+ treatmentPeriod + " " + treatmentPeriodTexteObj;            
             int renewalInt = Integer.parseInt(renewal);
             row+= "\nRenouvelable : ";
             boolean refundableBool = Boolean.parseBoolean(refundable);
             if(renewalInt == 0){
-                row +="Non;";
+                row +="Non; ";
             } 
             else{
-                row = row +"Oui;"+renewal+" fois;";
+                row = row +"Oui; "+renewal+" fois; ";
 
             }
             row+= "\nRemboursable : ";
             if(refundableBool){
-                row += "Non;";
+                row += "Non; ";
             }
             else {
-                row += "Oui;";
+                row += "Oui; ";
             }
-            row+="\nIndication : "+indication+";\n\n";
+            row+="\nIndication : "+indication+"; \n\n";
 
             ListItem item = new ListItem(row, prescriptionFont);
             list.add(item);

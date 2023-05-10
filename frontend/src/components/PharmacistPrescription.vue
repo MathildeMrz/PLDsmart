@@ -42,7 +42,7 @@
                 <div class="column">
                     <input id="patientAge" type="number" min="0" max="150" name="">
                     <p class="indications" style="margin-bottom:2vh;">Âge (ans)</p>
-                    <select id="sexe" name="sexe">
+                    <select id="patientSexe" name="sexe">
                         <option value="" disabled selected hidden></option>
                         <option value="Homme">Homme</option>
                         <option value="Femme">Femme</option>
@@ -64,7 +64,7 @@
             <div class="information">
                 <div class="column">
                     <input id="prescriptionDate" type="datetime-local" min="0" max="150" name=""/>
-                    <p class="indications">Date de l'ordonnance (JJ/MM/AAAA HH:MM)</p>
+                    <p class="indications">Date de l'ordonnance (yyyy-MM-dd hh:mm)</p>
                 </div>
 
                 <div class="column">
@@ -243,18 +243,20 @@
             {
                 var responseJson = JSON.stringify(response);
                 console.log("data : " + responseJson);
-
-                const doctorName = responseJson["NomDocteur"];
-                const doctorJob = responseJson["Qualification"];
-                const RPPSNum = responseJson["RPPS"];
-                const patientName = responseJson["NomPatient"];
-                const patientFirstName = responseJson["PrenomPatient"];
-                const patientAge = responseJson["Age"];
-                const patientWeight = responseJson["Poids"];
-                const patientHeight = responseJson["Taille"];
-                const prescriptionDate = responseJson["Date"];
-                const addressPrescription = responseJson["Adresse"];
-                const consultationPhoneNumber = responseJson["Tel"];
+                const jsonData = JSON.parse(responseJson);
+                console.log("data javascript : " + jsonData);
+                const doctorName = jsonData["NomDocteur"];
+                const doctorJob = jsonData["Qualification"];
+                const RPPSNum = jsonData["RPPS"];
+                const patientName = jsonData["NomPatient"];
+                const patientFirstName = jsonData["PrenomPatient"];
+                const patientAge = jsonData["Age"];
+                const patientSexe = jsonData["Sexe"];
+                const patientWeight = jsonData["Poids"];
+                const patientHeight = jsonData["Taille"];
+                const prescriptionDate = jsonData["Date"];
+                const addressPrescription = jsonData["Adresse"];
+                const consultationPhoneNumber = jsonData["Tel"];
 
                 document.getElementById("doctorName").value = doctorName;
                 document.getElementById("doctorJob").value = doctorJob;
@@ -262,6 +264,7 @@
                 document.getElementById("patientName").value = patientName;
                 document.getElementById("patientFirstName").value = patientFirstName;
                 document.getElementById("patientAge").value = patientAge;
+                document.getElementById("patientSexe").value = patientSexe;
                 document.getElementById("patientWeight").value = patientWeight;
                 document.getElementById("patientHeight").value = patientHeight;
                 document.getElementById("prescriptionDate").value = prescriptionDate;
@@ -306,6 +309,7 @@
             const patientName = document.getElementById("patientName").value;
             const patientFirstName = document.getElementById("patientFirstName").value;
             const patientAge = document.getElementById("patientAge").value;
+            const patientSexe = document.getElementById("patientSexe").value;
             const patientWeight = document.getElementById("patientWeight").value;
             const patientHeight = document.getElementById("patientHeight").value;
             const prescriptionDate = document.getElementById("prescriptionDate").textContent;
@@ -344,6 +348,7 @@
                 "patientName": patientName,
                 "patientFirstName": patientFirstName,
                 "patientAge": patientAge,
+                "patientSexe": patientSexe,
                 "patientWeight": patientWeight,
                 "patientHeight": patientHeight,
                 "prescriptionDate": prescriptionDate,
