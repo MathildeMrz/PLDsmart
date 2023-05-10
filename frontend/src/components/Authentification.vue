@@ -84,7 +84,11 @@
           console.log(response);
 
           if(handleAuth.status == 200) {
-            location.href = job + ".html?"+ response.id;
+            if(job=="doctor"){
+              document.cookie = "id=" + response.id + "; path=/doctor.html";
+            }
+            //location.href = job + ".html?"+ response.id;
+            location.href = job + ".html";
           }
           else {
             console.log("User not registered");
