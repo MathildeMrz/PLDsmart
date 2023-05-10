@@ -302,6 +302,29 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
+//Recuperer les donnes du docteur
+fetch('http://localhost:9000/Doctor-api/' + 1) //Il faut remplacer '1' par doctorId
+    .then(response => response.json())
+    .then(data => {
+    // récupérer les informations de l'objet Doctor à partir de la réponse JSON
+    const firstName = data.firstName;
+    const lastName = data.lastName;
+    const telephone = data.telephone;
+    const qualification = data.qualification;
+    const officeAddress = data.officeAddress;
+    const idPSdoctor = data.idPSdoctor;
+
+    // remplir les champs de formulaire avec les informations récupérées
+    document.getElementById('doctorName').innerHTML = "Docteur " + firstName + " " + lastName;
+    document.getElementById('consultationPhoneNumber').innerHTML = telephone;
+    document.getElementById('doctorJob').innerHTML = qualification;
+    document.getElementById('addressPrescription').innerHTML = officeAddress;
+    document.getElementById('RPPSNum').innerHTML = idPSdoctor;
+    })
+    .catch(error => {
+    console.error('Erreur lors de la récupération des informations de l\'objet Doctor:', error);
+});
+
 </script>
 
 
