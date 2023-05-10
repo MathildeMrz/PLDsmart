@@ -103,8 +103,7 @@
             </button>
         </div>
         <button id="generatePdfButton" class="ordonnance" @click="verifyValidity">Générer l'ordonnance</button>
-            <input type="file" id="myFile" name="filename">
-            <input id="submitImageToOCR" type="submit" style="margin-left: 200px;">
+           
     </div>
 </template>
 
