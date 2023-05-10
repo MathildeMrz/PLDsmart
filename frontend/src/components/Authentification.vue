@@ -28,7 +28,7 @@
             <label for="role-admin">Administrateur</label>
           </div>
         </div>
-        <button id="connexion-button" v-on:click="authenticate(event)">Me Connecter</button>
+        <button id="connexion-button" v-on:click.prevent="authenticate">Me Connecter</button>
       </form>
     </div>
     <div id="doctor-box">
@@ -47,10 +47,7 @@
     name: 'AuthentificationComponent',
     props: {},
     methods: {
-      async authenticate(e) {
-        e = e || window.event;
-        e.preventDefault();
-        
+      async authenticate() {
         var jobSelected = document.querySelectorAll("input[type='radio'][name='role']:checked");
         var job = "";
 
