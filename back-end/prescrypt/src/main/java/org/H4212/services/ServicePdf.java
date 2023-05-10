@@ -1,6 +1,8 @@
 package org.H4212.services;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.net.URL;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -15,11 +17,25 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.List;
 import com.itextpdf.text.ListItem;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
+
 
 public class ServicePdf {
 
-    private static Font prescriptionFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.NORMAL, BaseColor.BLACK);
+    public static final String TAHOMA = "C:/Users/33660/Documents/PLD_SMART/PLDsmart/back-end/prescrypt/src/main/resources/tahoma.ttf";
+    private static BaseFont baseFont = null;
+
+    static {
+        try {
+            baseFont = BaseFont.createFont(TAHOMA, BaseFont.WINANSI, BaseFont.EMBEDDED);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static Font prescriptionFont = new Font(baseFont, 12);
+
     private static Font prescriptionBoldFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD, BaseColor.BLACK);
     private static Chunk bullet = new Chunk("\u2022", prescriptionFont);
 

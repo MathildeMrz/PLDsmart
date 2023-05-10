@@ -1,23 +1,19 @@
 package org.H4212.services;
-
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-
+import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
-
-import org.apache.commons.io.IOUtils;
-
+import org.json.JSONObject;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import java.awt.image.BufferedImage;
 
 
 public class ServiceOCR {
-    public String generateJSON(byte[] image) throws IOException, TesseractException
+    public JSONObject generateJSON(byte[] image) throws IOException, TesseractException
     {
         String result = null;
         Tesseract tesseract = new Tesseract();
@@ -25,21 +21,163 @@ public class ServiceOCR {
         tesseract.setDatapath("C:/Users/zhang/Documents/GitHub/PLDsmart/back-end/prescrypt/src/main/resources/tessdata");//datapath chez Yi
         tesseract.setLanguage("fra");
         tesseract.setVariable("user_words_suffix", ".user-words");
-        //change path
-        tesseract.setVariable("user_words_file", "C:/Users/LENOVO/Desktop/pld_smart/PLDsmart/back-end/prescrypt/src/main/resources/tessdata/dictionary/fra.wordlist");
+        tesseract.setVariable("user_words_file", "C:/Users/33660/Documents/PLD_SMART/PLDsmart/back-end/prescrypt/src/main/resources/tessdata/dictionaries/fra.user-words");
+        JSONObject prescriptionJson = new JSONObject();
+
         try (InputStream inputStream = new ByteArrayInputStream(image)) {
             BufferedImage bufferedImage = ImageIO.read(inputStream);
             result = tesseract.doOCR(bufferedImage);
-            System.out.println("Résultat OCR : "+result);
-            // Use the BufferedImage instance as needed...
-        } catch (IOException e) {
-            // Handle any exceptions that may occur...
+            System.out.println("result : "+result);
+
+            result = result.replaceAll("\n", "");
+
+            /* Médecin */            
+            //Nom
+            Pattern nomDocteurPattern = Pattern.compile("Nom docteur : (.+?);");
+            Matcher nomDocteurMatcher = nomDocteurPattern.matcher(result);
+            if (nomDocteurMatcher.find()) {
+                String nomDocteur = nomDocteurMatcher.group(1);
+                prescriptionJson.put("NomDocteur", nomDocteur);
+            }
+            else
+            {
+                prescriptionJson.put("NomDocteur", "");
+            }
+
+            //Qualification
+            Pattern qualificationPattern = Pattern.compile("Qualification : (.+?);");
+            Matcher qualificationMatcher = qualificationPattern.matcher(result);
+            String qualification = "";
+            if (qualificationMatcher.find()) {
+                qualification = qualificationMatcher.group(1);
+            }
+            prescriptionJson.put("Qualification", qualification);
+            
+            //RPPS
+            Pattern rppsPattern = Pattern.compile("RPPS : (.+?);");
+            Matcher rppsMatcher = rppsPattern.matcher(result);
+            String rpps = "";
+            if (rppsMatcher.find()) {
+                rpps = rppsMatcher.group(1);
+            }
+            prescriptionJson.put("RPPS", rpps);
+
+            //Adresse
+            Pattern adressePattern = Pattern.compile("Adresse : (.+?);");
+            Matcher adresseMatcher = adressePattern.matcher(result);
+            String adresse = "";
+            if (adresseMatcher.find()) {
+                adresse = adresseMatcher.group(1);
+            }
+            prescriptionJson.put("Adresse", adresse);
+
+            //Tel
+            Pattern telPattern = Pattern.compile("Tel : (.+?);");
+            Matcher telMatcher = telPattern.matcher(result);
+            String tel = "";
+            if (telMatcher.find()) {
+                tel = telMatcher.group(1);
+            }
+            prescriptionJson.put("Tel", tel);
+
+            /* Consultation */
+            //Date
+            Pattern datePattern = Pattern.compile("Fait le : (.+?);");
+            Matcher dateMatcher = datePattern.matcher(result);
+            String date = "";
+            if (dateMatcher.find()) {
+                date = dateMatcher.group(1);
+            }
+            prescriptionJson.put("Date", date);
+
+            /* Patient */
+            Pattern nomPatientPattern = Pattern.compile("Nom patient : (.+?);");
+            Matcher nomPatientMatcher = nomPatientPattern.matcher(result);
+            String nomPatient = "";
+            if (nomPatientMatcher.find()) {
+                nomPatient = nomPatientMatcher.group(1);
+            }
+            prescriptionJson.put("NomPatient", nomPatient);
+
+            /* Prénom */
+            Pattern prenomPatientPattern = Pattern.compile("Prénom patient : (.+?);");
+            Matcher prenomPatientMatcher = prenomPatientPattern.matcher(result);
+            String prenomPatient = "";
+            if (prenomPatientMatcher.find()) {
+                prenomPatient = prenomPatientMatcher.group(1);
+            }
+            prescriptionJson.put("PrenomPatient", prenomPatient);
+
+            /* Age */
+            Pattern agePattern = Pattern.compile("Age : (.+?);");
+            Matcher ageMatcher = agePattern.matcher(result);
+            String age = "";
+            if (ageMatcher.find()) {
+                age = ageMatcher.group(1);
+            }
+            prescriptionJson.put("Age", age);
+
+            /* Sexe */
+            Pattern sexePattern = Pattern.compile("Sexe : (.+?);");
+            Matcher sexeMatcher = sexePattern.matcher(result);
+            String sexe = "";
+            if (sexeMatcher.find()) {
+                sexe = sexeMatcher.group(1);
+            }
+            prescriptionJson.put("Sexe", sexe);
+
+            /* Taille */
+            Pattern taillePattern = Pattern.compile("Taille : (.+?);");
+            Matcher tailleMatcher = taillePattern.matcher(result);
+            String taille = "";
+            if (tailleMatcher.find()) {
+                taille = tailleMatcher.group(1);
+            }
+            prescriptionJson.put("Taille", taille);
+
+            /* Poids */        
+            Pattern poidsPattern = Pattern.compile("Poids : (.+?);");
+            Matcher poidsMatcher = poidsPattern.matcher(result);
+            if (poidsMatcher.find()) {
+                String poids = poidsMatcher.group(1);
+                prescriptionJson.put("Poids", poids);
+            } else {
+                prescriptionJson.put("Poids", "");
+}
+
+            /* Médicament(s) */
+            String[] medications = result.split("Médicament");
+            medications = Arrays.copyOfRange(medications, 1, medications.length);
+
+            /* Médicament(s) */
+            Pattern medicamentPattern = Pattern.compile("Médicament : (.+?);Posologie : (.+?)mg;Période : (.+?);Renouvelable : (.+?);Remboursable : (.+?);Indication : (.+?);");
+            Matcher medicamentMatcher = medicamentPattern.matcher(result);
+            while (medicamentMatcher.find()) 
+            {
+                JSONObject medicineJson = new JSONObject();
+                String nomMedicament = medicamentMatcher.group(1);
+                String posologie = medicamentMatcher.group(2);
+                String periode = medicamentMatcher.group(3);
+                String renouvelable = medicamentMatcher.group(4);
+                String remboursable = medicamentMatcher.group(5);
+                String indication = medicamentMatcher.group(6);
+                medicineJson.put("NomMedicament", nomMedicament);
+                medicineJson.put("Posologie", posologie);
+                medicineJson.put("Periode", periode);
+                medicineJson.put("Renouvelable", renouvelable);
+                medicineJson.put("Remboursable", remboursable);
+                medicineJson.put("Indication", indication);
+                prescriptionJson.accumulate("Medicament", medicineJson);
+            }
+
+            System.out.println("SERVICEOCRRRRRRRRRRRRRRRRRRRRRRRRRRRrR : "+prescriptionJson);
+
+        } 
+        catch (IOException e) {
         }
         catch (TesseractException e) {
-            // capturez l'exception ici, par exemple :
             System.err.println("Erreur lors de la reconnaissance optique de caractères : " + e.getMessage());
         }
-   
-        return result;
+        return prescriptionJson;
     }
 }
