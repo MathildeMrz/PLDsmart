@@ -1,7 +1,7 @@
 pragma solidity ^0.8.0;
 
-import "../node_modules/@openzeppelin/contracts/access/AccessControl.sol";
-import "../node_modules/@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 contract MedicalPrescription is AccessControl {
     using SafeMath for uint256;

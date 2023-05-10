@@ -148,4 +148,61 @@ contract("MedicalPrescription", (accounts) => {
         console.log(prescriptionDetails[2]);
         assert.isAtLeast(parseInt(prescriptionDetails[2]), parseInt(time.duration.days(7)), "Prescription expiration date should be valid");
     });
+
+    it("Test prescription added event", async() => {
+        await medicalPrescription.grantDoctorRole(doctor, { from: admin });
+        const daysValid = 7;
+        const receipt = await medicalPrescription.addPrescription(prescriptionHash, daysValid, { from: doctor });
+
+        expectEvent(receipt, "PrescriptionAdded", {
+            doctor: doctor,
+            prescriptionHash: prescriptionHash
+        });
+    });
+
+    it("Test prescription revoked event", async() => {
+        await medicalPrescription.grantDoctorRole(doctor, { from: admin });
+        const daysValid = 7;
+        await medicalPrescription.addPrescription(prescriptionHash, daysValid, { from: doctor });
+
+        const reason = "Wrong prescription";
+        const receipt = await medicalPrescription.revokePrescription(prescriptionHash, reason, { from: doctor });
+
+        expectEvent(receipt, "PrescriptionRevoked", {
+            doctor: doctor,
+            prescriptionHash: prescriptionHash,
+            reason: reason
+        });
+    });
+
+    it("Test prescription delivered event", async() => {
+        await medicalPrescription.grantDoctorRole(doctor, { from: admin });
+        await medicalPrescription.grantPharmacistRole(pharmacist, { from: admin });
+        const daysValid = 7;
+        await medicalPrescription.addPrescription(prescriptionHash, daysValid, { from: doctor });
+
+        const receipt = await medicalPrescription.deliverPrescription(prescriptionHash, { from: pharmacist });
+
+        expectEvent(receipt, "PrescriptionDelivered", {
+            pharmacist: pharmacist,
+            prescriptionHash: prescriptionHash
+        });
+    });
+
+    /*it("Test prescription expired event", async() => {
+        await medicalPrescription.grantDoctorRole(doctor, { from: admin });
+        await medicalPrescription.grantPharmacistRole(pharmacist, { from: admin });
+        const prescriptionHash = web3.utils.sha3("prescription3");
+        const daysValid = 1;
+        await medicalPrescription.addPrescription(prescriptionHash, daysValid, { from: doctor });
+
+        // Increase time by more than a day to make the prescription expire
+        await time.increase(time.duration.days(1).add(time.duration.seconds(1)));
+
+        const receipt = await expectRevert.unspecified(medicalPrescription.deliverPrescription(prescriptionHash, { from: pharmacist }));
+
+        expectEvent(receipt, "PrescriptionExpired", {
+            prescriptionHash: prescriptionHash
+        });
+    });*/
 });
