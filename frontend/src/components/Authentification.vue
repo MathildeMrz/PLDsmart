@@ -84,7 +84,7 @@
           console.log(response);
 
           if(handleAuth.status == 200) {
-            location.href = job + ".html";
+            location.href = job + ".html?"+ response.id;
           }
           else {
             console.log("User not registered");

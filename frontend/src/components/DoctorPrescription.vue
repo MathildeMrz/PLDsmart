@@ -302,8 +302,20 @@ export default {
         //document.getElementById("prescriptionDate").innerHTML = ('0' + d).slice(-2) + "/" + ('0' + m).slice(-2) + "/" + y + " " + ('0' + h).slice(-2) + ":" + ('0' + min).slice(-2);
         document.getElementById("prescriptionDate").innerHTML  = y+'-'+('0' + m).slice(-2)+'-'+('0' + d).slice(-2)+'T'+('0' + h).slice(-2)+':'+('0' + min).slice(-2);
 
+        // Récupérer l'URL courante
+        var url = window.location.href;
+
+        // Diviser l'URL en deux parties : avant et après le "?"
+        var parts = url.split("?");
+
+        // Vérifier s'il y a un paramètre dans l'URL
+        if (parts.length > 1) {
+            var doctorId = parts[1];
+        }
+
+
         //Recuperer les donnes du docteur
-        fetch('http://localhost:9000/Doctor-api/' + 1) //Il faut remplacer '1' par doctorId
+        fetch('http://localhost:9000/Doctor-api/' + doctorId) //Il faut remplacer '1' par doctorId
             .then(response => response.json())
             .then(data => {
             // récupérer les informations de l'objet Doctor à partir de la réponse JSON
