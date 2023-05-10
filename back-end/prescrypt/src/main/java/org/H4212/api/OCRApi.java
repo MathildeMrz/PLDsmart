@@ -1,6 +1,5 @@
 package org.H4212.api;
 
-import jakarta.json.JsonObject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 import net.sourceforge.tess4j.TesseractException;
@@ -33,12 +32,10 @@ public class OCRApi {
         }
     }
 
-    @POST
-    @Produces("application/json")
+    @POST    @Produces("application/json")
     @Path("/pdf")
-    public Response parsePdfToJson(byte[] pdf) throws IOException, TesseractException
+    public Response parsePdfToJson(byte[] pdf) throws IOException
     {
-        //File f = new File("C:/Users/Malob/OneDrive/Documents/4IF/SMART/PLDsmart/back-end/prescrypt/src/main/resources/input/file.pdf");
         String parsedText;
         PDFParser parser = new PDFParser(new RandomAccessBuffer(pdf));
         parser.parse();
