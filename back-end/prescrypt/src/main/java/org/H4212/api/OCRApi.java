@@ -17,11 +17,16 @@ public class OCRApi {
  private final ServiceOCR serviceOCR = new ServiceOCR();
 
     @POST
+    @Produces("application/json")
     @Path("/")
     public Response generateJsonOCR(byte[] image) throws IOException, TesseractException 
     {   
         JSONObject resultOCRJson = serviceOCR.generateJSON(image);
-        System.out.println("APIOCR : "+resultOCRJson);
-        return Response.ok(resultOCRJson.toString()).build();    
+        System.out.println("API-OCR : "+resultOCRJson);
+        if(!resultOCRJson.isEmpty()){
+            return Response.ok(resultOCRJson.toString()).build();
+        }else{
+            return Response.status(500).entity(resultOCRJson).build();
+        }
     }
 }
