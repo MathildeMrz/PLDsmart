@@ -3,5 +3,8 @@
     "maven": "^5.0.0",
     "pdfjs-dist": "^3.6.172",
     "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "pdf-to-png-converter": "^3.0.0"
   }
 }

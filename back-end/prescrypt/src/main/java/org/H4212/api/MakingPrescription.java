@@ -30,7 +30,7 @@ public class MakingPrescription {
             }
             return Response.ok(jsonBuilder.build()).build();
         }else{
-            return Response.serverError().build();
+            return Response.status(500).entity("{}").build();
         }
     }
 

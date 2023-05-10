@@ -45,3 +45,14 @@
         }
     };
 </script>
+
+<style>
+    .buttonTable {
+        border: none;
+        background-color: transparent;
+    }
+
+    .buttonTable img {
+        width:2vw;
+    }
+</style>

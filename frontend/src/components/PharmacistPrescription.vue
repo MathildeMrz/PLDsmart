@@ -5,6 +5,7 @@
         <div id="import-prescription">
             <img id="import-prescription-img" src="../assets/importPrescription.png" alt="">
             <div id="import-prescription-text" @click="handleFileImport"> <h3>Importer une ordonnance</h3></div>
+            <div><img id="image-preview"></div>
         </div>
         <div id="doctor">
             <div>
@@ -62,8 +63,8 @@
             <h3>La consultation</h3>
             <div class="information">
                 <div class="column">
-                    <input id="prescriptionDate" type="date" min="0" max="150" name=""/>
-                    <p class="indications">Date de l'ordonnance (JJ/MM/AAAA)</p>
+                    <input id="prescriptionDate" type="datetime-local" min="0" max="150" name=""/>
+                    <p class="indications">Date de l'ordonnance (JJ/MM/AAAA HH:MM)</p>
                 </div>
 
                 <div class="column">
@@ -114,7 +115,8 @@
     import Medicament from './Medicament.vue';
     import NavigationBar from './NavigationBar.vue';
 
-    export default {
+    export default 
+    {
         name: 'PharmacistPrescription',
         components: {
             NavigationBar,
@@ -126,6 +128,121 @@
             };
         },
         methods: {
+            handleOCR(input)
+            {
+                console.log("Ok dans handleOCR");
+                var file = input.files[0];
+                const type = file.type;
+                console.log("typeeeeeee = "+type);
+
+                if(type != "image/png" && type != "image/jpeg" && type != "image/pdf" && 
+                    type != "application/png" && type != "application/jpeg" && type != "application/pdf" )
+                {
+                    alert("Les formats pris en compte pour l'OCR sont : jpeg, pdf et png");
+                }
+                else
+                {
+                    /* Contrôler le type */
+                    if(type == "application/pdf")
+                    {
+                        console.log("PDF détecté");
+                        const reader = new FileReader();
+                        reader.onload = function () 
+                        {
+                            import("pdfjs-dist/build/pdf.min.js").then((pdfjsLib) => {
+                                /* Initialiser PDF.js */
+                                pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.6.172/pdf.worker.min.js";
+                                
+                                /* Charger le fichier PDF */
+                                pdfjsLib.getDocument(reader.result).promise.then(function (pdf) {
+                                    console.log("PDF chargé avec succès !");
+                                    console.log("pdf : "+pdf);
+
+                                    console.log("Nombre de pages : " + pdf.numPages);
+
+                                    for (var pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) 
+                                    {
+                                        pdf.getPage(pageNumber).then(function(page) {
+                                            var canvas = document.createElement("canvas");
+                                            var context = canvas.getContext("2d");
+                                            var viewport = page.getViewport({scale: 1.5});
+                                            canvas.width = viewport.width;
+                                            canvas.height = viewport.height;
+
+                                            var renderTask = page.render({
+                                                canvasContext: context,
+                                                viewport: viewport
+                                            });
+
+                                            renderTask.promise.then(function() {
+                                                const imageData = canvas.toDataURL('image/png');
+                                                // Récupérer l'élément <img> à partir de son ID
+                                                const img = document.getElementById("image-preview");
+
+                                                // Définir la propriété "src" de l'élément <img> sur la valeur de imageData
+                                                img.src = imageData;
+                                                
+                                                fetch(imageData)
+                                                    .then(res => res.arrayBuffer())
+                                                    .then(buffer => {
+                                                        /*Appel OCR*/
+                                                        const blob = new Blob([buffer], { type: 'image/png' });
+                                                        const reader = new FileReader();
+                                                        reader.onload = function(event) 
+                                                        {
+                                                            const byteArray = new Uint8Array(event.target.result);
+                                                            const url = 'http://localhost:9000/OCR-api';
+                                                            fetch(url, {
+                                                                method: 'POST',
+                                                                body: byteArray.buffer, // encode le tableau de bytes en ArrayBuffer
+                                                                })
+                                                            .then(response => {
+                                                                console.log(response);
+                                                                })
+                                                            .catch(error => {
+                                                                console.error(error);
+                                                                });
+                                                        };
+                                                        reader.readAsArrayBuffer(blob);
+                                                });
+                                                console.log("Page " + pageNumber + " convertie en PNG : " + imageData);
+
+                                            });
+                                        });
+                                    }
+                                }).catch(function(error) {
+                                    console.log("Erreur lors du chargement du PDF :", error);
+                                });
+                            }).catch(function(error) {
+                                console.log("Erreur lors du chargement de PDF.js :", error);
+                            });
+                        };
+                        reader.readAsArrayBuffer(file);
+                    }
+                    else
+                    {
+                        /*Appel OCR*/
+                        const reader = new FileReader();
+                        reader.onload = function(event) {
+                            const byteArray = new Uint8Array(event.target.result);
+
+                            const url = 'http://localhost:9000/OCR-api';
+                            fetch(url, {
+                                method: 'POST',
+                                body: byteArray.buffer, // encode le tableau de bytes en ArrayBuffer
+                            })
+                            .then(response => {
+                                console.log(response);
+                            })
+                            .catch(error => {
+                                console.error(error);
+                            });
+                        };
+                        reader.readAsArrayBuffer(file);
+                    }
+                }         
+          
+            },
             handleFileImport(){
                 console.log("in the method handleFileImport!");
                 let input = document.createElement('input');
@@ -135,8 +252,10 @@
                     // you can use this method to get file and perform respective operations
                             let files =   Array.from(input.files);
                             console.log(files);
+                            this.handleOCR(input);
                         };
                 input.click();
+                
             },
             deleteMedicine(index) {
                 console.log("delete medicine of parent!!!!");
@@ -148,12 +267,13 @@
                 },
         },
         props: {},
-    }
+    };
     
     document.addEventListener("DOMContentLoaded", function() 
     {
+           
         //Listener generate pdf button
-        var button = document.getElementById("generatePdfButton");
+        var button = document.getElementById("verifyPrescButton");
         button.addEventListener("click", function() 
         {
 
@@ -255,14 +375,6 @@
         width : 10%;
     }
 
-    .logo {
-        display: inline-block;
-        vertical-align: top;
-        width: 200px; /*4vw*/
-        margin-left: 5vh;
-        margin-bottom: 10px;
-    }
-
     header img {
     float: left;
     width:4vw;
@@ -291,9 +403,7 @@
 
     #doctorPrescription
     {
-        margin-left:10vh;
-        margin-top: 5vw;
-        
+        margin: 1vw 10vh 3vw 10vh;
     }
     .indications
     {
@@ -378,6 +488,11 @@
 
     .buttonTable img {
         width:2vw;
+    }
+
+    #image-preview
+    {
+        width:8vw;
     }
 
 </style>
