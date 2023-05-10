@@ -1,0 +1,22 @@
+•
+Nom docteur : Docteur DUBOIS Charline;
+Qualification : Médecin généraliste;
+RPPS : 10100169461; 
+ 
+Adresse : 1, rue de la République;
+Tel : 0454234454; 
+ 
+Fait le : 2023-05-10T13:41; 
+ 
+Nom patient : Nom;
+Prénom patient : Prenom;
+Age  : 18 ans;
+Sexe : Femme; 
+ 
+Médicament1 : A B I, émulsion pour application locale;
+Posologie : 30 mg;
+Période : 2 mois
+Renouvelable : Oui; 3 fois;
+Remboursable : Oui;
+Indication : ;
+ 
