@@ -1,5 +1,5 @@
 <template>
-  <DoctorPrescription/>
+  <DoctorPrescription />
 </template>
 
 <script>
@@ -9,7 +9,7 @@ export default {
   name: 'App',
   components: {
     DoctorPrescription
-}
+  }
 }
 </script>
 
@@ -21,4 +21,7 @@ export default {
   color: #1817BA;
 }
 
+.swal2-popup {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+}
 </style>

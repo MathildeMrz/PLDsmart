@@ -30,6 +30,7 @@ public class Authentication {
         {
             doctor = serviceUser.authenticateDoctor(authenticateUserRequest.getUsername(), authenticateUserRequest.getPassword());
             authenticateUserResponse.setUser(doctor);
+            //System.out.println(authenticateUserResponse.toJson());
         }
         catch(Exception e)
         {

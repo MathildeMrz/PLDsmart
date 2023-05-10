@@ -1,6 +1,8 @@
 package org.H4212.services;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.net.URL;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -15,11 +17,25 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.List;
 import com.itextpdf.text.ListItem;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
+
 
 public class ServicePdf {
 
-    private static Font prescriptionFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.NORMAL, BaseColor.BLACK);
+    public static final String TAHOMA = "C:/Users/33660/Documents/PLD_SMART/PLDsmart/back-end/prescrypt/src/main/resources/tahoma.ttf";
+    private static BaseFont baseFont = null;
+
+    static {
+        try {
+            baseFont = BaseFont.createFont(TAHOMA, BaseFont.WINANSI, BaseFont.EMBEDDED);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static Font prescriptionFont = new Font(baseFont, 12);
+
     private static Font prescriptionBoldFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD, BaseColor.BLACK);
     private static Chunk bullet = new Chunk("\u2022", prescriptionFont);
 
@@ -69,39 +85,39 @@ public class ServicePdf {
 
         // Afficher la valeur de l'attribut "doctorName"
         
-        Paragraph doctorPart = new Paragraph("Nom docteur : "+doctorName+ "\nQualification : "+doctorJob+"\nRPPS : "+RPPSNum+";", prescriptionBoldFont);
+        Paragraph doctorPart = new Paragraph("Nom docteur : "+doctorName+ "; \nQualification : "+doctorJob+"; \nRPPS : "+RPPSNum+"; ", prescriptionBoldFont);
         addEmptyLine(doctorPart, 1);
 
         //Office
-        Paragraph officePart = new Paragraph("Adresse : " + consultationAddress+"\nTel : "+consultationPhoneNumber+";", prescriptionFont);
+        Paragraph officePart = new Paragraph("Adresse : " + consultationAddress+"; \nTel : "+consultationPhoneNumber+"; ", prescriptionFont);
         addEmptyLine(officePart, 1);
 
         //Consultation
-        Paragraph consultationPart = new Paragraph("Fait le : "+consultationDate+";", prescriptionFont);
+        Paragraph consultationPart = new Paragraph("Fait le : "+consultationDate+"; ", prescriptionFont);
         addEmptyLine(consultationPart, 1);
 
         //Patient
         //Check if age, weight, height empty
-        String patientString = "Nom patient : "+patientName+";\nPrénom patient : "+patientFirstName+";\n";
+        String patientString = "Nom patient : "+patientName+";\nPrénom patient : "+patientFirstName+"; \n";
         if(! patientAge.isEmpty())
         {
-            patientString += "Age : " +patientAge+" ans;";
+            patientString += "Age  : " +patientAge+" ans; ";
         }
 
 
         if(! patientSexe.isEmpty())
         {
-            patientString += "\nSexe: " + patientSexe + ";";
+            patientString += "\nSexe : " + patientSexe + "; ";
         }
 
         if(! patientHeight.isEmpty())
         {
-            patientString += "\nTaille : "+patientHeight+" cm;";
+            patientString += "\nTaille : "+patientHeight+" cm; ";
         }
 
         if(! patientWeight.isEmpty())
         {
-            patientString += "\nPoids : "+patientWeight+" kg;";
+            patientString += "\nPoids : "+patientWeight+" kg; ";
         }
 
         Paragraph patientPart = new Paragraph(patientString, prescriptionBoldFont);     
@@ -124,25 +140,25 @@ public class ServicePdf {
             String renewal = ((JSONObject)element).get("renewal").toString();
             String refundable = ((JSONObject)element).get("refundable").toString();
             String indication = ((JSONObject)element).get("indication").toString();
-            String row = "Médicament"+counter+" : "+medicineAct+";\nPosologie : " + posology +";\nPériode : "+ treatmentPeriod + " " + treatmentPeriodTexteObj;            
+            String row = "Médicament"+counter+" : "+medicineAct+"; \nPosologie : " + posology +"; \nPériode : "+ treatmentPeriod + " " + treatmentPeriodTexteObj;            
             int renewalInt = Integer.parseInt(renewal);
             row+= "\nRenouvelable : ";
             boolean refundableBool = Boolean.parseBoolean(refundable);
             if(renewalInt == 0){
-                row +="Non;";
+                row +="Non; ";
             } 
             else{
-                row = row +"Oui;"+renewal+" fois;";
+                row = row +"Oui; "+renewal+" fois; ";
 
             }
             row+= "\nRemboursable : ";
             if(refundableBool){
-                row += "Non;";
+                row += "Non; ";
             }
             else {
-                row += "Oui;";
+                row += "Oui; ";
             }
-            row+="\nIndication : "+indication+";\n\n";
+            row+="\nIndication : "+indication+"; \n\n";
 
             ListItem item = new ListItem(row, prescriptionFont);
             list.add(item);
