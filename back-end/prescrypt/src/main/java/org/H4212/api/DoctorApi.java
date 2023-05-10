@@ -31,8 +31,6 @@ public class DoctorApi {
             .add("idPSdoctor", doc.getIdPSdoctor())
             .build();
 
-        System.out.println(jsonResponse);
-
         // renvoyer la réponse JSON
         return Response.ok(jsonResponse).build();
     }
