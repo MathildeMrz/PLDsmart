@@ -268,6 +268,7 @@
         width: 150px;
         height: 40px;
         line-height: 40px;
+        cursor: pointer;
         transition: all .3s ease;
     }
 
@@ -300,7 +301,7 @@
     .searchbar > input {
         margin: 0px;
         padding-left: 15px;
-        width: 500px;
+        width: 400px;
         height: 30px;
         border: none;
         background: transparent;
