@@ -129,7 +129,7 @@ public class ServicePdf {
             String renewal = ((JSONObject)element).get("renewal").toString();
             String refundable = ((JSONObject)element).get("refundable").toString();
             String indication = ((JSONObject)element).get("indication").toString();
-            String row = "Médicament : "+medicineAct+"; \nPosologie : " + posology +"; \nPériode : "+ treatmentPeriod + " " + treatmentPeriodTexteObj;            
+            String row = "Médicament : "+medicineAct+"; \nPosologie : " + posology +"; \nPériode : "+ treatmentPeriod + " " + treatmentPeriodTexteObj+";";            
             row+= "\nRenouvelable : ";
             boolean refundableBool = Boolean.parseBoolean(refundable);
 

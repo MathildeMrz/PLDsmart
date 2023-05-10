@@ -121,7 +121,6 @@ public class ServiceOCR {
 
             /* Sexe */
             Pattern sexePattern = Pattern.compile("Sexe\s*:\s*(.+?);");
-            Pattern sexePattern = Pattern.compile("Sexe\s*:\s*(.+?);");
             Matcher sexeMatcher = sexePattern.matcher(result);
             String sexe = "";
             if (sexeMatcher.find()) {
@@ -131,7 +130,6 @@ public class ServiceOCR {
 
             /* Taille */
             Pattern taillePattern = Pattern.compile("Taille\s*:\s*(\\d+)");
-            Pattern taillePattern = Pattern.compile("Taille\s*:\s*(\\d+)");
             Matcher tailleMatcher = taillePattern.matcher(result);
             String taille = "";
             if (tailleMatcher.find()) {
@@ -140,7 +138,6 @@ public class ServiceOCR {
             prescriptionJson.put("Taille", taille);
 
             /* Poids */        
-            Pattern poidsPattern = Pattern.compile("Poids\s*:\s*(\\d+)");
             Pattern poidsPattern = Pattern.compile("Poids\s*:\s*(\\d+)");
             Matcher poidsMatcher = poidsPattern.matcher(result);
             if (poidsMatcher.find()) {
@@ -160,7 +157,6 @@ public class ServiceOCR {
             for (String medication : medications)
             {
                 JSONObject medicineJson = new JSONObject();
-
                 /* Nom */
                 Pattern nomMedicamentPattern = Pattern.compile("Medicament\s*:\s*(.+?);");
                 Matcher nomMedicamentMatcher = nomMedicamentPattern.matcher(medication);
@@ -190,6 +186,18 @@ public class ServiceOCR {
                 } else {
                     medicineJson.put("Periode", "");
                 }
+
+                /* Periode text*/
+                Pattern periodeTextPattern = Pattern.compile("Période\s*:\s*\\d+(.+?);");
+                Matcher periodeTextPatternMatcher = periodeTextPattern.matcher(medication);
+                if (periodeTextPatternMatcher.find()) {
+                    String periodeText = periodeTextPatternMatcher.group(1);
+                    medicineJson.put("PeriodeTexte", periodeText);
+                } else {
+                    medicineJson.put("PeriodeTexte", "");
+                }
+                
+
                 /* Renouvelable */
                 Pattern renouvelablePattern = Pattern.compile("Renouvelable\s*:\s*(\\d+)");
                 Matcher renouvelableMatcher = renouvelablePattern.matcher(medication);

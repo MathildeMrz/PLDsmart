@@ -24,7 +24,6 @@ public class OCRApi {
     public Response generateJsonOCR(byte[] image) throws IOException, TesseractException 
     {   
         JSONObject resultOCRJson = serviceOCR.generateJSON(image);
-        System.out.println("API-OCR : "+resultOCRJson);
         if(!resultOCRJson.isEmpty()){
             return Response.ok(resultOCRJson.toString()).build();
         }else{
@@ -32,7 +31,8 @@ public class OCRApi {
         }
     }
 
-    @POST    @Produces("application/json")
+    @POST   
+    @Produces("application/json")
     @Path("/pdf")
     public Response parsePdfToJson(byte[] pdf) throws IOException
     {

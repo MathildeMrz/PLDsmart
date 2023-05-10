@@ -7,7 +7,7 @@
             </datalist>
         </td>
         <td>
-            <input class="posology" type="text" name="" required>
+            <input id="posology" class="posology" type="text" name="" required>
         </td>
 
         <td>
@@ -48,7 +48,7 @@
 
     export default {
         name: 'MedicamentComponent',
-        props: ['index', 'input1', 'input2', 'input3','input4','input5','input6'],
+        props: ['index'],
         mounted() 
         {
             this.loadData();
@@ -62,10 +62,9 @@
             loadData() 
             {
                 //Ajout médicaments liste déroulante
-                /*const data = require('../assets/medicine.json');
+                const data = require('../assets/medicine.json');
                 const medicineSelect = document.getElementById("medicineActDatalist");
                 let result = [];
-                console.log("Fatma love u "+this.index);
                 for(let i=0; i<data.length; i++) 
                 {
                     let concat = data[i].CODE_UCD.toString() + " " + data[i].NOM_COURT;
@@ -75,20 +74,7 @@
                     option.value = data[i].NOM_COURT;
                     option.text = concat;
                     medicineSelect.appendChild(option);
-                }*/
-                console.log("input3 à l'index "+this.index+" = "+this.input3);
-                document.getElementById("medicineAct").value = "index ligne : "+this.index;
-                document.getElementById("posology").value = this.input2;
-                document.getElementById("treatmentPeriod").value = this.input3;
-                
-                document.getElementById("renewal").value = this.input4;
-
-                if(this.input5 == "Non"){
-                    document.getElementById("refundable").checked = true;
                 }
-
-                document.getElementById("indication").value = this.input6;
-
             }
         }
     }   ;

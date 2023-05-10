@@ -110,7 +110,7 @@
                     </tr>
                 </thead>
                 <tbody id="drugList">
-                    <Medicament v-for="(props, index) in medicineProps" :key="index" :index="index" :input1="props.input1" :input2="props.input2" :input3="props.input3" :input4="props.input4" :input5="props.input5" :input6="props.input6" @delete="deleteMedicine" />
+                    <Medicament v-for="(index) in medicines" :key="index" :index="index" @delete="deleteMedicine" />
                 </tbody>
             </table>
             <button class="buttonTable" type="submit" @click="addMedicine">
@@ -142,22 +142,6 @@ export default {
             medicines: []
         };
     },
-    computed: {
-    medicineProps: function() {
-        return this.medicines.map(function(medicine) {
-        return {
-            input1: medicine.NomMedicament,
-            input2: medicine.Posologie,
-            input3: medicine.Periode,
-            input4: medicine.Renouvelable,
-            input5: medicine.Remboursable,
-            input6: medicine.Indication,
-  // TODO: Ajouteer mois!!!
-
-        };
-        });
-    }
-},
     methods:
     {
         handleOCR(input) {
@@ -204,8 +188,6 @@ export default {
                                             const imageData = canvas.toDataURL('image/png');
                                             // Récupérer l'élément <img> à partir de son ID
                                             const img = document.getElementById("image-preview");
-
-                                            // Définir la propriété "src" de l'élément <img> sur la valeur de imageData
                                             img.src = imageData;
 
                                             fetch(imageData)
@@ -305,40 +287,45 @@ export default {
             document.getElementById("consultationPhoneNumber").value = consultationPhoneNumber;
 
             //Médicaments
-            const medicaments = jsonData["Medicaments"];
             const self = this;
-            var localMedicines=[];
             //var index = 0;
-            
-            //var table = document.getElementById("my-table");
-            medicaments.forEach(function(medicament) {
-                console.log("Coucou c'est moi");
-                localMedicines.push(medicament);
-                console.log(medicament);
 
+            var index = 0;
+
+            const medicaments = jsonData["Medicaments"];
+
+            medicaments.forEach(function(medicament) 
+            {
+                console.log("medicament : "+medicament+ " index = "+index);
+
+                const NomMedicament = medicament["NomMedicament"];
+                console.log("NomMedicament : "+NomMedicament);
+                const Posologie = medicament["Posologie"];
+                const Periode = medicament["Periode"];
+                const PeriodeTexte = medicament["PeriodeTexte"];
+                console.log("PeriodeTexte : "+PeriodeTexte);
+                const Renouvelable = medicament["Renouvelable"];
+                const Remboursable = medicament["Remboursable"];
+                const Indication = medicament["Indication"];
+
+                self.addMedicine();              
+
+                setTimeout(function() {
+                    document.querySelectorAll(".row")[index].querySelector("#medicineAct").value = NomMedicament;
+                    document.querySelectorAll(".row")[index].querySelector("#posology").value = Posologie;
+                    document.querySelectorAll(".row")[index].querySelector("#treatmentPeriod").value = Periode;
+                    document.querySelectorAll(".row")[index].querySelector("#treatmentPeriodTexte").value = PeriodeTexte;
+                    document.querySelectorAll(".row")[index].querySelector("#renewal").value = Renouvelable;
+
+                    if(Remboursable == "Non")
+                    {
+                        document.querySelectorAll(".row")[index].querySelector("#refundable").checked = true;
+                    }
+                    document.querySelectorAll(".row")[index].querySelector("#indication").value = Indication;
+                    index = index + 1;
+                }, 1000);
+                
             });
-            self.medicines = localMedicines;
-            console.log("Medicines : "+self.medicines);          
-            self.medicineProps.forEach(function(prop) {
-                console.log(prop);
-            });
-
-            /*
-
-            const NomMedicament = jsonData["NomMedicament"];
-            const Posologie = jsonData["Posologie"];
-            const Periode = jsonData["Periode"];
-            const Renouvelable = jsonData["Renouvelable"];
-            const Remboursable = jsonData["Remboursable"];
-            const Indication = jsonData["Indication"];
-
-            document.getElementById("medicineAct").value = NomMedicament;
-            document.getElementById("posology").value = Posologie;
-            document.getElementById("treatmentPeriod").value = Periode;
-            document.getElementById("renewal").value = Renouvelable;
-            document.getElementById("refundable").value = Remboursable;
-            document.getElementById("indication").value = Indication;*/
-
         },
 
         handleFileImport() {
@@ -359,14 +346,7 @@ export default {
             this.medicines.splice(index, 1);
         },
         addMedicine() {
-            this.medicines.push({
-                "NomMedicament":"",
-                "Posologie":"",
-                "Periode":"",
-                "Renouvelable":"",
-                "Remboursable":"",
-                "Indication":"",
-            });
+            this.medicines.push({});
         },
         async deliverPresc() {
             const table = document.querySelector("table");
