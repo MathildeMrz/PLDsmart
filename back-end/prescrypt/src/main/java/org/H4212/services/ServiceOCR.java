@@ -23,9 +23,8 @@ public class ServiceOCR {
         //tesseract.setDatapath("C:/Users/zhang/Documents/GitHub/PLDsmart/back-end/prescrypt/src/main/resources/tessdata");//datapath chez Yi
         tesseract.setLanguage("fra");
         tesseract.setVariable("user_words_suffix", ".user-words");
-        //tesseract.setVariable("user_words_file", "C:/Users/33660/Documents/PLD_SMART/PLDsmart/back-end/prescrypt/src/main/resources/tessdata/dictionaries/fra.user-words");
-        JSONObject prescriptionJson = new JSONObject();
-        
+        tesseract.setVariable("user_words_file", "C:/Users/zhang/Documents/GitHub/PLDsmart/back-end/prescrypt/src/main/resources/tessdata/fra.user-words");
+        JSONObject prescriptionJson = new JSONObject();        
 
         try (InputStream inputStream = new ByteArrayInputStream(image)) {
             BufferedImage bufferedImage = ImageIO.read(inputStream);
@@ -122,6 +121,7 @@ public class ServiceOCR {
 
             /* Sexe */
             Pattern sexePattern = Pattern.compile("Sexe\s*:\s*(.+?);");
+            Pattern sexePattern = Pattern.compile("Sexe\s*:\s*(.+?);");
             Matcher sexeMatcher = sexePattern.matcher(result);
             String sexe = "";
             if (sexeMatcher.find()) {
@@ -131,6 +131,7 @@ public class ServiceOCR {
 
             /* Taille */
             Pattern taillePattern = Pattern.compile("Taille\s*:\s*(\\d+)");
+            Pattern taillePattern = Pattern.compile("Taille\s*:\s*(\\d+)");
             Matcher tailleMatcher = taillePattern.matcher(result);
             String taille = "";
             if (tailleMatcher.find()) {
@@ -139,6 +140,7 @@ public class ServiceOCR {
             prescriptionJson.put("Taille", taille);
 
             /* Poids */        
+            Pattern poidsPattern = Pattern.compile("Poids\s*:\s*(\\d+)");
             Pattern poidsPattern = Pattern.compile("Poids\s*:\s*(\\d+)");
             Matcher poidsMatcher = poidsPattern.matcher(result);
             if (poidsMatcher.find()) {

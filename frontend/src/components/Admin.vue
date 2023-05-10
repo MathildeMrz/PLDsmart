@@ -3,9 +3,9 @@
 
     <div class="searchnav">
         <div class="toggle">
-            <input type="radio" id="doctors" class="job" name="jobView" checked/>
+            <input type="radio" id="doctors" class="job" name="jobView" value="doctors" v-model="selectedOption"/>
             <label for="doctors">Médecins</label>
-            <input type="radio" id="pharmacists" class="job" name="jobView"/>
+            <input type="radio" id="pharmacists" class="job" name="jobView" value="pharmacists" v-model="selectedOption"/>
             <label for="pharmacists">Pharmaciens</label>
         </div>
 
@@ -17,58 +17,194 @@
         </div>
     </div>
 
-    <table class="my-table">
+    <table class="my-table" id="doctors-table">
         <thead>
             <tr>
-                <th>NOM</th>
-                <th>Prénom</th>
-                <th>Qualification</th>
-                <th>Numéro RPPS</th>
-                <th>Adresse</th>
-                <th>Téléphone</th>
-                <th><button class="buttonTable" type="submit" @click="addProfessional">
+                <th style="width: 9vw;">NOM</th>
+                <th style="width: 9vw;">Prénom</th>
+                <th style="width: 10vw;">Qualification</th>
+                <th style="width: 8vw;">Numéro RPPS</th>
+                <th style="width: 20vw;">Adresse</th>
+                <th style="width: 8vw;">Téléphone</th>
+                <th style="width: 3vw;">
+                    <button class="buttonTable" type="submit" @click="addProfessional">
                         <img src="../assets/plus.png" alt="button add prescription" />
                     </button>
                 </th>
             </tr>
         </thead>
         <tbody id="profesionnalsList">
-            <Professional v-for="(index) in professionals" :key="index" :index="index" @delete="deleteProfessional"/>
+            <Doctor v-for="(professional, index) in professionals" :key="index" :index="index" :lastName="professional.lastName" :firstName="professional.firstName" :qualification="professional.qualification" :idPSdoctor="professional.idPSdoctor" :officeAddress="professional.officeAddress" :telephone="professional.telephone" @delete="deleteProfessional" @update="modifyProfessional"/>
         </tbody>
     </table>
+
+    <table class="my-table" id="pharmacists-table" hidden>
+        <thead>
+            <tr>
+                <th style="width: 9vw;">NOM</th>
+                <th style="width: 9vw;">Prénom</th>
+                <th style="width: 3vw;">
+                    <button class="buttonTable" type="submit" @click="addProfessional">
+                        <img src="../assets/plus.png" alt="button add prescription" />
+                    </button>
+                </th>
+            </tr>
+        </thead>
+        <tbody id="profesionnalsList">
+            <Pharmacist v-for="(professional, index) in professionals" :key="index" :index="index" :lastName="professional.lastName" :firstName="professional.firstName" @delete="deleteProfessional" @update="modifyProfessional"/>
+        </tbody>
+    </table>
+
+    <div id="loader-div">
+        <img id="loader" src="../assets/loading_spinner.gif" alt="Loading spinner"/>
+        <span id="error-span">Erreur lors du chargement des professionnels</span>
+    </div>
 </template>
 
 <script>
-    import Professional from './Professional.vue';
+    import Doctor from './Doctor.vue';
+    import Pharmacist from './Pharmacist.vue';
     import NavigationBar from './NavigationBar.vue';
 
     export default {
         name: 'AdminComponent',
         components: {
             NavigationBar,
-            Professional
+            Doctor,
+            Pharmacist
         },
         data() {
-        return {
-            professionals: []
+            return {
+                selectedOption: 'doctors',
+                professionals: []
             };
         },
+        mounted() {
+            this.loadProfessionals();
+        },
         methods: {
-            deleteProfessional(index) 
+            deleteProfessional(index)
             {
                 this.professionals.splice(index, 1);
             },
             addProfessional() 
             {
                 this.professionals.push({
-
+                    lastName: '',
+                    firstName: '',
+                    qualification: '',
+                    idPSdoctor: '',
+                    officeAddress: '',
+                    telephone: ''
                 });
+            },
+            modifyProfessional(index, newValue, where) {
+                if (where === 'lastName') {
+                    this.professionals[index].lastName = newValue;
+                } else if (where === 'firstName') {
+                    this.professionals[index].firstName = newValue;
+                } else if (where === 'qualification') {
+                    this.professionals[index].qualification = newValue;
+                } else if (where === 'idPSdoctor') {
+                    this.professionals[index].idPSdoctor = newValue;
+                } else if (where === 'officeAddress') {
+                    this.professionals[index].officeAddress = newValue;
+                } else if (where === 'telephone') {
+                    this.professionals[index].telephone = newValue;
+                }
             },
             disconnect() 
             {
                 location.href = '/';
+            },
+            loadProfessionals() {
+                if (this.selectedOption === 'doctors') {
+                    document.getElementById("doctors-table").style.display = "table";
+                    document.getElementById("pharmacists-table").style.display = "none";
+                    this.loadDoctors();
+                } else if (this.selectedOption === 'pharmacists') {
+                    document.getElementById("doctors-table").style.display = "none";
+                    document.getElementById("pharmacists-table").style.display = "table";
+                    this.loadPharmacists();
+                }
+            },
+            async loadDoctors() {
+                try {
+                    document.getElementById("loader-div").style.visibility = "visible";
+
+                    this.professionals = [];
+
+                    let handleProf = await fetch("http://localhost:9000/api/admin/getDoctors", {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json; charset=UTF-8'
+                        }
+                    });
+                    let response = await handleProf.json();
+                    console.log(handleProf);
+                    console.log(response);
+
+                    if(handleProf.status == 200) {
+                        console.log("Doctors' list loaded successfully !");
+                        document.getElementById("loader-div").style.visibility = "hidden";
+                        for (var res in response) {
+                            console.log(response[res]);
+                            this.professionals.push(response[res]);
+                        }
+                        return handleProf;
+                    }
+                    else {
+                        console.log("Error while loading doctors' list...");
+                        document.getElementById("loader").style.visibility = "hidden";
+                        document.getElementById("error-span").style.visibility = "visible";
+                        return null;
+                    }
+                }
+                catch (error) {
+                    console.log(error);
+                }
+            },
+            async loadPharmacists() {
+                try {
+                    document.getElementById("loader-div").style.visibility = "visible";
+
+                    this.professionals = [];
+
+                    let handleProf = await fetch("http://localhost:9000/api/admin/getPharmacists", {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json; charset=UTF-8'
+                        }
+                    });
+                    let response = await handleProf.json();
+                    console.log(handleProf);
+                    console.log(response);
+
+                    if(handleProf.status == 200) {
+                        console.log("Pharmacists' list loaded successfully !");
+                        document.getElementById("loader-div").style.visibility = "hidden";
+                        for (var res in response) {
+                            this.professionals.push(response[res]);
+                        }
+                        return handleProf;
+                    }
+                    else {
+                        console.log("Error while loading pharmacists' list...");
+                        document.getElementById("loader").style.visibility = "hidden";
+                        document.getElementById("error-span").style.visibility = "visible";
+                        return null;
+                    }
+                }
+                catch (error) {
+                    console.log(error);
+                }
             }
-        },        
+        },
+        watch: {
+            selectedOption: function() {
+                this.loadProfessionals();
+            }
+        },
         props: {},
     }
 </script>
@@ -78,32 +214,25 @@
         border-collapse: collapse; 
         font-size: 16px; 
         text-align: center; 
-        width : 95%;
-        margin-top: 3vh;
+        width : auto;
+        margin-top: 5vh;
         margin-left: auto;
         margin-right: auto;
-    
     }
 
     .my-table th, .my-table td {
         border: 1px solid; 
-        padding: 8px;
+        padding: 0;
     }
 
     .my-table td {
         color:rgba(24,23,186,0.23);
-
     }
 
     .my-table th {
         background-color: rgba(24,23,186,0.63); 
         color:white;
-    }
-
-    input {
-        border: none;
-        border-bottom: 2px solid #1817BA;
-        width:20vh;
+        font-size: 18px;
     }
 
     input:focus {
@@ -119,7 +248,7 @@
     .toggle {
         display: flex;
         justify-content: center;
-        margin-left: 39px;
+        margin-left: 40px;
     }
 
     input[type="radio"].job {
@@ -139,6 +268,7 @@
         width: 150px;
         height: 40px;
         line-height: 40px;
+        cursor: pointer;
         transition: all .3s ease;
     }
 
@@ -163,7 +293,7 @@
     .searchbar {
         display: flex;
         align-items: center;
-        margin-right: 39px;
+        margin-right: 40px;
         border: 2px solid rgba(24,23,186,0.63);
         border-radius: 20px;
     }
@@ -171,17 +301,43 @@
     .searchbar > input {
         margin: 0px;
         padding-left: 15px;
-        width: 500px;
+        width: 400px;
         height: 30px;
         border: none;
         background: transparent;
         font-size: 16px;
+        text-align: left;
     }
 
     #searchIcon {
         width: 25px;
         height: 25px;
         margin: 0 7px 0 7px;
+    }
+
+    #loader-div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        width: 100vw;
+        height: auto;
+        visibility: visible;
+    }
+
+    #loader {
+        margin-top: 10px;
+        width: 50px;
+        height: 50px;
+    }
+
+    #error-span {
+        font-size: 20px;
+        color: red;
+        font-style: italic;
+        margin-bottom: 5px;
+        height: 20px;
+        visibility: hidden;
     }
     
 </style>

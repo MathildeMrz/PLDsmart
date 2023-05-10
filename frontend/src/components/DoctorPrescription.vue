@@ -301,6 +301,53 @@ export default {
         const min = n.getMinutes();
         //document.getElementById("prescriptionDate").innerHTML = ('0' + d).slice(-2) + "/" + ('0' + m).slice(-2) + "/" + y + " " + ('0' + h).slice(-2) + ":" + ('0' + min).slice(-2);
         document.getElementById("prescriptionDate").innerHTML  = y+'-'+('0' + m).slice(-2)+'-'+('0' + d).slice(-2)+'T'+('0' + h).slice(-2)+':'+('0' + min).slice(-2);
+
+       /* // Récupérer l'URL courante
+        var url = window.location.href;
+
+        // Diviser l'URL en deux parties : avant et après le "?"
+        var parts = url.split("?");
+
+        // Vérifier s'il y a un paramètre dans l'URL
+        if (parts.length > 1) {
+            var doctorId = parts[1];
+        }*/
+
+       // Récupération du cookie
+        const cookies = document.cookie.split(';');
+
+        // Recherche du cookie "monCookie"
+        let idValue = null;
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.startsWith('id=')) {
+                idValue = cookie.substring('id='.length, cookie.length);
+                break;
+            }
+        }
+        console.log(idValue);
+
+        //Recuperer les donnes du docteur
+        fetch('http://localhost:9000/Doctor-api/' + idValue) 
+            .then(response => response.json())
+            .then(data => {
+            // récupérer les informations de l'objet Doctor à partir de la réponse JSON
+            const firstName = data.firstName;
+            const lastName = data.lastName;
+            const telephone = data.telephone;
+            const qualification = data.qualification;
+            const officeAddress = data.officeAddress;
+            const idPSdoctor = data.idPSdoctor;
+            // remplir les champs de formulaire avec les informations récupérées
+            document.getElementById('doctorName').innerHTML = "Docteur " + firstName + " " + lastName;
+            document.getElementById('consultationPhoneNumber').innerHTML = telephone;
+            document.getElementById('doctorJob').innerHTML = qualification;
+            document.getElementById('addressPrescription').innerHTML = officeAddress;
+            document.getElementById('RPPSNum').innerHTML = idPSdoctor;
+            })
+            .catch(error => {
+            console.error('Erreur lors de la récupération des informations de l\'objet Doctor:', error);
+        });
     });
 </script>
 

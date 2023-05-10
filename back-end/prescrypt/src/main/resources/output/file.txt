@@ -1,0 +1,16 @@
+Nom docteur : Docteur Malo OLIVIER;
+Qualification : str;
+RPPS : 111; 
+ 
+Adresse : str;
+Tel : str; 
+ 
+Fait le : 2023-05-10T17:57; 
+ 
+Nom patient : DEAPRDIEU;
+Prénom patient : Gérard;
+Age : 20 ans;
+Sexe : Homme;
+Taille : 120 cm;
+Poids : 160 kg; 
+ 

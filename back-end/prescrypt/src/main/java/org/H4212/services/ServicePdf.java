@@ -1,29 +1,20 @@
 package org.H4212.services;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.net.URL;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Chunk;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.List;
-import com.itextpdf.text.ListItem;
-import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
 
 
 public class ServicePdf {
 
-    public static final String TAHOMA = "C:/Users/33660/Documents/PLD_SMART/PLDsmart/back-end/prescrypt/src/main/resources/tahoma.ttf";
+    public static final String TAHOMA = "C:/Users/Malob/OneDrive/Documents/4IF/SMART/PLDsmart/back-end/prescrypt/src/main/resources/tahoma.ttf";
     private static BaseFont baseFont = null;
 
     static {
@@ -99,7 +90,7 @@ public class ServicePdf {
         //Patient
         //Check if age, weight, height empty
         String patientString = "Nom patient : "+patientName+";\nPrénom patient : "+patientFirstName+"; \n";
-        if(! patientAge.isEmpty())
+        if(!patientAge.isEmpty())
         {
             patientString += "Age : " +patientAge+" ans; ";
         }

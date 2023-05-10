@@ -28,7 +28,7 @@ CREATE TABLE doctor
     address VARCHAR(100),
     telephone VARCHAR(100),
     ethAddress VARCHAR(100),
-    PRIMARY KEY (doctorId),
+    PRIMARY KEY (idPSdoctor),
     FOREIGN KEY (doctorId) REFERENCES users(userId)
 );
 
