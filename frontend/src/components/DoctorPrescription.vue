@@ -116,6 +116,7 @@
     //import { read } from 'xlsx';
     import Medicament from './Medicament.vue';
     import NavigationBar from './NavigationBar.vue';
+    //import pdfjsLib from 'pdfjs-dist';
 
     export default {
         name: 'DoctorPrescriptionComponent',
@@ -129,6 +130,18 @@
             };
         },
         methods: {
+            mounted(){
+                import("pdfjs-dist/build/pdf.min").then((pdfjsLib) => {
+                pdfjsLib.GlobalWorkerOptions.workerSrc =
+                    "https://cdn.jsdelivr.net/npm/pdfjs-dist@2.7.570/build/pdf.worker.min.js";
+                pdfjsLib.getDocument("/orddd.pdf").promise.then(function (pdf) {
+                    pdf.getPage(1).then((page) => {
+                    console.log(page);
+                    });
+                });
+                });
+
+            },
             deleteMedicine(index) 
             {
                 this.medicines.splice(index, 1);
