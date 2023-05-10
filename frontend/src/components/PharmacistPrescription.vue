@@ -150,14 +150,10 @@
                         reader.onload = function () 
                         {
                             import("pdfjs-dist/build/pdf.min.js").then((pdfjsLib) => {
-                                /* Initialiser PDF.js */
                                 pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.6.172/pdf.worker.min.js";
-                                
-                                /* Charger le fichier PDF */
                                 pdfjsLib.getDocument(reader.result).promise.then(function (pdf) {
                                     console.log("PDF chargé avec succès !");
                                     console.log("pdf : "+pdf);
-
                                     console.log("Nombre de pages : " + pdf.numPages);
 
                                     for (var pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) 
@@ -176,12 +172,10 @@
 
                                             renderTask.promise.then(function() {
                                                 const imageData = canvas.toDataURL('image/png');
-                                                // Récupérer l'élément <img> à partir de son ID
                                                 const img = document.getElementById("image-preview");
-
-                                                // Définir la propriété "src" de l'élément <img> sur la valeur de imageData
                                                 img.src = imageData;
-                                                
+                                                const self = this; // stocker this dans une variable
+
                                                 fetch(imageData)
                                                     .then(res => res.arrayBuffer())
                                                     .then(buffer => {
@@ -194,19 +188,19 @@
                                                             const url = 'http://localhost:9000/OCR-api';
                                                             fetch(url, {
                                                                 method: 'POST',
-                                                                body: byteArray.buffer, // encode le tableau de bytes en ArrayBuffer
-                                                                })
-                                                            .then(response => {
-                                                                console.log(response);
-                                                                })
+                                                                body: byteArray.buffer,
+                                                            })
+                                                            .then(response => response.json())
+                                                            .then(data => {
+                                                                self.fillFormAfterOCR(data);
+                                                            })
                                                             .catch(error => {
-                                                                console.error(error);
-                                                                });
-                                                        };
+                                                                console.error('Error:', error);
+                                                            });
+                                                        }
                                                         reader.readAsArrayBuffer(blob);
                                                 });
                                                 console.log("Page " + pageNumber + " convertie en PNG : " + imageData);
-
                                             });
                                         });
                                     }
@@ -222,26 +216,58 @@
                     else
                     {
                         /*Appel OCR*/
+                        const self = this; // stocker this dans une variable
                         const reader = new FileReader();
                         reader.onload = function(event) {
                             const byteArray = new Uint8Array(event.target.result);
-
                             const url = 'http://localhost:9000/OCR-api';
                             fetch(url, {
                                 method: 'POST',
                                 body: byteArray.buffer, // encode le tableau de bytes en ArrayBuffer
                             })
-                            .then(response => {
-                                console.log(response);
+                            .then(response => response.json())
+                            .then(data => {
+                                self.fillFormAfterOCR(data);
                             })
                             .catch(error => {
-                                console.error(error);
+                                console.error('Error:', error);
                             });
+                            
                         };
                         reader.readAsArrayBuffer(file);
                     }
                 }         
           
+            },
+            fillFormAfterOCR(response)
+            {
+                var responseJson = JSON.stringify(response);
+                console.log("data : " + responseJson);
+
+                const doctorName = responseJson["NomDocteur"];
+                const doctorJob = responseJson["Qualification"];
+                const RPPSNum = responseJson["RPPS"];
+                const patientName = responseJson["NomPatient"];
+                const patientFirstName = responseJson["PrenomPatient"];
+                const patientAge = responseJson["Age"];
+                const patientWeight = responseJson["Poids"];
+                const patientHeight = responseJson["Taille"];
+                const prescriptionDate = responseJson["Date"];
+                const addressPrescription = responseJson["Adresse"];
+                const consultationPhoneNumber = responseJson["Tel"];
+
+                document.getElementById("doctorName").value = doctorName;
+                document.getElementById("doctorJob").value = doctorJob;
+                document.getElementById("RPPSNum").value = RPPSNum;
+                document.getElementById("patientName").value = patientName;
+                document.getElementById("patientFirstName").value = patientFirstName;
+                document.getElementById("patientAge").value = patientAge;
+                document.getElementById("patientWeight").value = patientWeight;
+                document.getElementById("patientHeight").value = patientHeight;
+                document.getElementById("prescriptionDate").value = prescriptionDate;
+                document.getElementById("addressPrescription").value = addressPrescription;
+                document.getElementById("consultationPhoneNumber").value = consultationPhoneNumber;               
+
             },
             handleFileImport(){
                 console.log("in the method handleFileImport!");
@@ -249,7 +275,6 @@
                 input.type = 'file';
                 input.multiple = false;
                 input.onchange = () => {
-                    // you can use this method to get file and perform respective operations
                             let files =   Array.from(input.files);
                             console.log(files);
                             this.handleOCR(input);
@@ -258,7 +283,6 @@
                 
             },
             deleteMedicine(index) {
-                console.log("delete medicine of parent!!!!");
                 this.medicines.splice(index, 1);
                 },
             addMedicine() {
@@ -276,7 +300,6 @@
         var button = document.getElementById("verifyPrescButton");
         button.addEventListener("click", function() 
         {
-
             const doctorName = document.getElementById("doctorName").textContent;
             const doctorJob = document.getElementById("doctorJob").textContent;
             const RPPSNum = document.getElementById("RPPSNum").textContent;
