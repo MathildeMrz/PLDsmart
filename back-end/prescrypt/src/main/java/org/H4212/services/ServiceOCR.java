@@ -24,6 +24,9 @@ public class ServiceOCR {
         //tesseract.setDatapath("C:/Users/33660/Documents/PLD_SMART/PLDsmart/back-end/prescrypt/src/main/resources/tessdata");//datapath chez Mathilde
         tesseract.setDatapath("C:/Users/zhang/Documents/GitHub/PLDsmart/back-end/prescrypt/src/main/resources/tessdata");//datapath chez Yi
         tesseract.setLanguage("fra");
+        tesseract.setVariable("user_words_suffix", ".user-words");
+        //change path
+        tesseract.setVariable("user_words_file", "C:/Users/LENOVO/Desktop/pld_smart/PLDsmart/back-end/prescrypt/src/main/resources/tessdata/dictionary/fra.wordlist");
         try (InputStream inputStream = new ByteArrayInputStream(image)) {
             BufferedImage bufferedImage = ImageIO.read(inputStream);
             result = tesseract.doOCR(bufferedImage);

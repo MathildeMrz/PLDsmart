@@ -116,6 +116,7 @@
     //import { read } from 'xlsx';
     import Medicament from './Medicament.vue';
     import NavigationBar from './NavigationBar.vue';
+    //import pdfjsLib from 'pdfjs-dist';
 
     export default {
         name: 'DoctorPrescriptionComponent',
@@ -129,6 +130,18 @@
             };
         },
         methods: {
+            mounted(){
+                import("pdfjs-dist/build/pdf.min").then((pdfjsLib) => {
+                pdfjsLib.GlobalWorkerOptions.workerSrc =
+                    "https://cdn.jsdelivr.net/npm/pdfjs-dist@2.7.570/build/pdf.worker.min.js";
+                pdfjsLib.getDocument("/orddd.pdf").promise.then(function (pdf) {
+                    pdf.getPage(1).then((page) => {
+                    console.log(page);
+                    });
+                });
+                });
+
+            },
             deleteMedicine(index) 
             {
                 this.medicines.splice(index, 1);
@@ -274,13 +287,66 @@
             {
                 console.log("PDF détecté");
                 /* Transformer pdf en png */
-                
+                const fileReader = new FileReader();
+                console.log("BEFORE LOAD!!!");
+
+                fileReader.onload = function() {
+                    console.log("DANS LOAD!!!");
+
+                    //const arrayBuffer = this.result;
+                    /* Initialiser le PDF.js */
+                    console.log("JUSTE AVANT!!!");
+                    import("pdfjs-dist/build/pdf.min").then((pdfjsLib) => {
+                        console.log("Fatma la plus belleee");
+                        pdfjsLib.GlobalWorkerOptions.workerSrc =
+                            "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.6.172/build/pdf.min.js";
+                            console.log("Fatma la plus belleeeeeeee");
+                            pdfjsLib.getDocument("C:/Users/LENOVO/Desktop/pld_smart/PLDsmart/frontend/src/components/orddd.pdf").promise.then(function (pdf) 
+                            {
+                                console.log("Fatma la plus belleeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+                                pdf.getPage(1).then((page) => {
+                                console.log(page);
+                                });
+                            }).catch(function(error) {
+                            console.log(error);
+                        });
+                    });
+                    
+                    /*pdfjsLib.getDocument(arrayBuffer).promise.then(function(pdf) {
+                        /* Boucle à travers les pages PDF *
+                        console.log("PDF NUMPAGES "+pdf.numPages);
+                        for(let i = 1; i <= pdf.numPages; i++) {
+                            /* Récupérer la page PDF *
+                            pdf.getPage(i).then(function(page) {
+                                /* Créer un canvas pour afficher la page *
+                                const canvas = document.createElement("canvas");
+                                const context = canvas.getContext("2d");
+                                const viewport = page.getViewport({scale: 1.0});
+                                canvas.height = viewport.height;
+                                canvas.width = viewport.width;
+                                /* Dessiner la page PDF sur le canvas *
+                                const renderContext = {
+                                    canvasContext: context,
+                                    viewport: viewport
+                                };
+                                page.render(renderContext).promise.then(function() {
+                                    /* Récupérer l'image PNG du canvas *
+                                    const imageData = canvas.toDataURL("image/png");
+                                    console.log(imageData);
+                                });
+                            });
+                        }
+                    });*/
+                    console.log("Icii");
+                }
+            fileReader.readAsArrayBuffer(file);
+            console.log("Làà");
 
             }
 
             else
             {
-                 const reader = new FileReader();
+                const reader = new FileReader();
                 reader.onload = function(event) {
                 const byteArray = new Uint8Array(event.target.result);
 
