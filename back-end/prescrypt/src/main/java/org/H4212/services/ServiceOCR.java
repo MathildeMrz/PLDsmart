@@ -33,7 +33,7 @@ public class ServiceOCR {
 
             /* Médecin */            
             //Nom
-            Pattern nomDocteurPattern = Pattern.compile("Nom docteur : (.+?);");
+            Pattern nomDocteurPattern = Pattern.compile("Nom docteur\s*:\s*(.+?);");
             Matcher nomDocteurMatcher = nomDocteurPattern.matcher(result);
             if (nomDocteurMatcher.find()) {
                 String nomDocteur = nomDocteurMatcher.group(1);
@@ -45,7 +45,7 @@ public class ServiceOCR {
             }
 
             //Qualification
-            Pattern qualificationPattern = Pattern.compile("Qualification : (.+?);");
+            Pattern qualificationPattern = Pattern.compile("Qualification\s*:\s*(.+?);");
             Matcher qualificationMatcher = qualificationPattern.matcher(result);
             String qualification = "";
             if (qualificationMatcher.find()) {
@@ -54,7 +54,7 @@ public class ServiceOCR {
             prescriptionJson.put("Qualification", qualification);
             
             //RPPS
-            Pattern rppsPattern = Pattern.compile("RPPS : (.+?);");
+            Pattern rppsPattern = Pattern.compile("RPPS\s*:\s*(.+?);");
             Matcher rppsMatcher = rppsPattern.matcher(result);
             String rpps = "";
             if (rppsMatcher.find()) {
@@ -63,7 +63,7 @@ public class ServiceOCR {
             prescriptionJson.put("RPPS", rpps);
 
             //Adresse
-            Pattern adressePattern = Pattern.compile("Adresse : (.+?);");
+            Pattern adressePattern = Pattern.compile("Adresse\s*:\s*(.+?);");
             Matcher adresseMatcher = adressePattern.matcher(result);
             String adresse = "";
             if (adresseMatcher.find()) {
@@ -72,7 +72,7 @@ public class ServiceOCR {
             prescriptionJson.put("Adresse", adresse);
 
             //Tel
-            Pattern telPattern = Pattern.compile("Tel : (.+?);");
+            Pattern telPattern = Pattern.compile("Tel\s*:\s*(.+?);");
             Matcher telMatcher = telPattern.matcher(result);
             String tel = "";
             if (telMatcher.find()) {
@@ -82,7 +82,7 @@ public class ServiceOCR {
 
             /* Consultation */
             //Date
-            Pattern datePattern = Pattern.compile("Fait le : (.+?);");
+            Pattern datePattern = Pattern.compile("Fait le\s*:\s*(.+?);");
             Matcher dateMatcher = datePattern.matcher(result);
             String date = "";
             if (dateMatcher.find()) {
@@ -91,7 +91,7 @@ public class ServiceOCR {
             prescriptionJson.put("Date", date);
 
             /* Patient */
-            Pattern nomPatientPattern = Pattern.compile("Nom patient : (.+?);");
+            Pattern nomPatientPattern = Pattern.compile("Nom patient\s*:\s*(.+?);");
             Matcher nomPatientMatcher = nomPatientPattern.matcher(result);
             String nomPatient = "";
             if (nomPatientMatcher.find()) {
@@ -100,7 +100,7 @@ public class ServiceOCR {
             prescriptionJson.put("NomPatient", nomPatient);
 
             /* Prénom */
-            Pattern prenomPatientPattern = Pattern.compile("Prénom patient : (.+?);");
+            Pattern prenomPatientPattern = Pattern.compile("Prénom patient\s*:\s*(.+?);");
             Matcher prenomPatientMatcher = prenomPatientPattern.matcher(result);
             String prenomPatient = "";
             if (prenomPatientMatcher.find()) {
@@ -109,7 +109,7 @@ public class ServiceOCR {
             prescriptionJson.put("PrenomPatient", prenomPatient);
 
             /* Age */
-            Pattern agePattern = Pattern.compile("Age :(\\d+)");
+            Pattern agePattern = Pattern.compile("Age\s*:\s*(\\d+)");
             Matcher ageMatcher = agePattern.matcher(result);
             String age = "";
             if (ageMatcher.find()) {
@@ -118,7 +118,7 @@ public class ServiceOCR {
             prescriptionJson.put("Age", age);
 
             /* Sexe */
-            Pattern sexePattern = Pattern.compile("Sexe : (.+?);");
+            Pattern sexePattern = Pattern.compile("Sexe\s*:\s*(.+?);");
             Matcher sexeMatcher = sexePattern.matcher(result);
             String sexe = "";
             if (sexeMatcher.find()) {
@@ -127,7 +127,7 @@ public class ServiceOCR {
             prescriptionJson.put("Sexe", sexe);
 
             /* Taille */
-            Pattern taillePattern = Pattern.compile("Taille : (\\d+)");
+            Pattern taillePattern = Pattern.compile("Taille\s*:\s*(\\d+)");
             Matcher tailleMatcher = taillePattern.matcher(result);
             String taille = "";
             if (tailleMatcher.find()) {
@@ -136,7 +136,7 @@ public class ServiceOCR {
             prescriptionJson.put("Taille", taille);
 
             /* Poids */        
-            Pattern poidsPattern = Pattern.compile("Poids : (\\d+)");
+            Pattern poidsPattern = Pattern.compile("Poids\s*:\s*(\\d+)");
             Matcher poidsMatcher = poidsPattern.matcher(result);
             if (poidsMatcher.find()) {
                 String poids = poidsMatcher.group(1);
@@ -150,7 +150,7 @@ public class ServiceOCR {
             medications = Arrays.copyOfRange(medications, 1, medications.length);
 
             /* Médicament(s) */
-            Pattern medicamentPattern = Pattern.compile("Médicament : (.+?);Posologie : (.+?)mg;Période : (.+?);Renouvelable : (.+?);Remboursable : (.+?);Indication : (.+?);");
+            Pattern medicamentPattern = Pattern.compile("Médicament\s*:\s*(.+?);Posologie\s*:\s*(.+?)mg;Période\s*:\s*(.+?);Renouvelable\s*:\s*(.+?);Remboursable\s*:\s*(.+?);Indication\s*:\s*(.+?);");
             Matcher medicamentMatcher = medicamentPattern.matcher(result);
             while (medicamentMatcher.find()) 
             {
