@@ -110,7 +110,7 @@
                     </tr>
                 </thead>
                 <tbody id="drugList">
-                    <Medicament v-for="(index) in medicines" :key="index" :index="index" @delete="deleteMedicine" />
+                    <Medicament v-for="(props, index) in medicineProps" :key="index" :index="index" :input1="props.input1" :input2="props.input2" :input3="props.input3" :input4="props.input4" :input5="props.input5" :input6="props.input6" @delete="deleteMedicine" />
                 </tbody>
             </table>
             <button class="buttonTable" type="submit" @click="addMedicine">
@@ -142,6 +142,22 @@ export default {
             medicines: []
         };
     },
+    computed: {
+    medicineProps: function() {
+        return this.medicines.map(function(medicine) {
+        return {
+            input1: medicine.NomMedicament,
+            input2: medicine.Posologie,
+            input3: medicine.Periode,
+            input4: medicine.Renouvelable,
+            input5: medicine.Remboursable,
+            input6: medicine.Indication,
+  // TODO: Ajouteer mois!!!
+
+        };
+        });
+    }
+},
     methods:
     {
         handleOCR(input) {
@@ -257,6 +273,7 @@ export default {
 
         },
         fillFormAfterOCR(response) {
+
             var responseJson = JSON.stringify(response);
             console.log("data : " + responseJson);
             const jsonData = JSON.parse(responseJson);
@@ -271,7 +288,7 @@ export default {
             const patientWeight = jsonData["Poids"];
             const patientHeight = jsonData["Taille"];
             const prescriptionDate = jsonData["Date"];
-            const addressPrescription = jsonData["Adresse"];
+            const addressPrescription = jsonData["Adresse"];            
             const consultationPhoneNumber = jsonData["Tel"];
 
             document.getElementById("doctorName").value = doctorName;
@@ -284,8 +301,43 @@ export default {
             document.getElementById("patientWeight").value = patientWeight;
             document.getElementById("patientHeight").value = patientHeight;
             document.getElementById("prescriptionDate").value = prescriptionDate;
-            document.getElementById("addressPrescription").value = addressPrescription;
+            document.getElementById("addressPrescription").value = addressPrescription;            
             document.getElementById("consultationPhoneNumber").value = consultationPhoneNumber;
+
+            //Médicaments
+            const medicaments = jsonData["Medicaments"];
+            const self = this;
+            var localMedicines=[];
+            //var index = 0;
+            
+            //var table = document.getElementById("my-table");
+            medicaments.forEach(function(medicament) {
+                console.log("Coucou c'est moi");
+                localMedicines.push(medicament);
+                console.log(medicament);
+
+            });
+            self.medicines = localMedicines;
+            console.log("Medicines : "+self.medicines);          
+            self.medicineProps.forEach(function(prop) {
+                console.log(prop);
+            });
+
+            /*
+
+            const NomMedicament = jsonData["NomMedicament"];
+            const Posologie = jsonData["Posologie"];
+            const Periode = jsonData["Periode"];
+            const Renouvelable = jsonData["Renouvelable"];
+            const Remboursable = jsonData["Remboursable"];
+            const Indication = jsonData["Indication"];
+
+            document.getElementById("medicineAct").value = NomMedicament;
+            document.getElementById("posology").value = Posologie;
+            document.getElementById("treatmentPeriod").value = Periode;
+            document.getElementById("renewal").value = Renouvelable;
+            document.getElementById("refundable").value = Remboursable;
+            document.getElementById("indication").value = Indication;*/
 
         },
 
@@ -308,6 +360,12 @@ export default {
         },
         addMedicine() {
             this.medicines.push({
+                "NomMedicament":"",
+                "Posologie":"",
+                "Periode":"",
+                "Renouvelable":"",
+                "Remboursable":"",
+                "Indication":"",
             });
         },
         async deliverPresc() {

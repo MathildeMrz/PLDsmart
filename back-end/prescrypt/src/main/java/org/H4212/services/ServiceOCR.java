@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
@@ -17,8 +19,8 @@ public class ServiceOCR {
     {
         String result = null;
         Tesseract tesseract = new Tesseract();
-        //tesseract.setDatapath("C:/Users/33660/Documents/PLD_SMART/PLDsmart/back-end/prescrypt/src/main/resources/tessdata");//datapath chez Mathilde
-        tesseract.setDatapath("C:/Users/zhang/Documents/GitHub/PLDsmart/back-end/prescrypt/src/main/resources/tessdata");//datapath chez Yi
+        tesseract.setDatapath("C:/Users/33660/Documents/PLD_SMART/PLDsmart/back-end/prescrypt/src/main/resources/tessdata");//datapath chez Mathilde
+        //tesseract.setDatapath("C:/Users/zhang/Documents/GitHub/PLDsmart/back-end/prescrypt/src/main/resources/tessdata");//datapath chez Yi
         tesseract.setLanguage("fra");
         tesseract.setVariable("user_words_suffix", ".user-words");
         //tesseract.setVariable("user_words_file", "C:/Users/33660/Documents/PLD_SMART/PLDsmart/back-end/prescrypt/src/main/resources/tessdata/dictionaries/fra.user-words");
@@ -34,7 +36,7 @@ public class ServiceOCR {
 
             /* Médecin */            
             //Nom
-            Pattern nomDocteurPattern = Pattern.compile("Nom docteur : (.+?);");
+            Pattern nomDocteurPattern = Pattern.compile("Nom docteur\s*:\s*(.+?);");
             Matcher nomDocteurMatcher = nomDocteurPattern.matcher(result);
             if (nomDocteurMatcher.find()) {
                 String nomDocteur = nomDocteurMatcher.group(1);
@@ -46,7 +48,7 @@ public class ServiceOCR {
             }
 
             //Qualification
-            Pattern qualificationPattern = Pattern.compile("Qualification : (.+?);");
+            Pattern qualificationPattern = Pattern.compile("Qualification\s*:\s*(.+?);");
             Matcher qualificationMatcher = qualificationPattern.matcher(result);
             String qualification = "";
             if (qualificationMatcher.find()) {
@@ -55,7 +57,7 @@ public class ServiceOCR {
             prescriptionJson.put("Qualification", qualification);
             
             //RPPS
-            Pattern rppsPattern = Pattern.compile("RPPS : (.+?);");
+            Pattern rppsPattern = Pattern.compile("RPPS\s*:\s*(.+?);");
             Matcher rppsMatcher = rppsPattern.matcher(result);
             String rpps = "";
             if (rppsMatcher.find()) {
@@ -64,7 +66,7 @@ public class ServiceOCR {
             prescriptionJson.put("RPPS", rpps);
 
             //Adresse
-            Pattern adressePattern = Pattern.compile("Adresse : (.+?);");
+            Pattern adressePattern = Pattern.compile("Adresse\s*:\s*(.+?);");
             Matcher adresseMatcher = adressePattern.matcher(result);
             String adresse = "";
             if (adresseMatcher.find()) {
@@ -73,7 +75,7 @@ public class ServiceOCR {
             prescriptionJson.put("Adresse", adresse);
 
             //Tel
-            Pattern telPattern = Pattern.compile("Tel : (.+?);");
+            Pattern telPattern = Pattern.compile("Tel\s*:\s*(.+?);");
             Matcher telMatcher = telPattern.matcher(result);
             String tel = "";
             if (telMatcher.find()) {
@@ -83,7 +85,7 @@ public class ServiceOCR {
 
             /* Consultation */
             //Date
-            Pattern datePattern = Pattern.compile("Fait le : (.+?);");
+            Pattern datePattern = Pattern.compile("Fait le\s*:\s*(.+?);");
             Matcher dateMatcher = datePattern.matcher(result);
             String date = "";
             if (dateMatcher.find()) {
@@ -92,7 +94,7 @@ public class ServiceOCR {
             prescriptionJson.put("Date", date);
 
             /* Patient */
-            Pattern nomPatientPattern = Pattern.compile("Nom patient : (.+?);");
+            Pattern nomPatientPattern = Pattern.compile("Nom patient\s*:\s*(.+?);");
             Matcher nomPatientMatcher = nomPatientPattern.matcher(result);
             String nomPatient = "";
             if (nomPatientMatcher.find()) {
@@ -101,7 +103,7 @@ public class ServiceOCR {
             prescriptionJson.put("NomPatient", nomPatient);
 
             /* Prénom */
-            Pattern prenomPatientPattern = Pattern.compile("Prénom patient : (.+?);");
+            Pattern prenomPatientPattern = Pattern.compile("Prénom patient\s*:\s*(.+?);");
             Matcher prenomPatientMatcher = prenomPatientPattern.matcher(result);
             String prenomPatient = "";
             if (prenomPatientMatcher.find()) {
@@ -110,7 +112,7 @@ public class ServiceOCR {
             prescriptionJson.put("PrenomPatient", prenomPatient);
 
             /* Age */
-            Pattern agePattern = Pattern.compile("Age :(\\d+)");
+            Pattern agePattern = Pattern.compile("Age\s*:\s*(\\d+)");
             Matcher ageMatcher = agePattern.matcher(result);
             String age = "";
             if (ageMatcher.find()) {
@@ -119,7 +121,7 @@ public class ServiceOCR {
             prescriptionJson.put("Age", age);
 
             /* Sexe */
-            Pattern sexePattern = Pattern.compile("Sexe : (.+?);");
+            Pattern sexePattern = Pattern.compile("Sexe\s*:\s*(.+?);");
             Matcher sexeMatcher = sexePattern.matcher(result);
             String sexe = "";
             if (sexeMatcher.find()) {
@@ -128,7 +130,7 @@ public class ServiceOCR {
             prescriptionJson.put("Sexe", sexe);
 
             /* Taille */
-            Pattern taillePattern = Pattern.compile("Taille : (\\d+)");
+            Pattern taillePattern = Pattern.compile("Taille\s*:\s*(\\d+)");
             Matcher tailleMatcher = taillePattern.matcher(result);
             String taille = "";
             if (tailleMatcher.find()) {
@@ -137,42 +139,88 @@ public class ServiceOCR {
             prescriptionJson.put("Taille", taille);
 
             /* Poids */        
-            Pattern poidsPattern = Pattern.compile("Poids : (\\d+)");
+            Pattern poidsPattern = Pattern.compile("Poids\s*:\s*(\\d+)");
             Matcher poidsMatcher = poidsPattern.matcher(result);
             if (poidsMatcher.find()) {
                 String poids = poidsMatcher.group(1);
                 prescriptionJson.put("Poids", poids);
             } else {
                 prescriptionJson.put("Poids", "");
-}
+            }
 
             /* Médicament(s) */
             String[] medications = result.split("Médicament");
             medications = Arrays.copyOfRange(medications, 1, medications.length);
 
-            /* Médicament(s) */
-            Pattern medicamentPattern = Pattern.compile("Médicament : (.+?);Posologie : (.+?)mg;Période : (.+?);Renouvelable : (.+?);Remboursable : (.+?);Indication : (.+?);");
-            Matcher medicamentMatcher = medicamentPattern.matcher(result);
-            while (medicamentMatcher.find()) 
+            System.out.println("Liste des médicaments : "+medications);
+            JSONArray medicationsArray = new JSONArray();
+
+            for (String medication : medications)
             {
                 JSONObject medicineJson = new JSONObject();
-                String nomMedicament = medicamentMatcher.group(1);
-                String posologie = medicamentMatcher.group(2);
-                String periode = medicamentMatcher.group(3);
-                String renouvelable = medicamentMatcher.group(4);
-                String remboursable = medicamentMatcher.group(5);
-                String indication = medicamentMatcher.group(6);
-                medicineJson.put("NomMedicament", nomMedicament);
-                medicineJson.put("Posologie", posologie);
-                medicineJson.put("Periode", periode);
-                medicineJson.put("Renouvelable", renouvelable);
-                medicineJson.put("Remboursable", remboursable);
-                medicineJson.put("Indication", indication);
-                prescriptionJson.accumulate("Medicament", medicineJson);
+
+                /* Nom */
+                Pattern nomMedicamentPattern = Pattern.compile("Medicament\s*:\s*(.+?);");
+                Matcher nomMedicamentMatcher = nomMedicamentPattern.matcher(medication);
+                if (nomMedicamentMatcher.find()) {
+                    String nomMedicament = nomMedicamentMatcher.group(1);
+                    medicineJson.put("NomMedicament", nomMedicament);
+                } else {
+                    medicineJson.put("NomMedicament", "");
+                }
+
+                /* Posologie */
+                Pattern posologyPattern = Pattern.compile("Posologie\s*:\s*(\\d+)");
+                Matcher posologyMatcher = posologyPattern.matcher(medication);
+                if (posologyMatcher.find()) {
+                    String posologie = posologyMatcher.group(1);
+                    medicineJson.put("Posologie", posologie);
+                } else {
+                    medicineJson.put("Posologie", "");
+                }
+
+                /* Periode */
+                Pattern periodePattern = Pattern.compile("Période\s*:\s*(\\d+)");
+                Matcher periodeMatcher = periodePattern.matcher(medication);
+                if (periodeMatcher.find()) {
+                    String periode = periodeMatcher.group(1);
+                    medicineJson.put("Periode", periode);
+                } else {
+                    medicineJson.put("Periode", "");
+                }
+                /* Renouvelable */
+                Pattern renouvelablePattern = Pattern.compile("Renouvelable\s*:\s*(\\d+)");
+                Matcher renouvelableMatcher = renouvelablePattern.matcher(medication);
+                if (renouvelableMatcher.find()) {
+                    String renouvelable = renouvelableMatcher.group(1);
+                    medicineJson.put("Renouvelable", renouvelable);
+                } else {
+                    medicineJson.put("Periode", "");
+                }
+                /* Remboursable */
+                Pattern remboursablePattern = Pattern.compile("Remboursable\s*:\s*(.+?);");
+                Matcher remboursableMatcher = remboursablePattern.matcher(medication);
+                if (remboursableMatcher.find()) {
+                    String remboursable = remboursableMatcher.group(1);
+                    medicineJson.put("Remboursable", remboursable);
+                } else {
+                    medicineJson.put("Remboursable", "");
+
+                }
+
+                /* Indication */
+                Pattern indicationPattern = Pattern.compile("Indication\s*:\s*(.+?);");
+                Matcher indicationMatcher = indicationPattern.matcher(medication);
+                if (indicationMatcher.find()) {
+                    String indication = indicationMatcher.group(1);
+                    medicineJson.put("Indication", indication);
+                } else {
+                    medicineJson.put("Indication", "");
+                }
+                medicationsArray.put(medicineJson);
             }
-
             System.out.println("SERVICEOCRRRRRRRRRRRRRRRRRRRRRRRRRRRrR : "+prescriptionJson);
-
+            prescriptionJson.put("Medicaments",medicationsArray);
         } 
         catch (IOException e) {
         }

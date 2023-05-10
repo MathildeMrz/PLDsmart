@@ -36,7 +36,7 @@ public class ServicePdf {
 
     private static Font prescriptionFont = new Font(baseFont, 12);
 
-    private static Font prescriptionBoldFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD, BaseColor.BLACK);
+    private static Font prescriptionBoldFont = new Font(baseFont, 12, Font.BOLD, BaseColor.BLACK);
     private static Chunk bullet = new Chunk("\u2022", prescriptionFont);
 
     public byte[] generatePdf(String jsonPdf) {
@@ -101,7 +101,7 @@ public class ServicePdf {
         String patientString = "Nom patient : "+patientName+";\nPrénom patient : "+patientFirstName+"; \n";
         if(! patientAge.isEmpty())
         {
-            patientString += "Age  : " +patientAge+" ans; ";
+            patientString += "Age : " +patientAge+" ans; ";
         }
 
 
@@ -129,8 +129,6 @@ public class ServicePdf {
 
         JSONArray jsonArray = (JSONArray) parser.parse(rowsMedicamentsActs);
 
-        int counter = 1;
-
         for (Object element : jsonArray) 
         {
             String medicineAct = ((JSONObject)element).get("medicineAct").toString();
@@ -140,17 +138,15 @@ public class ServicePdf {
             String renewal = ((JSONObject)element).get("renewal").toString();
             String refundable = ((JSONObject)element).get("refundable").toString();
             String indication = ((JSONObject)element).get("indication").toString();
-            String row = "Médicament"+counter+" : "+medicineAct+"; \nPosologie : " + posology +"; \nPériode : "+ treatmentPeriod + " " + treatmentPeriodTexteObj;            
-            int renewalInt = Integer.parseInt(renewal);
+            String row = "Médicament : "+medicineAct+"; \nPosologie : " + posology +"; \nPériode : "+ treatmentPeriod + " " + treatmentPeriodTexteObj;            
             row+= "\nRenouvelable : ";
             boolean refundableBool = Boolean.parseBoolean(refundable);
-            if(renewalInt == 0){
-                row +="Non; ";
-            } 
-            else{
-                row = row +"Oui; "+renewal+" fois; ";
 
-            }
+            if(! renewal.isEmpty())
+            {
+                row = row +renewal+" fois; ";
+            }          
+
             row+= "\nRemboursable : ";
             if(refundableBool){
                 row += "Non; ";
@@ -158,11 +154,13 @@ public class ServicePdf {
             else {
                 row += "Oui; ";
             }
-            row+="\nIndication : "+indication+"; \n\n";
+            if(! indication.isEmpty())
+            {
+                row+="\nIndication : "+indication+"; \n\n";
+            } 
 
             ListItem item = new ListItem(row, prescriptionFont);
             list.add(item);
-            counter = counter+1;
         }
                 
         document.add(doctorPart);
