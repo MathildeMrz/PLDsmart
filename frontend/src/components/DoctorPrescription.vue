@@ -163,7 +163,11 @@ export default {
 
             if (table.rows.length == 1) {
                 incorrectPrescription = Boolean(true);
-                alert("Au moins un médicament ou acte doit être renseigné");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Au moins un médicament ou acte doit être renseigné'
+                })
                 this.addMedicine();
             }
 
@@ -188,6 +192,14 @@ export default {
                     incorrectPrescription = Boolean(true);
                     select.classList.add("red-border");
                 }
+            }
+
+            if(incorrectPrescription){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Veuillez remplir tous les champs obligatoires.'
+                })
             }
 
             if (!incorrectPrescription) 
