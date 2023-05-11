@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 
+import org.hibernate.annotations.SourceType;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import net.sourceforge.tess4j.Tesseract;
@@ -19,17 +20,18 @@ public class ServiceOCR {
     {
         String result = null;
         Tesseract tesseract = new Tesseract();
-        tesseract.setDatapath("C:/Users/33660/Documents/PLD_SMART/PLDsmart/back-end/prescrypt/src/main/resources/tessdata");//datapath chez Mathilde
+        //System.out.println("CHEMIN COURANT : "+System.getProperty("user.dir"));
+
+        tesseract.setDatapath("src/main/resources/tessdata");
         //tesseract.setDatapath("C:/Users/zhang/Documents/GitHub/PLDsmart/back-end/prescrypt/src/main/resources/tessdata");//datapath chez Yi
         tesseract.setLanguage("fra");
         tesseract.setVariable("user_words_suffix", ".user-words");
-        tesseract.setVariable("user_words_file", "C:/Users/zhang/Documents/GitHub/PLDsmart/back-end/prescrypt/src/main/resources/tessdata/fra.user-words");
+        tesseract.setVariable("user_words_file", "src/main/resources/tessdata/fra.user-words");
         JSONObject prescriptionJson = new JSONObject();        
 
         try (InputStream inputStream = new ByteArrayInputStream(image)) {
             BufferedImage bufferedImage = ImageIO.read(inputStream);
             result = tesseract.doOCR(bufferedImage);
-            System.out.println("result : "+result);
 
             result = result.replaceAll("\n", "");
 
@@ -147,28 +149,38 @@ public class ServiceOCR {
                 prescriptionJson.put("Poids", "");
             }
 
+            /* Durée validité */
+            Pattern dureeValiditePattern = Pattern.compile("Durée de validité\s*:\s*(\\d+)");
+            Matcher dureeValiditeMatcher = dureeValiditePattern.matcher(result);
+            if (dureeValiditeMatcher.find()) {
+                String validite = dureeValiditeMatcher.group(1);
+                prescriptionJson.put("Validite", validite);
+            } else {
+                prescriptionJson.put("Validite", "");
+            }
+
             /* Médicament(s) */
-            String[] medications = result.split("Médicament");
+            String[] medications = result.split("Médicament\s*:\s*");
             medications = Arrays.copyOfRange(medications, 1, medications.length);
 
-            System.out.println("Liste des médicaments : "+medications);
             JSONArray medicationsArray = new JSONArray();
 
             for (String medication : medications)
             {
                 JSONObject medicineJson = new JSONObject();
                 /* Nom */
-                Pattern nomMedicamentPattern = Pattern.compile("Medicament\s*:\s*(.+?);");
+                Pattern nomMedicamentPattern = Pattern.compile("(.+?);\s*Posologie");
                 Matcher nomMedicamentMatcher = nomMedicamentPattern.matcher(medication);
                 if (nomMedicamentMatcher.find()) {
                     String nomMedicament = nomMedicamentMatcher.group(1);
                     medicineJson.put("NomMedicament", nomMedicament);
                 } else {
                     medicineJson.put("NomMedicament", "");
+
                 }
 
                 /* Posologie */
-                Pattern posologyPattern = Pattern.compile("Posologie\s*:\s*(\\d+)");
+                Pattern posologyPattern = Pattern.compile("Posologie\s*:\s*(.+?);");
                 Matcher posologyMatcher = posologyPattern.matcher(medication);
                 if (posologyMatcher.find()) {
                     String posologie = posologyMatcher.group(1);
@@ -188,25 +200,36 @@ public class ServiceOCR {
                 }
 
                 /* Periode text*/
-                Pattern periodeTextPattern = Pattern.compile("Période\s*:\s*\\d+(.+?);");
+                Pattern periodeTextPattern = Pattern.compile("Période\s*:\s*\\d+\s*(.+?)\s*;");
                 Matcher periodeTextPatternMatcher = periodeTextPattern.matcher(medication);
                 if (periodeTextPatternMatcher.find()) {
                     String periodeText = periodeTextPatternMatcher.group(1);
-                    medicineJson.put("PeriodeTexte", periodeText);
+                    medicineJson.put("PeriodeTexte", periodeText);  
                 } else {
                     medicineJson.put("PeriodeTexte", "");
-                }
+                }               
                 
-
                 /* Renouvelable */
                 Pattern renouvelablePattern = Pattern.compile("Renouvelable\s*:\s*(\\d+)");
                 Matcher renouvelableMatcher = renouvelablePattern.matcher(medication);
-                if (renouvelableMatcher.find()) {
+
+                Pattern renouvelableZeroPattern = Pattern.compile("Renouvelable\s*:\s*(.+?)");
+                Matcher renouvelableZeroMatcher = renouvelableZeroPattern.matcher(medication);
+
+                if (renouvelableMatcher.find()) 
+                {
                     String renouvelable = renouvelableMatcher.group(1);
-                    medicineJson.put("Renouvelable", renouvelable);
-                } else {
-                    medicineJson.put("Periode", "");
+                        medicineJson.put("Renouvelable", renouvelable);
                 }
+                else if(renouvelableZeroMatcher.find())
+                {                    
+                    medicineJson.put("Renouvelable", "0");
+                }
+                else
+                {
+                    medicineJson.put("Renouvelable", "");
+                }
+
                 /* Remboursable */
                 Pattern remboursablePattern = Pattern.compile("Remboursable\s*:\s*(.+?);");
                 Matcher remboursableMatcher = remboursablePattern.matcher(medication);
@@ -229,7 +252,6 @@ public class ServiceOCR {
                 }
                 medicationsArray.put(medicineJson);
             }
-            System.out.println("SERVICEOCRRRRRRRRRRRRRRRRRRRRRRRRRRRrR : "+prescriptionJson);
             prescriptionJson.put("Medicaments",medicationsArray);
         } 
         catch (IOException e) {
