@@ -478,7 +478,7 @@ export default {
                 console.log("Hash : "+prescriptionHash);
 
                 try {
-                    const txReceipt = await deliverPrescriription(prescriptionHash);
+                    const txReceipt = await deliverPrescription(prescriptionHash);
                     if (txReceipt.success) {
                         Swal.fire({
                             icon: 'success',
