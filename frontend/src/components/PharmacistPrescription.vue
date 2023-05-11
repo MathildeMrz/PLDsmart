@@ -328,6 +328,18 @@ export default {
 
         handleFileImport() {
             console.log("in the method handleFileImport!");
+            document.querySelectorAll("input").forEach((input)=>{input.value = "";})
+            var indication = document.querySelector("#indication");
+            var joursMois = document.querySelector("#treatmentPeriodTexte");
+            
+            if((indication != null)||(joursMois != null))
+            {
+                indication.value = "";
+                joursMois.value = "";
+            }
+            
+            this.medicines = [];
+
             let input = document.createElement('input');
             input.type = 'file';
             input.multiple = false;
