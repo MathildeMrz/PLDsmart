@@ -1,4 +1,9 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 
-createApp(App).mount('#admin')
+const user = JSON.parse(localStorage.getItem("user"));
+if (user != undefined && user.type == "admin") {
+    createApp(App).mount('#admin')
+} else {
+    location.href = "/";
+}
