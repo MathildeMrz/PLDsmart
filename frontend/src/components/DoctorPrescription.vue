@@ -472,6 +472,7 @@ select {
     display: block;
     margin: auto;
     margin-top: 5vh;
+    margin-bottom: 5vh;
     padding: 15px 25px 15px 25px;
     background: rgba(24, 23, 186, 0.46);
     border: none;

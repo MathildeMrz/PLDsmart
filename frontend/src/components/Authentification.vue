@@ -13,22 +13,15 @@
           <input id="password" class="bottomInput" type="password" placeholder="Mot de passe" name="" required="">
         </div>
 
-        <div>
-          <div class="radio">
-            <input type="radio" id="role-doctor" name="role" value="Médecin" checked />
-            <label for="role-doctor">Médecin</label>
-          </div>
-
-          <div class="radio">
-            <input type="radio" id="role-pharmacist" name="role" value="Pharmacien" />
-            <label for="role-pharmacist">Pharmacien</label>
-          </div>
-
-          <div class="radio">
-            <input type="radio" id="role-admin" name="role" value="Administrateur" />
-            <label for="role-admin">Administrateur</label>
-          </div>
+        <div class="toggle">
+            <input type="radio" id="doctor" class="job" name="jobView" value="doctor" v-model="selectedOption" checked/>
+            <label for="doctor">Médecins</label>
+            <input type="radio" id="pharmacist" class="job" name="jobView" value="pharmacist" v-model="selectedOption"/>
+            <label for="pharmacist">Pharmaciens</label>
+            <input type="radio" id="administrator" class="job" name="jobView" value="administrator" v-model="selectedOption"/>
+            <label for="administrator">Administrateurs</label>
         </div>
+
         <button id="connexion-button" v-on:click.prevent="authenticate">Me Connecter</button>
       </form>
     </div>
@@ -44,28 +37,32 @@
 </template>
 
 <script>
-export default {
-  name: 'AuthentificationComponent',
-  props: {},
-  methods: {
-    async authenticate() {
-      var jobSelected = document.querySelectorAll("input[type='radio'][name='role']:checked");
-      var job = "";
+  export default {
+    name: 'AuthentificationComponent',
+    props: {},
+    data() {
+      return {
+          selectedOption: 'doctors'
+      };
+    },
+    methods: {
+      async authenticate() {
+        var job = "";
 
-      switch (jobSelected[0].value) {
-        case "Médecin":
-          job = "doctor";
-          console.log("Authentification en tant que médecin");
-          break;
-        case "Pharmacien":
-          job = "pharmacist";
-          console.log("Authentification en tant que pharmacien");
-          break;
-        case "Administrateur":
-          job = "admin";
-          console.log("Authentification en tant qu'administrateur");
-          break;
-      }
+        switch(this.selectedOption) {
+          case "doctor":
+            job = "doctor";
+            console.log("Authentification en tant que médecin");
+            break;
+          case "pharmacist":
+            job = "pharmacist";
+            console.log("Authentification en tant que pharmacien");
+            break;
+          case "administrator":
+            job = "admin";
+            console.log("Authentification en tant qu'administrateur");
+            break;
+        }
 
       try {
         let handleAuth = await fetch("http://localhost:9000/api/auth/" + job, {
@@ -214,6 +211,63 @@ input {
   z-index: -1;
   max-width: 100%;
 }
+
+  #doctor-image {
+    width: 40vw;
+    height : 100vh;
+    z-index: -1;
+    max-width: 100%;
+  }
+
+  .toggle {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 50px;
+  }
+
+  input[type="radio"].job {
+    display: none;
+    cursor: pointer;
+    outline: none;
+    transition: all .3s ease;
+  }
+
+  input[type="radio"].job + label {
+    position: relative;
+    text-align: center;
+    font-size: 20px;
+    font-variant: small-caps;
+    background: rgba(24,23,186,0.05);
+    border: none;
+    width: 150px;
+    height: 40px;
+    line-height: 40px;
+    cursor: pointer;
+    transition: all .3s ease;
+  }
+
+  #doctor + label {
+    border-left: 2px solid rgba(24,23,186,0.63);
+    border-top: 2px solid rgba(24,23,186,0.63);
+    border-bottom: 2px solid rgba(24,23,186,0.63);
+  } 
+
+  #pharmacist + label {
+    border: 2px solid rgba(24,23,186,0.63);
+  }
+
+  #administrator + label {
+    border-right: 2px solid rgba(24,23,186,0.63);
+    border-top: 2px solid rgba(24,23,186,0.63);
+    border-bottom: 2px solid rgba(24,23,186,0.63);
+  }
+
+  input[type="radio"].job:checked + label {
+    background: rgba(24,23,186,0.63);
+    background-clip: padding-box;
+    color: white;
+  }
 
 /*331 */
 @media screen and (max-width:1200px) {
