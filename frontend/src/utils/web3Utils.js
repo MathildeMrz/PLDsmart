@@ -49,7 +49,7 @@ export async function addPrescription(prescriptionHash, daysValid) {
             return { success: false, message: reason };
         }
     }
-    return { success: false, message: 'Account not connected' };
+    return { success: false, message: 'Compte metamask non connecté' };
 }
 
 export async function deliverPrescription(prescriptionHash) {
@@ -72,7 +72,7 @@ export async function deliverPrescription(prescriptionHash) {
             return { success: false, message: reason };
         }
     }
-    return { success: false, message: 'Account not connected' };
+    return { success: false, message: 'Compte metamask non connecté' };
 }
 
 export async function addDoctor(doctorAddress) {
@@ -95,7 +95,7 @@ export async function addDoctor(doctorAddress) {
             return { success: false, message: reason };
         }
     }
-    return { success: false, message: 'Account not connected' };
+    return { success: false, message: 'Compte metamask non connecté' };
 }
 
 export async function addPharmacist(pharmacistAddress) {
@@ -118,7 +118,7 @@ export async function addPharmacist(pharmacistAddress) {
             return { success: false, message: reason };
         }
     }
-    return { success: false, message: 'Account not connected' };
+    return { success: false, message: 'Compte metamask non connecté' };
 }
 
 export async function deleteDoctor(doctorAddress) {
@@ -141,7 +141,7 @@ export async function deleteDoctor(doctorAddress) {
             return { success: false, message: reason };
         }
     }
-    return { success: false, message: 'Account not connected' };
+    return { success: false, message: 'Compte metamask non connecté' };
 }
 
 export async function deletePharmacist(pharmacistAddress) {
@@ -164,5 +164,5 @@ export async function deletePharmacist(pharmacistAddress) {
             return { success: false, message: reason };
         }
     }
-    return { success: false, message: 'Account not connected' };
+    return { success: false, message: 'Compte metamask non connecté' };
 }
