@@ -10,8 +10,7 @@
         </div>
 
         <div class="searchbar">
-            <input id="searchInput" type="text" placeholder="Rechercher un professionnel" v-model="searchedProfessional"
-                @input="searchProfessionalByName" />
+            <input id="searchInput" type="text" placeholder="Rechercher un professionnel" v-model="searchedProfessional" @input="searchProfessionalByName" />
             <img src="../assets/search.png" id="searchIcon" alt="button search" class="buttonTable" />
         </div>
     </div>
@@ -175,42 +174,49 @@ export default {
         },
         async registerDoctor(index) {
             try {
-                let handleAuth = await fetch("http://localhost:9000/api/register/doctor", {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        username: "user" + Math.random().toString(36).substring(8),
-                        password: "password",
-                        firstName: this.professionals[index].firstName,
-                        lastName: this.professionals[index].lastName,
-                        qualification: this.professionals[index].qualification,
-                        idPSdoctor: this.professionals[index].idPSdoctor,
-                        officeAddress: this.professionals[index].officeAddress,
-                        telephone: this.professionals[index].telephone,
-                        ethAddress: this.professionals[index].ethAddress
-                    }),
-                    headers: {
-                        'Content-Type': 'application/json; charset=UTF-8'
-                    }
-                    });
+                let receipt = await addDoctor(this.professionals[index].ethAddress);
+                if(receipt.success) {
+                    let handleAuth = await fetch("http://localhost:9000/api/register/doctor", {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            username: "user" + Math.random().toString(36).substring(8),
+                            password: "password",
+                            firstName: this.professionals[index].firstName,
+                            lastName: this.professionals[index].lastName,
+                            qualification: this.professionals[index].qualification,
+                            idPSdoctor: this.professionals[index].idPSdoctor,
+                            officeAddress: this.professionals[index].officeAddress,
+                            telephone: this.professionals[index].telephone,
+                            ethAddress: this.professionals[index].ethAddress
+                        }),
+                        headers: {
+                            'Content-Type': 'application/json; charset=UTF-8'
+                        }
+                        });
 
-                if(handleAuth.status == 200) {
-                    try {
-                        addDoctor(this.professionals[index].ethAddress);
+                    if(handleAuth.status == 200) {
                         Swal.fire({
                             icon: 'success',
                             title: 'Succès !',
                             text: "Le docteur " + this.professionals[index].firstName + " " + this.professionals[index].lastName + " a bien été enregistré"
                         });
+
                         this.loadDoctors();
-                    } catch (error) {
-                        console.log(error);
                     }
-                }
-                else {
+                    else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: "Erreur lors de l'enregistrement du docteur " + this.professionals[index].firstName + " " + this.professionals[index].lastName + " dans le backend"
+                        });
+
+                        deleteDoctor(this.professionals[index].ethAddress);
+                    }
+                } else {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: "Erreur lors de l'enregistrement du docteur " + this.professionals[index].firstName + " " + this.professionals[index].lastName
+                        text: "Erreur dans la blockchain"
                     });
                 }
             }
@@ -220,40 +226,47 @@ export default {
         },
         async registerPharmacist(index) {
             try {
-                let handleAuth = await fetch("http://localhost:9000/api/register/pharmacist", {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        username: "user" + Math.random().toString(36).substring(7),
-                        password: "password",
-                        firstName: this.professionals[index].firstName,
-                        lastName: this.professionals[index].lastName,
-                        pharmacyAddress: this.professionals[index].officeAddress,
-                        telephone: this.professionals[index].telephone,
-                        ethAddress: this.professionals[index].ethAddress
-                    }),
-                    headers: {
-                        'Content-Type': 'application/json; charset=UTF-8'
-                    }
-                    });
+                let receipt = await addPharmacist(this.professionals[index].ethAddress);
+                if(receipt.success) {
+                    let handleAuth = await fetch("http://localhost:9000/api/register/pharmacist", {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            username: "user" + Math.random().toString(36).substring(7),
+                            password: "password",
+                            firstName: this.professionals[index].firstName,
+                            lastName: this.professionals[index].lastName,
+                            pharmacyAddress: this.professionals[index].officeAddress,
+                            telephone: this.professionals[index].telephone,
+                            ethAddress: this.professionals[index].ethAddress
+                        }),
+                        headers: {
+                            'Content-Type': 'application/json; charset=UTF-8'
+                        }
+                        });
 
-                if(handleAuth.status == 200) {
-                    try {
-                        addPharmacist(this.professionals[index].ethAddress);
+                    if(handleAuth.status == 200) {
                         Swal.fire({
                             icon: 'success',
                             title: 'Succès !',
                             text: "Le pharmacien " + this.professionals[index].firstName + " " + this.professionals[index].lastName + " a bien été enregistré"
                         });
+                        
                         this.loadPharmacists();
-                    } catch (error) {
-                        console.log(error);
                     }
-                }
-                else {
+                    else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: "Erreur lors de l'enregistrement du pharmacien " + this.professionals[index].firstName + " " + this.professionals[index].lastName + " dans le backend"
+                        });
+
+                        deletePharmacist(this.professionals[index].ethAddress);
+                    }
+                } else {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: "Erreur lors de l'enregistrement du pharmacien " + this.professionals[index].firstName + " " + this.professionals[index].lastName
+                        text: "Erreur dans la blockchain"
                     });
                 }
             }
