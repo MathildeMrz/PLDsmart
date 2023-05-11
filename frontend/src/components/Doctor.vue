@@ -88,30 +88,31 @@
 </script>
 
 <style>
-.buttonTable {
-    border: none;
-    background-color: transparent;
-}
+    .buttonTable {
+        border: none;
+        background-color: transparent;
+    }
 
-.buttonTable img {
-    width: 2vw;
-    height: auto;
-    margin: 2px;
-}
+    .buttonTable img {
+        width: 2vw;
+        height: auto;
+        margin: 2px;
+    }
 
-#validate {
-    display: none;
-}
+    #validate {
+        display: none;
+    }
 
-input {
-    font-size: 14px;
-    margin: auto;
-    width: calc(100% - 30px);
-    text-align: center;
-    border: none;
-}
+    input {
+        font-size: 14px;
+        margin: auto;
+        width: calc(100% - 30px);
+        text-align: center;
+        border: none;
+    }
 
-input:read-write {
-    border: none;
-    border-bottom: 2px solid #1817BA;
-}</style>
+    input:read-write {
+        border: none;
+        border-bottom: 2px solid #1817BA;
+    }
+</style>
