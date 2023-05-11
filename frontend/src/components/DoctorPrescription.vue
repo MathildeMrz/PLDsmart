@@ -28,9 +28,9 @@
             <h3>Le patient</h3>
             <div class="prescription-box information">
                 <div class="column">
-                    <input id="patientName" type="text" name="" required>
+                    <input id="patientName" type="text" name="" required @input="filterChars('patientName')">
                     <p class="indications" style="margin-bottom:2vh;">NOM *</p>
-                    <input id="patientFirstName" type="text" name="" required>
+                    <input id="patientFirstName" type="text" name="" required @input="filterChars('patientFirstName')">
                     <p class="indications">Prénom *</p>
                 </div>
 
@@ -86,8 +86,11 @@
             <h3>La prescription</h3>
 
             <div class="column">
-                <input id="validityPrescriptionDays" type="number" name="" value="90">
-                <p class="indications">La validité de l'ordonnance (jours)</p>
+                <input id="validityPrescriptionDays" type="number" min="1" max="999" name="" value="90"
+                onkeydown="return event.key !== ' ' && event.key !== '-' && event.key !== '+' && !['e', 'E'].includes(event.key);"
+                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                maxlength="3" onchange="if (this.value > 1000 || this.value < 1 ) {this.value = ''; alert('La valeur saisie dans le champs validité n\'est pas valable');}">
+                <p class="indications">La validité de l'ordonnance (jours)</p> 
             </div>
 
             <table id="tablePrescription" class="my-table">
@@ -134,7 +137,8 @@ export default {
         };
     },
     methods: {
-        mounted() {
+        mounted() 
+        {
             import("pdfjs-dist/build/pdf.min").then((pdfjsLib) => {
                 pdfjsLib.GlobalWorkerOptions.workerSrc =
                     "https://cdn.jsdelivr.net/npm/pdfjs-dist@2.7.570/build/pdf.worker.min.js";
@@ -146,16 +150,15 @@ export default {
             });
 
         },
-        deleteMedicine(index) {
+        deleteMedicine(index) 
+        {
             this.medicines.splice(index, 1);
         },
-        addMedicine() {
+        addMedicine() 
+        {
             this.medicines.push({
 
             });
-        },
-        disconnect() {
-            location.href = '/';
         },
         async verifyValidity() 
         {
@@ -265,7 +268,6 @@ export default {
                 };
 
                 let JSONString = JSON.stringify(jsonPdf);
-                console.log("JSONString docteur : \n"+JSONString);
 
                 const prescriptionHash = web3.utils.sha3(JSONString);
                 console.log("Hash docteur: \n", prescriptionHash);
@@ -277,8 +279,8 @@ export default {
                     if (txReceipt.success) {
                         Swal.fire({
                             icon: 'success',
-                            title: 'Success',
-                            text: 'The prescription is registered succesfully in the block chain'
+                            title: 'Succès',
+                            text: 'L\'ordonnance a été enregistrée avec succès dans la blockchain'
                         })
                     } else {
                         Swal.fire({
@@ -292,7 +294,7 @@ export default {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Something when wrong when trying to call the blockchain. Try again later'
+                        text: 'L\'ordonnance n\'a pas pu être enregistrée dans la blockchain'
                     })
                     return;
                 }
@@ -317,6 +319,16 @@ export default {
                     .catch(error => console.error(error));
             }
         },
+        filterChars(identifier) 
+        {
+            var valeurInput = document.getElementById(identifier).value;
+            var valeurModifiee = valeurInput.replace(";", "");
+            document.getElementById(identifier).value = valeurModifiee;
+
+            valeurInput = document.getElementById(identifier).value;
+            valeurModifiee = valeurInput.replace("\n", "");
+            document.getElementById(identifier).value = valeurModifiee;            
+        },
         props: {},
     }
 }
@@ -332,53 +344,21 @@ export default {
         //document.getElementById("prescriptionDate").innerHTML = ('0' + d).slice(-2) + "/" + ('0' + m).slice(-2) + "/" + y + " " + ('0' + h).slice(-2) + ":" + ('0' + min).slice(-2);
         document.getElementById("prescriptionDate").innerHTML  = y+'-'+('0' + m).slice(-2)+'-'+('0' + d).slice(-2)+'T'+('0' + h).slice(-2)+':'+('0' + min).slice(-2);
 
-       /* // Récupérer l'URL courante
-        var url = window.location.href;
+        const data = JSON.parse(localStorage.getItem("user"));
+        // récupérer les informations de l'objet Doctor
+        const firstName = data.firstName;
+        const lastName = data.lastName;
+        const telephone = data.telephone;
+        const qualification = data.qualification;
+        const officeAddress = data.officeAddress;
+        const idPSdoctor = data.idPSdoctor;
 
-        // Diviser l'URL en deux parties : avant et après le "?"
-        var parts = url.split("?");
-
-        // Vérifier s'il y a un paramètre dans l'URL
-        if (parts.length > 1) {
-            var doctorId = parts[1];
-        }*/
-
-       // Récupération du cookie
-        const cookies = document.cookie.split(';');
-
-        // Recherche du cookie "monCookie"
-        let idValue = null;
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.startsWith('id=')) {
-                idValue = cookie.substring('id='.length, cookie.length);
-                break;
-            }
-        }
-        console.log(idValue);
-
-        //Recuperer les donnes du docteur
-        fetch('http://localhost:9000/Doctor-api/' + idValue) 
-            .then(response => response.json())
-            .then(data => {
-            // récupérer les informations de l'objet Doctor à partir de la réponse JSON
-            const firstName = data.firstName;
-            const lastName = data.lastName;
-            const telephone = data.telephone;
-            const qualification = data.qualification;
-            const officeAddress = data.officeAddress;
-            const idPSdoctor = data.idPSdoctor;
-
-            // remplir les champs de formulaire avec les informations récupérées
-            document.getElementById('doctorName').innerHTML = "Docteur " + firstName + " " + lastName;
-            document.getElementById('consultationPhoneNumber').innerHTML = telephone;
-            document.getElementById('doctorJob').innerHTML = qualification;
-            document.getElementById('addressPrescription').innerHTML = officeAddress;
-            document.getElementById('RPPSNum').innerHTML = idPSdoctor;
-            })
-            .catch(error => {
-            console.error('Erreur lors de la récupération des informations de l\'objet Doctor:', error);
-        });
+        // remplir les champs de formulaire avec les informations récupérées
+        document.getElementById('doctorName').innerHTML = "Docteur " + firstName + " " + lastName;
+        document.getElementById('consultationPhoneNumber').innerHTML = telephone;
+        document.getElementById('doctorJob').innerHTML = qualification;
+        document.getElementById('addressPrescription').innerHTML = officeAddress;
+        document.getElementById('RPPSNum').innerHTML = idPSdoctor;
     });
 </script>
 

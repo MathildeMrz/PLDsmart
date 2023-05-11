@@ -6,15 +6,16 @@
       <span id="error-span"></span>
       <form>
         <div class="user-box">
-          <input id="username" class="bottomInput" type="text" placeholder="Mon adresse" name="" required="" checked="checked">
+          <input id="username" class="bottomInput" type="text" placeholder="Mon adresse" name="" required=""
+            checked="checked">
         </div>
         <div class="user-box">
-          <input id="password" class="bottomInput" type="password" placeholder="Mot de passe"  name="" required="">
+          <input id="password" class="bottomInput" type="password" placeholder="Mot de passe" name="" required="">
         </div>
 
         <div>
           <div class="radio">
-            <input type="radio" id="role-doctor" name="role" value="Médecin" checked/>
+            <input type="radio" id="role-doctor" name="role" value="Médecin" checked />
             <label for="role-doctor">Médecin</label>
           </div>
 
@@ -32,210 +33,206 @@
       </form>
     </div>
     <div id="doctor-box">
-        <img id="doctor-image" src="../assets/doctor.png" alt="Doctor smiling">
-        <div class="centered">
-          <p id="slogan">Votre vérificateur d’ordonnances</p>
-          <p id="secured">100% sécurisé</p>
-          <img id="zigouigoui" src="../assets/zigouigoui.png" alt="Zigouigoui secured">
-        </div>
+      <img id="doctor-image" src="../assets/doctor.png" alt="Doctor smiling">
+      <div class="centered">
+        <p id="slogan">Votre vérificateur d’ordonnances</p>
+        <p id="secured">100% sécurisé</p>
+        <img id="zigouigoui" src="../assets/zigouigoui.png" alt="Zigouigoui secured">
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-  export default {
-    name: 'AuthentificationComponent',
-    props: {},
-    methods: {
-      async authenticate() {
-        var jobSelected = document.querySelectorAll("input[type='radio'][name='role']:checked");
-        var job = "";
+export default {
+  name: 'AuthentificationComponent',
+  props: {},
+  methods: {
+    async authenticate() {
+      var jobSelected = document.querySelectorAll("input[type='radio'][name='role']:checked");
+      var job = "";
 
-        switch(jobSelected[0].value) {
-          case "Médecin":
-            job = "doctor";
-            console.log("Authentification en tant que médecin");
-            break;
-          case "Pharmacien":
-            job = "pharmacist";
-            console.log("Authentification en tant que pharmacien");
-            break;
-          case "Administrateur":
-            job = "admin";
-            console.log("Authentification en tant qu'administrateur");
-            break;
-        }
+      switch (jobSelected[0].value) {
+        case "Médecin":
+          job = "doctor";
+          console.log("Authentification en tant que médecin");
+          break;
+        case "Pharmacien":
+          job = "pharmacist";
+          console.log("Authentification en tant que pharmacien");
+          break;
+        case "Administrateur":
+          job = "admin";
+          console.log("Authentification en tant qu'administrateur");
+          break;
+      }
 
-        try {
-          let handleAuth = await fetch("http://localhost:9000/api/auth/" + job, {
-              method: 'POST',
-              body: JSON.stringify({
-                  username: document.getElementById("username").value,
-                  password: document.getElementById("password").value
-                }),
-              headers: {
-                'Content-Type': 'application/json; charset=UTF-8'
-              }
-            });
-          let response = await handleAuth.json();
-          console.log(response);
-
-          if(handleAuth.status == 200) {
-            if(job=="doctor"){
-              document.cookie = "id=" + response.id + "; path=/doctor.html";
-            }
-            //location.href = job + ".html?"+ response.id;
-            location.href = job + ".html";
+      try {
+        let handleAuth = await fetch("http://localhost:9000/api/auth/" + job, {
+          method: 'POST',
+          body: JSON.stringify({
+            username: document.getElementById("username").value,
+            password: document.getElementById("password").value
+          }),
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8'
           }
-          else {
-            console.log("User not registered");
-            document.getElementById("error-span").innerHTML = "Nom d'utilisateur ou mot de passe incorrect";
+        });
+        let userData = await handleAuth.json();
+        userData.type = job;
+        if (handleAuth.status == 200) {
+          localStorage.setItem('user', JSON.stringify(userData));
+          location.href = job + ".html";
+        }
+        let response = await handleAuth.json();
+        console.log(response);
+
+        if (handleAuth.status == 200) {
+          if (job == "doctor") {
+            document.cookie = "id=" + response.id + "; path=/doctor.html";
           }
+          //location.href = job + ".html?"+ response.id;
+          location.href = job + ".html";
         }
-        catch (error) {
-          console.log(error);
+        else {
+          console.log("User not registered");
+          document.getElementById("error-span").innerHTML = "Nom d'utilisateur ou mot de passe incorrect";
         }
+      }
+      catch (error) {
+        console.log(error);
       }
     }
   }
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+#index-page {
+  font-size: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  width: 100vw;
+  justify-content: right;
+}
 
-  #index-page
-  {
-    font-size: 20px;
-    display: flex;
-    flex-wrap: wrap;
-    width: 100vw;
-    justify-content: right;
-  }
+#login-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 60vw;
+  height: 100vh;
+}
 
-  #login-box
-  {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 60vw;
-    height: 100vh;
-  }
+.bottomInput {
+  border: none;
+  border-bottom: 2px solid #1817BA;
+  width: 300px;
+  padding: 8px;
+}
 
-  .bottomInput
-  {
-    border: none;
-    border-bottom: 2px solid #1817BA;
-    width: 300px;
-    padding: 8px;
-  }
+#connexion-button {
+  padding: 15px 25px 15px 25px;
+  background: rgba(24, 23, 186, 0.46);
+  border: none;
+  color: white;
+  font-variant: small-caps;
+  font-size: 20px;
+  cursor: pointer;
+}
 
-  #connexion-button
-  {
-    padding: 15px 25px 15px 25px;
-    background: rgba(24, 23, 186, 0.46);
-    border: none;
-    color:white;
-    font-variant: small-caps;
-    font-size: 20px;
-    cursor: pointer;
-  }
+input::placeholder {
+  font-size: 18px;
+}
 
-  input::placeholder
-  {
-    font-size: 18px;
-  }
+input {
+  font-size: 18px;
+  margin-bottom: 30px;
+}
 
-  input
-  {
-    font-size: 18px;
-    margin-bottom: 30px;
-  }
+#error-span {
+  font-size: 20px;
+  color: red;
+  font-style: italic;
+  margin-bottom: 5px;
+  height: 20px;
+}
 
-  #error-span {
-    font-size: 20px;
-    color: red;
-    font-style: italic;
-    margin-bottom: 5px;
-    height: 20px;
-  }
+#logo-image-login {
+  width: 350px;
+  margin-bottom: 40px;
+}
 
-  #logo-image-login
-  {
-    width: 350px;
-    margin-bottom: 40px;
-  }
+.radio {
+  display: inline-block;
+  margin: 10px;
+}
 
-  .radio
-  {
-    display: inline-block;
-    margin: 10px;
-  }
+.centered {
+  position: absolute;
+  width: 100%;
+  top: 66%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
 
-  .centered {
-    position: absolute;
-    width: 100%;
-    top: 66%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1;
-  }
+#slogan {
+  color: white;
+  font-size: 3vw;
+  font-weight: 600;
+}
 
-  #slogan {
-    color:white;
-    font-size: 3vw;
-    font-weight: 600;
-  }
+#secured {
+  color: black;
+  font-size: 2vw;
+  font-weight: 600;
+  padding: 0;
+  margin: 0;
+  margin-top: 10px;
+}
 
-  #secured {
-    color: black;
-    font-size: 2vw;
-    font-weight: 600;
-    padding: 0;
-    margin: 0;
-    margin-top: 10px;
-  }
+#zigouigoui {
+  margin: 0;
+  padding-left: 80px;
+  width: 89px;
+  height: 20px;
+  transform: translateY(-5px);
+}
 
-  #zigouigoui {
-    margin: 0;
-    padding-left: 80px;
-    width: 89px;
-    height: 20px;
-    transform: translateY(-5px) ;
-  }
+#doctor-box {
+  position: relative;
+  margin: 0;
+  display: flex;
+}
 
-  #doctor-box {
-    position: relative;
-    margin: 0;
-    display: flex;
-  }
+#doctor-image {
+  width: 40vw;
+  height: 100vh;
+  z-index: -1;
+  max-width: 100%;
+}
 
-  #doctor-image {
-    width: 40vw;
-    height : 100vh;
-    z-index: -1;
-    max-width: 100%;
-  }
 /*331 */
-  @media screen and (max-width:1200px) {
-    #doctor-box {
-      display: none;
-    }
-    #index-page
-    {
-      justify-content: center;
-    }
+@media screen and (max-width:1200px) {
+  #doctor-box {
+    display: none;
   }
 
-  @media screen and (max-height:600px) {
-    #doctor-box {
-      display: none;
-    }
-    #index-page
-    {
-      justify-content: center;
-    }
+  #index-page {
+    justify-content: center;
+  }
+}
+
+@media screen and (max-height:600px) {
+  #doctor-box {
+    display: none;
   }
 
-
+  #index-page {
+    justify-content: center;
+  }
+}
 </style>
