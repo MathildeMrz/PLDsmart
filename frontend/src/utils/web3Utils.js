@@ -74,3 +74,95 @@ export async function deliverPrescription(prescriptionHash) {
     }
     return { success: false, message: 'Account not connected' };
 }
+
+export async function addDoctor(doctorAddress) {
+    if (account == null) {
+        await requestAccountAccess();
+    }
+    if (account) {
+        try {
+            await medicalPrescriptionContract.methods
+                .grantDoctorRole(doctorAddress)
+                .estimateGas({ from: account });
+
+            const tx = await medicalPrescriptionContract.methods
+                .grantDoctorRole(doctorAddress)
+                .send({ from: account });
+            return { success: true, tx };
+        } catch (error) {
+            console.log('Error in grantDoctorRole:', error);
+            const reason = extractRevertReason(error);
+            return { success: false, message: reason };
+        }
+    }
+    return { success: false, message: 'Account not connected' };
+}
+
+export async function addPharmacist(pharmacistAddress) {
+    if (account == null) {
+        await requestAccountAccess();
+    }
+    if (account) {
+        try {
+            await medicalPrescriptionContract.methods
+                .grantPharmacistRole(pharmacistAddress)
+                .estimateGas({ from: account });
+
+            const tx = await medicalPrescriptionContract.methods
+                .grantPharmacistRole(pharmacistAddress)
+                .send({ from: account });
+            return { success: true, tx };
+        } catch (error) {
+            console.log('Error in grantPharmacistRole:', error);
+            const reason = extractRevertReason(error);
+            return { success: false, message: reason };
+        }
+    }
+    return { success: false, message: 'Account not connected' };
+}
+
+export async function deleteDoctor(doctorAddress) {
+    if (account == null) {
+        await requestAccountAccess();
+    }
+    if (account) {
+        try {
+            await medicalPrescriptionContract.methods
+                .revokeDoctorRole(doctorAddress)
+                .estimateGas({ from: account });
+
+            const tx = await medicalPrescriptionContract.methods
+                .revokeDoctorRole(doctorAddress)
+                .send({ from: account });
+            return { success: true, tx };
+        } catch (error) {
+            console.log('Error in revokeDoctorRole:', error);
+            const reason = extractRevertReason(error);
+            return { success: false, message: reason };
+        }
+    }
+    return { success: false, message: 'Account not connected' };
+}
+
+export async function deletePharmacist(pharmacistAddress) {
+    if (account == null) {
+        await requestAccountAccess();
+    }
+    if (account) {
+        try {
+            await medicalPrescriptionContract.methods
+                .revokePharmacistRole(pharmacistAddress)
+                .estimateGas({ from: account });
+
+            const tx = await medicalPrescriptionContract.methods
+                .revokePharmacistRole(pharmacistAddress)
+                .send({ from: account });
+            return { success: true, tx };
+        } catch (error) {
+            console.log('Error in revokePharmacistRole:', error);
+            const reason = extractRevertReason(error);
+            return { success: false, message: reason };
+        }
+    }
+    return { success: false, message: 'Account not connected' };
+}

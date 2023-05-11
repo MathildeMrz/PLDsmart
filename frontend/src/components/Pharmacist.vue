@@ -1,18 +1,30 @@
 <template>
     <tr>
         <td>
-            <input id="professionalName" type="text" v-on:dblclick="setEditable($event)" v-on:keyup.enter="setUneditable($event)" v-on:blur="setUneditable($event)" @input="validateModification" required :readonly="!editable || selectedInput !== 'professionalName'" :value="lastName" name="lastName" ref="professionalNameInput">
+            <input id="professionalName" type="text" v-on:click="setEditable($event)" v-on:keyup.enter="setUneditable($event)" v-on:blur="setUneditable($event)" @input="validateModification" required :readonly="!editable || selectedInput !== 'professionalName'" :value="lastName" name="lastName" ref="professionalNameInput">
         </td>
 
         <td>
-            <input id="professionalFirstName" type="text" v-on:dblclick="setEditable($event)" v-on:keyup.enter="setUneditable($event)" v-on:blur="setUneditable($event)" @input="validateModification" required :readonly="!editable || selectedInput !== 'professionalFirstName'" :value="firstName" name="firstName" ref="professionalFirstNameInput">
+            <input id="professionalFirstName" type="text" v-on:click="setEditable($event)" v-on:keyup.enter="setUneditable($event)" v-on:blur="setUneditable($event)" @input="validateModification" required :readonly="!editable || selectedInput !== 'professionalFirstName'" :value="firstName" name="firstName" ref="professionalFirstNameInput">
+        </td>
+
+        <td>
+            <input id="professionalPharmacyAddress" type="text" v-on:click="setEditable($event)" v-on:keyup.enter="setUneditable($event)" v-on:blur="setUneditable($event)" @input="validateModification" required :readonly="!editable || selectedInput !== 'professionalPharmacyAddress'" :value="pharmacyAddress" name="pharmacyAddress" ref="professionalPharmacyAddressInput">
+        </td>
+
+        <td>
+            <input id="professionalTelephone" type="tel" v-on:click="setEditable($event)" v-on:keyup.enter="setUneditable($event)" v-on:blur="setUneditable($event)" @input="validateModification" required :readonly="!editable || selectedInput !== 'professionalTelephone'" :value="telephone" name="telephone" ref="professionalTelephoneInput">
+        </td>
+
+        <td>
+            <input id="professionalEthAddress" type="text" v-on:click="setEditable($event)" v-on:keyup.enter="setUneditable($event)" v-on:blur="setUneditable($event)" @input="validateModification" required :readonly="!editable || selectedInput !== 'professionalEthAddress'" :value="ethAddress" name="ethAddress" ref="professionalEthAddressInput">
         </td>
         
         <td>
-            <button id="delete" class="buttonTable" type="button" @click="deletePharmacist">
+            <button id="delete" class="buttonTable" type="button" @click.prevent="deletePharmacist">
                 <img src="../assets/delete.png" alt="button delete" />
             </button>
-            <button id="validate" class="buttonTable" type="button" @click="addDoctor">
+            <button id="validate" class="buttonTable" type="button" @click.prevent="addDoctor">
                 <img src="../assets/validate.png" alt="button validate" />
             </button>
         </td>
@@ -23,7 +35,7 @@
 
     export default {
         name: 'PharmacistComponent',
-        props: ['index', 'lastName', 'firstName'],
+        props: ['index', 'lastName', 'firstName', 'pharmacyAddress', 'telephone', 'ethAddress'],
         data() {
             return {
                 editable: false, // initialize editable to false

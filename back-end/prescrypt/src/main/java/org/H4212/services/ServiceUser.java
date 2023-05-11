@@ -191,7 +191,7 @@ public class ServiceUser {
 
         if(resultSetPharmacist.next())
         {
-            return new Pharmacist((long) resultSetPharmacist.getLong(1), resultSetPharmacist.getString(2), resultSetPharmacist.getString(3), resultSetPharmacist.getString(4), resultSetPharmacist.getString(5));
+            return new Pharmacist((long) resultSetPharmacist.getLong(1), resultSetPharmacist.getString(2), resultSetPharmacist.getString(3), resultSetPharmacist.getString(4), resultSetPharmacist.getString(5), resultSetPharmacist.getString(6));
         }else{
             System.out.println("ResultSet is empty");
             return new Pharmacist();
@@ -238,7 +238,7 @@ public class ServiceUser {
 
         if(resultSetPharmacist.next())
         {
-            return new Pharmacist((long) resultSetPharmacist.getLong(1), resultSetPharmacist.getString(2), resultSetPharmacist.getString(3), resultSetPharmacist.getString(4), resultSetPharmacist.getString(5));
+            return new Pharmacist((long) resultSetPharmacist.getLong(1), resultSetPharmacist.getString(2), resultSetPharmacist.getString(3), resultSetPharmacist.getString(4), resultSetPharmacist.getString(5), resultSetPharmacist.getString(6));
         }else{
             System.out.println("resultSetPharmacist is empty");
             return new Pharmacist();
@@ -371,7 +371,7 @@ public class ServiceUser {
 
         String stringQueryPharmacist =
                 """
-                    INSERT INTO pharmacist VALUES (?,?,?,?,?);
+                    INSERT INTO pharmacist VALUES (?,?,?,?,?,?);
                 """;
 
         PreparedStatement preparedStatementPharmacist = connection.prepareStatement(stringQueryPharmacist);
@@ -380,6 +380,7 @@ public class ServiceUser {
         preparedStatementPharmacist.setString(3, registerPharmacistRequest.getPharmacist().getFirstName());
         preparedStatementPharmacist.setString(4, registerPharmacistRequest.getPharmacist().getTelephone());
         preparedStatementPharmacist.setString(5, registerPharmacistRequest.getPharmacist().getPharmacyAddress());
+        preparedStatementPharmacist.setString(6, registerPharmacistRequest.getPharmacist().getEthAddress());
 
         preparedStatementPharmacist.executeUpdate();
     }
