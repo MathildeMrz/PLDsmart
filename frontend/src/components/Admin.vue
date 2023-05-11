@@ -104,45 +104,55 @@ export default {
 
             if(result) {
                 console.log("deleting the professional from index " + index + " in table. ID: " + this.professionals[index].id);
+                var receipt;
 
-                if(this.selectedOption === 'doctors') {
-                    job = "doctor/";
-                } else if(this.selectedOption === 'pharmacists') {
-                    job = "pharmacist/";
-                }
                 try {
-                    let handleDel = await fetch("http://localhost:9000/api/delete/" + job + this.professionals[index].id, {
-                        method: 'DELETE'
-                    });
-                    console.log(handleDel);
-                    
-                    if(handleDel.ok) {
-                        try {
-                            if(this.selectedOption === 'doctors') {
-                                deleteDoctor(this.professionals[index].ethAddress);
-                            } else if(this.selectedOption === 'pharmacists') {
-                                deletePharmacist(this.professionals[index].ethAddress);
-                            }
-                            this.professionals.splice(index, 1);
+                    if(this.selectedOption === 'doctors') {
+                        receipt = deleteDoctor(this.professionals[index].ethAddress);
+                    } else if(this.selectedOption === 'pharmacists') {
+                        receipt = deletePharmacist(this.professionals[index].ethAddress);
+                    }
+                } catch (error) {
+                    console.log(error);
+                }
+
+                if(receipt.success) {
+                    if(this.selectedOption === 'doctors') {
+                        job = "doctor/";
+                    } else if(this.selectedOption === 'pharmacists') {
+                        job = "pharmacist/";
+                    }
+
+                    try {
+                        let handleDel = await fetch("http://localhost:9000/api/delete/" + job + this.professionals[index].id, {
+                            method: 'DELETE'
+                        });
+                        console.log(handleDel);
+                        
+                        if(handleDel.ok) {
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Succès !',
                                 text: "Le professionnel a bien été supprimé"
                             });
-                        } catch (error) {
-                            console.log(error);
-                        }
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: "Erreur lors de la suppression du professionnel"
-                        });
-                    }
 
-                    this.professionals.splice(index, 1);
-                } catch (error) {
-                    console.log(error);
+                            this.professionals.splice(index, 1);
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: "Erreur lors de la suppression du professionnel"
+                            });
+                        }
+                    } catch (error) {
+                        console.log(error);
+                    }
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: (await receipt).message
+                    });
                 }
             }
         },
@@ -216,7 +226,7 @@ export default {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: "Erreur dans la blockchain"
+                        text: (await receipt).message
                     });
                 }
             }
@@ -235,7 +245,7 @@ export default {
                             password: "password",
                             firstName: this.professionals[index].firstName,
                             lastName: this.professionals[index].lastName,
-                            pharmacyAddress: this.professionals[index].officeAddress,
+                            pharmacyAddress: this.professionals[index].pharmacyAddress,
                             telephone: this.professionals[index].telephone,
                             ethAddress: this.professionals[index].ethAddress
                         }),
@@ -250,7 +260,7 @@ export default {
                             title: 'Succès !',
                             text: "Le pharmacien " + this.professionals[index].firstName + " " + this.professionals[index].lastName + " a bien été enregistré"
                         });
-                        
+
                         this.loadPharmacists();
                     }
                     else {
