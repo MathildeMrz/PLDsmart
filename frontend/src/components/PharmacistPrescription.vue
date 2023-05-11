@@ -128,6 +128,7 @@ import NavigationBar from './NavigationBar.vue';
 import { deliverPrescription } from '@/utils/web3Utils'
 import Swal from 'sweetalert2'
 import Web3 from "web3";
+import { findClosestMatch } from '@/utils/utils'
 const web3 = new Web3();
 
 export default {

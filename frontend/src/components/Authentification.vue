@@ -78,6 +78,12 @@ export default {
             'Content-Type': 'application/json; charset=UTF-8'
           }
         });
+        let userData = await handleAuth.json();
+        userData.type = job;
+        if (handleAuth.status == 200) {
+          localStorage.setItem('user', JSON.stringify(userData));
+          location.href = job + ".html";
+        }
         let response = await handleAuth.json();
         console.log(response);
 

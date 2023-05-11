@@ -10,6 +10,7 @@ export default {
     props: {},
     methods: {
         disconnect() {
+            localStorage.removeItem("user");
             location.href = '/';
         }
     }
