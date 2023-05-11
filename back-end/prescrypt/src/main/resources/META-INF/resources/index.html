@@ -129,11 +129,14 @@
     <div class="right-column">
         <h3>Available endpoints</h3>
         <ul>
-            <li>POST /OCR-api/pdf <br>
-                binary: select file (postman)
+            <li>PARSER PDF TO JSON /OCR-api/pdf-2 <br>
+                binary: select pdf (postman)
+            </li>
+            <li>OCR PDF TO JSON : POST /OCR-api/pdf-1 <br>
+                binary: select pdf (postman)
             </li>
             <li>POST /OCR-api <br>
-                binary: select file (postman)
+                binary: select image (postman)
             </li>
             <li>POST /api/auth/pharmacist <br>body : {
                 "username": "Koko",
@@ -144,7 +147,8 @@
                 "firstName": "Korantin",
                 "lastName": "AIMÉ",
                 "telephone": "str",
-                "pharmacyAddress": "str"
+                "pharmacyAddress": "str",
+                "ethAddress" : "0xstr"
                 }</li>
             <li>POST /api/auth/doctor <br> body : {
                 "username": "Malo",
@@ -157,7 +161,8 @@
                 "idPSdoctor": 222,
                 "qualification": "str",
                 "officeAddress": "str",
-                "telephone": "str"
+                "telephone": "str",
+                "ethAddress" : "0xstr"
                 }</li>
             <li>POST /api/auth/admin <br> body : {
                 "username": "admin",
@@ -174,7 +179,8 @@
                 "firstName": "Korantin",
                 "lastName": "AIMÉ",
                 "telephone": "str",
-                "pharmacyAddress": "str"
+                "pharmacyAddress": "str",
+                "ethAddress" : "0xstr"
                 }</li>
             <li>POST /api/register/doctor <br> body : {
                 "username": "Malo",
@@ -254,7 +260,8 @@
                 "idPSdoctor": 222,
                 "qualification": "str",
                 "officeAddress": "str",
-                "telephone": "str"
+                "telephone": "str",
+                "ethAddress" : "0xstr"
                 },
                 {
                 ...
@@ -265,7 +272,8 @@
                 "firstName": "Korantin",
                 "lastName": "AIMÉ",
                 "telephone": "str",
-                "pharmacyAddress": "str"
+                "pharmacyAddress": "str",
+                "ethAddress" : "0xstr"
                 },
                 {
                 ...

@@ -10,10 +10,8 @@
         </div>
 
         <div class="searchbar">
-            <input type="text" placeholder="Rechercher un professionnel" />
-            <button class="buttonTable" type="submit">
-                <img src="../assets/search.png" id="searchIcon" alt="button search" />
-            </button>
+            <input id="searchInput" type="text" placeholder="Rechercher un professionnel" v-model="searchedProfessional" @input="searchProfessionalByName" />
+            <img src="../assets/search.png" id="searchIcon" alt="button search" class="buttonTable" />
         </div>
     </div>
 
@@ -26,6 +24,7 @@
                 <th style="width: 8vw;">Numéro RPPS</th>
                 <th style="width: 20vw;">Adresse</th>
                 <th style="width: 8vw;">Téléphone</th>
+                <th style="width: 14vw;">Adresse Ethereum</th>
                 <th style="width: 3vw;">
                     <button class="buttonTable" type="submit" @click="addProfessional">
                         <img src="../assets/plus.png" alt="button add prescription" />
@@ -34,7 +33,7 @@
             </tr>
         </thead>
         <tbody id="profesionnalsList">
-            <Doctor v-for="(professional, index) in professionals" :key="index" :index="index" :lastName="professional.lastName" :firstName="professional.firstName" :qualification="professional.qualification" :idPSdoctor="professional.idPSdoctor" :officeAddress="professional.officeAddress" :telephone="professional.telephone" @delete="deleteProfessional" @update="modifyProfessional"/>
+            <Doctor v-for="(professional, index) in professionals" :key="index" :index="index" :lastName="professional.lastName" :firstName="professional.firstName" :qualification="professional.qualification" :idPSdoctor="professional.idPSdoctor" :officeAddress="professional.officeAddress" :telephone="professional.telephone" :ethAddress="professional.ethAddress" @add="registerProfessional" @delete="deleteProfessional" @update="modifyProfessional"/>
         </tbody>
     </table>
 
@@ -43,6 +42,9 @@
             <tr>
                 <th style="width: 9vw;">NOM</th>
                 <th style="width: 9vw;">Prénom</th>
+                <th style="width: 20vw;">Adresse</th>
+                <th style="width: 8vw;">Téléphone</th>
+                <th style="width: 14vw;">Adresse Ethereum</th>
                 <th style="width: 3vw;">
                     <button class="buttonTable" type="submit" @click="addProfessional">
                         <img src="../assets/plus.png" alt="button add prescription" />
@@ -51,7 +53,7 @@
             </tr>
         </thead>
         <tbody id="profesionnalsList">
-            <Pharmacist v-for="(professional, index) in professionals" :key="index" :index="index" :lastName="professional.lastName" :firstName="professional.firstName" @delete="deleteProfessional" @update="modifyProfessional"/>
+            <Pharmacist v-for="(professional, index) in professionals" :key="index" :index="index" :lastName="professional.lastName" :firstName="professional.firstName" :pharmacyAddress="professional.pharmacyAddress" :telephone="professional.telephone" :ethAddress="professional.ethAddress" @add="registerProfessional" @delete="deleteProfessional" @update="modifyProfessional"/>
         </tbody>
     </table>
 
@@ -65,6 +67,7 @@
     import Doctor from './Doctor.vue';
     import Pharmacist from './Pharmacist.vue';
     import NavigationBar from './NavigationBar.vue';
+    import { addDoctor, addPharmacist, deleteDoctor, deletePharmacist } from '@/utils/web3Utils';
 
     export default {
         name: 'AdminComponent',
@@ -76,6 +79,8 @@
         data() {
             return {
                 selectedOption: 'doctors',
+                searchedProfessional: '',
+                allProfessionals: [],
                 professionals: []
             };
         },
@@ -83,9 +88,47 @@
             this.loadProfessionals();
         },
         methods: {
-            deleteProfessional(index)
+            async deleteProfessional(index)
             {
-                this.professionals.splice(index, 1);
+                var result = confirm("Êtes-vous sûr de vouloir supprimer le professionnel " + this.professionals[index].firstName + " " + this.professionals[index].lastName + " ?");
+                var job ="";
+
+                if(result) {
+                    console.log("deleting the professional from index " + index + " in DB");
+
+                    if(this.selectedOption === 'doctors') {
+                        job = "doctor/";
+                    } else if(this.selectedOption === 'pharmacists') {
+                        job = "pharmacist/";
+                    }
+                    try {
+                        let handleDel = await fetch("http://localhost:9000/api/delete/" + job + this.professionals[index].id, {
+                            method: 'DELETE'
+                        });
+                        let response = await handleDel.json();
+                        console.log(handleDel);
+                        console.log(response);
+                        
+                        if(handleDel.status === 200) {
+                            try {
+                                if(this.selectedOption === 'doctors') {
+                                    deleteDoctor(this.professionals[index].ethAddress);
+                                } else if(this.selectedOption === 'pharmacists') {
+                                    deletePharmacist(this.professionals[index].ethAddress);
+                                }
+                                alert("Le professionnel a bien été supprimé");
+                            } catch (error) {
+                                console.log(error);
+                            }
+                        } else {
+                            alert("Erreur lors de la suppression du professionnel");
+                        }
+
+                        this.professionals.splice(index, 1);
+                    } catch (error) {
+                        console.log(error);
+                    }
+                }
             },
             addProfessional() 
             {
@@ -95,8 +138,98 @@
                     qualification: '',
                     idPSdoctor: '',
                     officeAddress: '',
-                    telephone: ''
+                    pharmacyAddress: '',
+                    telephone: '',
+                    ethAddress: ''
                 });
+            },
+            registerProfessional(index) {
+                if(index === this.professionals.length - 1) {
+                    console.log("adding the doctor from index " + index + " to DB");
+                    
+                    if (this.selectedOption === 'doctors') {
+                        this.registerDoctor(index);
+                    } else if (this.selectedOption === 'pharmacists') {
+                        this.registerPharmacist(index);
+                    }
+                }
+                else {
+                    console.log("updating the doctor from index " + index + " in DB");
+                }
+            },
+            async registerDoctor(index) {
+                try {
+                    let handleAuth = await fetch("http://localhost:9000/api/register/doctor", {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            username: "user" + Math.random().toString(36).substring(8),
+                            password: "password",
+                            firstName: this.professionals[index].firstName,
+                            lastName: this.professionals[index].lastName,
+                            qualification: this.professionals[index].qualification,
+                            idPSdoctor: this.professionals[index].idPSdoctor,
+                            officeAddress: this.professionals[index].officeAddress,
+                            telephone: this.professionals[index].telephone,
+                            ethAddress: this.professionals[index].ethAddress
+                        }),
+                        headers: {
+                            'Content-Type': 'application/json; charset=UTF-8'
+                        }
+                        });
+                    let response = await handleAuth.json();
+                    console.log(response);
+
+                    if(handleAuth.status == 200) {
+                        try {
+                            addDoctor(this.professionals[index].ethAddress);
+                            alert("New professional registered");
+                        } catch (error) {
+                            console.log(error);
+                        }
+                    }
+                    else {
+                        alert("Error while registering new professional");
+                    }
+                }
+                catch (error) {
+                    console.log(error);
+                }
+            },
+            async registerPharmacist(index) {
+                try {
+                    let handleAuth = await fetch("http://localhost:9000/api/register/pharmacist", {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            username: "user" + Math.random().toString(36).substring(7),
+                            password: "password",
+                            firstName: this.professionals[index].firstName,
+                            lastName: this.professionals[index].lastName,
+                            pharmacyAddress: this.professionals[index].officeAddress,
+                            telephone: this.professionals[index].telephone,
+                            ethAddress: this.professionals[index].ethAddress
+                        }),
+                        headers: {
+                            'Content-Type': 'application/json; charset=UTF-8'
+                        }
+                        });
+                    let response = await handleAuth.json();
+                    console.log(response);
+
+                    if(handleAuth.status == 200) {
+                        try {
+                            addPharmacist(this.professionals[index].ethAddress);
+                            alert("New professional registered");
+                        } catch (error) {
+                            console.log(error);
+                        }
+                    }
+                    else {
+                        alert("Error while registering new professional");
+                    }
+                }
+                catch (error) {
+                    console.log(error);
+                }
             },
             modifyProfessional(index, newValue, where) {
                 if (where === 'lastName') {
@@ -111,7 +244,22 @@
                     this.professionals[index].officeAddress = newValue;
                 } else if (where === 'telephone') {
                     this.professionals[index].telephone = newValue;
+                } else if (where === 'ethAddress') {
+                    this.professionals[index].ethAddress = newValue;
+                } else if (where === 'pharmacyAddress') {
+                    this.professionals[index].pharmacyAddress = newValue;
                 }
+            },
+            searchProfessionalByName() {
+                this.professionals = [];
+
+                this.$nextTick(() => {
+                    for(var index in this.allProfessionals) {
+                        if(this.allProfessionals[index].lastName.includes(this.searchedProfessional.toUpperCase())) {
+                            this.professionals.push(this.allProfessionals[index]);
+                        }
+                    }
+                });
             },
             disconnect() 
             {
@@ -127,6 +275,8 @@
                     document.getElementById("pharmacists-table").style.display = "table";
                     this.loadPharmacists();
                 }
+
+                this.allProfessionals = this.professionals;
             },
             async loadDoctors() {
                 try {
@@ -148,7 +298,6 @@
                         console.log("Doctors' list loaded successfully !");
                         document.getElementById("loader-div").style.visibility = "hidden";
                         for (var res in response) {
-                            console.log(response[res]);
                             this.professionals.push(response[res]);
                         }
                         return handleProf;
@@ -227,6 +376,7 @@
 
     .my-table td {
         color:rgba(24,23,186,0.23);
+        height: 45px;
     }
 
     .my-table th {

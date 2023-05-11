@@ -1,5 +1,6 @@
 package org.H4212.services;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -7,6 +8,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.rendering.ImageType;
+import org.apache.pdfbox.rendering.PDFRenderer;
+import org.apache.pdfbox.tools.imageio.ImageIOUtil;
 import org.hibernate.annotations.SourceType;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -260,5 +265,19 @@ public class ServiceOCR {
             System.err.println("Erreur lors de la reconnaissance optique de caractères : " + e.getMessage());
         }
         return prescriptionJson;
+    }
+
+    public JSONObject generateJSONFromPdf(byte[] pdf) throws IOException, TesseractException {
+        PDDocument document = PDDocument.load(pdf);
+        PDFRenderer pdfRenderer = new PDFRenderer(document);
+        BufferedImage bim = null;
+        for (int page = 0; page < document.getNumberOfPages(); ++page) {
+            bim = pdfRenderer.renderImageWithDPI(page, 400, ImageType.RGB);
+        }
+        document.close();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(bim, "png", baos);
+        byte[] imageJPG = baos.toByteArray();
+        return generateJSON(imageJPG);
     }
 }
