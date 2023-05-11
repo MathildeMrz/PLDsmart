@@ -152,7 +152,11 @@ export default {
 
             if (type != "image/png" && type != "image/jpeg" && type != "image/pdf" &&
                 type != "application/png" && type != "application/jpeg" && type != "application/pdf") {
-                alert("Les formats pris en compte pour l'OCR sont : jpeg, pdf et png");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops',
+                    text: 'Les formats pris en compte pour l\'OCR sont : jpeg, pdf et png'
+                })
             }
             else {
                 /* Contrôler le type */
