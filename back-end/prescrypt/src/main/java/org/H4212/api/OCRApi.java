@@ -31,9 +31,22 @@ public class OCRApi {
         }
     }
 
+    @POST
+    @Produces("application/json")
+    @Path("/pdf-1")
+    public Response generateJsonOCRFromPdf(byte[] pdf) throws IOException, TesseractException
+    {
+        JSONObject resultOCRJson = serviceOCR.generateJSONFromPdf(pdf);
+        if(!resultOCRJson.isEmpty()){
+            return Response.ok(resultOCRJson.toString()).build();
+        }else{
+            return Response.status(500).entity(resultOCRJson).build();
+        }
+    }
+
     @POST   
     @Produces("application/json")
-    @Path("/pdf")
+    @Path("/pdf-2")
     public Response parsePdfToJson(byte[] pdf) throws IOException
     {
         String parsedText;
