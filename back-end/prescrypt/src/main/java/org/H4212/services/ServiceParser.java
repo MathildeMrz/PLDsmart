@@ -1,5 +1,6 @@
 package org.H4212.services;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Arrays;
@@ -91,7 +92,7 @@ public class ServiceParser {
         prescriptionJson.put("PrenomPatient", prenomPatient);
 
         /* Age */
-        Pattern agePattern = Pattern.compile("Age : (.+?);");
+        Pattern agePattern = Pattern.compile("Age : (.+?) ans;");
         Matcher ageMatcher = agePattern.matcher(result);
         String age = "";
         if (ageMatcher.find()) {
@@ -128,36 +129,47 @@ public class ServiceParser {
         }
 
         /* Médicament(s) */
-        String[] medications = result.split("Médicament");
-        medications = Arrays.copyOfRange(medications, 1, medications.length);
+        JSONArray medicaments = new JSONArray();
+        int nbMedicines = 0;
+        Pattern nbMedicinesPattern = Pattern.compile("Médicament");
+        Matcher nbMedicinesMatcher = nbMedicinesPattern.matcher(result);
+        while(nbMedicinesMatcher.find())
+        {
+            nbMedicines++;
+        }
 
         /* Médicament(s) */
-        Pattern medicamentPattern = Pattern.compile("""
-                                                    Médicament1 : (.+?);
-                                                    Posologie : (.+?)mg;
-                                                    Période : (.+?)
-                                                    Renouvelable : (.+?);
-                                                    Remboursable : (.+?);
-                                                    Indication : (.+?);
-                                                    """);
+        Pattern medicamentPattern = Pattern.compile("Médicament n°(\\d+) : (.+?);");
         Matcher medicamentMatcher = medicamentPattern.matcher(result);
-        while (medicamentMatcher.find())
-        {
+
+        Pattern posologiePattern = Pattern.compile("Posologie : (.+?);");
+        Matcher posologieMatcher = posologiePattern.matcher(result);
+
+        Pattern periodePattern = Pattern.compile("Période : (.+?);");
+        Matcher periodeMatcher = periodePattern.matcher(result);
+
+        Pattern renouvelablePattern = Pattern.compile("Renouvelable : (.+?);");
+        Matcher renouvelableMatcher = renouvelablePattern.matcher(result);
+
+        Pattern remboursablePattern = Pattern.compile("Remboursable : (.+?);");
+        Matcher remboursableMatcher = remboursablePattern.matcher(result);
+
+        Pattern indicationPattern = Pattern.compile("Indication : (.+?);");
+        Matcher indicationMatcher = indicationPattern.matcher(result);
+
+        while(medicamentMatcher.find() && posologieMatcher.find() && periodeMatcher.find() && renouvelableMatcher.find() && remboursableMatcher.find() && indicationMatcher.find()){
             JSONObject medicineJson = new JSONObject();
-            String nomMedicament = medicamentMatcher.group(1);
-            String posologie = medicamentMatcher.group(2);
-            String periode = medicamentMatcher.group(3);
-            String renouvelable = medicamentMatcher.group(4);
-            String remboursable = medicamentMatcher.group(5);
-            String indication = medicamentMatcher.group(6);
-            medicineJson.put("NomMedicament", nomMedicament);
-            medicineJson.put("Posologie", posologie);
-            medicineJson.put("Periode", periode);
-            medicineJson.put("Renouvelable", renouvelable);
-            medicineJson.put("Remboursable", remboursable);
-            medicineJson.put("Indication", indication);
-            prescriptionJson.accumulate("Medicament", medicineJson);
+            medicineJson.put("NomMedicament", medicamentMatcher.group(2));
+            medicineJson.put("Posologie", posologieMatcher.group(1));
+            medicineJson.put("Période", periodeMatcher.group(1));
+            medicineJson.put("Renouvelable", renouvelableMatcher.group(1));
+            medicineJson.put("Remboursable", remboursableMatcher.group(1));
+            medicineJson.put("Indication", indicationMatcher.group(1));
+
+            medicaments.put(medicineJson);
         }
+
+        if(!medicaments.isEmpty()) prescriptionJson.put("Médicaments", medicaments);
 
         return prescriptionJson;
     }

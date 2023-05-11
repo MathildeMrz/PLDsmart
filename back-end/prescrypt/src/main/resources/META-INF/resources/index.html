@@ -129,6 +129,9 @@
     <div class="right-column">
         <h3>Available endpoints</h3>
         <ul>
+            <li>POST /OCR-api/pdf <br>
+                binary: select file (postman)
+            </li>
             <li>POST /OCR-api <br>
                 binary: select file (postman)
             </li>
@@ -139,7 +142,9 @@
             <br>returns {
                 "id" : 2,
                 "firstName": "Korantin",
-                "lastName": "AIMÉ"
+                "lastName": "AIMÉ",
+                "telephone": "str",
+                "pharmacyAddress": "str"
                 }</li>
             <li>POST /api/auth/doctor <br> body : {
                 "username": "Malo",
@@ -167,7 +172,9 @@
                 "username": "Koko",
                 "password": "mdp",
                 "firstName": "Korantin",
-                "lastName": "AIMÉ"
+                "lastName": "AIMÉ",
+                "telephone": "str",
+                "pharmacyAddress": "str"
                 }</li>
             <li>POST /api/register/doctor <br> body : {
                 "username": "Malo",
@@ -177,7 +184,8 @@
                 "idPSdoctor": 222,
                 "qualification": "str",
                 "officeAddress": "str",
-                "telephone": "str"
+                "telephone": "str",
+                "ethAddress" : "0xstr"
                 }</li>
             <li>DELETE /api/delete/pharmacist/{pharmacistId}</li>
             <li>DELETE /api/delete/doctor/{doctorId}</li>
@@ -255,7 +263,9 @@
             <li>GET /api/admin/getPharmacists <br>returns [{
                 "id" : 2,
                 "firstName": "Korantin",
-                "lastName": "AIMÉ"
+                "lastName": "AIMÉ",
+                "telephone": "str",
+                "pharmacyAddress": "str"
                 },
                 {
                 ...

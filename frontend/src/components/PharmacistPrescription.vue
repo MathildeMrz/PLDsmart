@@ -117,7 +117,7 @@
                 <img src="../assets/plus.png" alt="button add prescription" />
             </button>
         </div>
-        <button id="deliverPrescButton" class="ordonnance" @click="deliverPresc">Delivrer ordonnance</button>
+        <button id="verifyPrescButton" class="ordonnance" @click="verifyValidity">Vérifier l'ordonnance</button>
     </div>
 </template>
 
@@ -125,7 +125,7 @@
 <script>
 import Medicament from './Medicament.vue';
 import NavigationBar from './NavigationBar.vue';
-import { deliverPrescription } from '@/utils/web3Utils'
+import { verifyValidityription } from '@/utils/web3Utils'
 import Swal from 'sweetalert2'
 import Web3 from "web3";
 const web3 = new Web3();
@@ -188,8 +188,6 @@ export default {
                                             const imageData = canvas.toDataURL('image/png');
                                             // Récupérer l'élément <img> à partir de son ID
                                             const img = document.getElementById("image-preview");
-
-                                            // Définir la propriété "src" de l'élément <img> sur la valeur de imageData
                                             img.src = imageData;
 
                                             fetch(imageData)
@@ -257,6 +255,7 @@ export default {
 
         },
         fillFormAfterOCR(response) {
+
             var responseJson = JSON.stringify(response);
             console.log("data : " + responseJson);
             const jsonData = JSON.parse(responseJson);
@@ -271,8 +270,9 @@ export default {
             const patientWeight = jsonData["Poids"];
             const patientHeight = jsonData["Taille"];
             const prescriptionDate = jsonData["Date"];
-            const addressPrescription = jsonData["Adresse"];
+            const addressPrescription = jsonData["Adresse"];            
             const consultationPhoneNumber = jsonData["Tel"];
+            const validityPrescriptionDays = jsonData["Validite"];            
 
             document.getElementById("doctorName").value = doctorName;
             document.getElementById("doctorJob").value = doctorJob;
@@ -284,9 +284,46 @@ export default {
             document.getElementById("patientWeight").value = patientWeight;
             document.getElementById("patientHeight").value = patientHeight;
             document.getElementById("prescriptionDate").value = prescriptionDate;
-            document.getElementById("addressPrescription").value = addressPrescription;
+            document.getElementById("addressPrescription").value = addressPrescription;            
             document.getElementById("consultationPhoneNumber").value = consultationPhoneNumber;
+            document.getElementById("validityPrescriptionDays").value = validityPrescriptionDays;
 
+            //Médicaments
+            const self = this;
+            var index = 0;
+
+            const medicaments = jsonData["Medicaments"];
+
+            medicaments.forEach(function(medicament) 
+            {
+                console.log("medicament : "+medicament+ " index = "+index);
+                const NomMedicament = medicament["NomMedicament"];
+                const Posologie = medicament["Posologie"];
+                const Periode = medicament["Periode"];
+                const PeriodeTexte = medicament["PeriodeTexte"];
+                const Renouvelable = medicament["Renouvelable"];
+                const Remboursable = medicament["Remboursable"];
+                const Indication = medicament["Indication"];
+
+                console.log("IMPORTANT : "+PeriodeTexte);
+                self.addMedicine();              
+
+                setTimeout(function() {
+                    document.querySelectorAll(".row")[index].querySelector("#medicineAct").value = NomMedicament;
+                    document.querySelectorAll(".row")[index].querySelector("#posology").value = Posologie;
+                    document.querySelectorAll(".row")[index].querySelector("#treatmentPeriod").value = Periode;
+                    document.querySelectorAll(".row")[index].querySelector("#treatmentPeriodTexte").value = PeriodeTexte;
+                    document.querySelectorAll(".row")[index].querySelector("#renewal").value = Renouvelable;
+
+                    if(Remboursable == "Non")
+                    {
+                        document.querySelectorAll(".row")[index].querySelector("#refundable").checked = true;
+                    }
+                    document.querySelectorAll(".row")[index].querySelector("#indication").value = Indication;
+                    index = index + 1;
+                }, 1000);
+                
+            });
         },
 
         handleFileImport() {
@@ -307,10 +344,9 @@ export default {
             this.medicines.splice(index, 1);
         },
         addMedicine() {
-            this.medicines.push({
-            });
+            this.medicines.push({});
         },
-        async deliverPresc() {
+        async verifyValidity() {
             const table = document.querySelector("table");
 
             if (table.rows.length == 1) {
@@ -332,7 +368,8 @@ export default {
                 }
             }
 
-            if (!incorrectPrescription) {
+            if (!incorrectPrescription) 
+            {
                 const doctorName = document.getElementById("doctorName").value;
                 const doctorJob = document.getElementById("doctorJob").value;
                 const RPPSNum = document.getElementById("RPPSNum").value;
@@ -399,7 +436,7 @@ export default {
                 const prescriptionHash = web3.utils.sha3(JSONString);
 
                 try {
-                    const txReceipt = await deliverPrescription(prescriptionHash);
+                    const txReceipt = await verifyValidityription(prescriptionHash);
                     if (txReceipt.success) {
                         Swal.fire({
                             icon: 'success',
@@ -445,8 +482,14 @@ export default {
     text-decoration-color: #1817BA;
     margin-left: 10px;
     cursor: pointer;
+}
 
+.red-border {
+    border-color: red;
+}
 
+blue-border {
+    border-color: #1817BA;
 }
 
 td:nth-child(5) {

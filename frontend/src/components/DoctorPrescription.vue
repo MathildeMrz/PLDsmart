@@ -38,7 +38,7 @@
                     <input id="patientAge" type="number" min="0" max="150" name=""
                         onkeydown="return event.key !== ' ' && event.key !== '-' && event.key !== '+' && !['e', 'E'].includes(event.key);"
                         oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-                        maxlength="3">
+                        maxlength="3" onchange="if (this.value > 150 || this.value < 0 ) {this.value = ''; alert('La valeur saisie n\'est pas valable');}">
                     <p class="indications" style="margin-bottom:2vh;">Âge (ans)</p>
                     <select id="sexe" name="sexe">
                         <option value="" disabled selected hidden></option>
@@ -50,15 +50,15 @@
                 </div>
 
                 <div class="column">
-                    <input id="patientWeight" type="number" min="0" max="1000" name=""
+                    <input id="patientWeight" type="number" min="1" max="1000" name=""
                         onkeydown="return event.key !== ' ' && event.key !== '-' && event.key !== '+' && !['e', 'E'].includes(event.key);"
                         oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-                        maxlength="3">
+                        maxlength="3" onchange="if (this.value > 1000 || this.value < 1) {this.value = ''; alert('La valeur saisie n\'est pas valable');}">
                     <p class="indications" style="margin-bottom:2vh;">Poids (kg)</p>
-                    <input id="patientHeight" type="number" min="0" max="300" name=""
+                    <input id="patientHeight" type="number" min="1" max="300" name=""
                         onkeydown="return event.key !== ' ' && event.key !== '-' && event.key !== '+' && !['e', 'E'].includes(event.key);"
                         oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-                        maxlength="3">
+                        maxlength="3"  onchange="if (this.value > 300 || this.value < 1) {this.value = ''; alert('La valeur saisie n\'est pas valable');}">
                     <p class="indications">Taille (cm)</p>
                 </div>
             </div>
@@ -157,7 +157,8 @@ export default {
         disconnect() {
             location.href = '/';
         },
-        async verifyValidity() {
+        async verifyValidity() 
+        {
             const table = document.querySelector("table");
 
             if (table.rows.length == 1) {
@@ -179,7 +180,10 @@ export default {
                 }
             }
 
-            if (!incorrectPrescription) {
+            if (!incorrectPrescription) 
+            {
+                console.log("!incorrectPrescription");
+
                 const doctorName = document.getElementById("doctorName").textContent;
                 const doctorJob = document.getElementById("doctorJob").textContent;
                 const RPPSNum = document.getElementById("RPPSNum").textContent;
@@ -192,6 +196,7 @@ export default {
                 const prescriptionDate = document.getElementById("prescriptionDate").textContent;
                 const addressPrescription = document.getElementById("addressPrescription").textContent;
                 const consultationPhoneNumber = document.getElementById("consultationPhoneNumber").textContent;
+                const validityPrescriptionDays = document.getElementById("validityPrescriptionDays").value;
 
                 const table = document.querySelector("table");
                 const rows = table.querySelectorAll("tbody tr");
@@ -233,7 +238,8 @@ export default {
                     "prescriptionDate": prescriptionDate,
                     "addressPrescription": addressPrescription,
                     "consultationPhoneNumber": consultationPhoneNumber,
-                    "prescriptions": rowsMedicamentsActs
+                    "validityPrescriptionDays":validityPrescriptionDays,
+                    "prescriptions": rowsMedicamentsActs                    
                 };
 
                 let JSONString = JSON.stringify(jsonPdf);
@@ -338,6 +344,7 @@ export default {
             const qualification = data.qualification;
             const officeAddress = data.officeAddress;
             const idPSdoctor = data.idPSdoctor;
+
             // remplir les champs de formulaire avec les informations récupérées
             document.getElementById('doctorName').innerHTML = "Docteur " + firstName + " " + lastName;
             document.getElementById('consultationPhoneNumber').innerHTML = telephone;

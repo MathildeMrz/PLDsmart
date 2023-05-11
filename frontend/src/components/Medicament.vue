@@ -1,5 +1,5 @@
 <template>
-    <tr>
+    <tr class="row">
         <td>
             <input type="text" id="medicineAct" list="medicineActDatalist"/>
             <datalist id="medicineActDatalist">
@@ -7,14 +7,15 @@
             </datalist>
         </td>
         <td>
-            <input id="posology" type="text" name="" required>
+            <input id="posology" class="posology" type="text" name="" required>
         </td>
 
         <td>
-            <input id="treatmentPeriod" type="number" min="1" name="" required
+            <input id="treatmentPeriod" type="number" min="1" max="31" name="" required
             onkeydown="return event.key !== ' ' && event.key !== '-' && event.key !== '+' && !['e', 'E'].includes(event.key);"
             oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="3"
-            style="width: 7vh; border-right: 2px solid #1817BA;">
+            style="width: 7vh; border-right: 2px solid #1817BA;"
+            onchange="if (this.value > 31 || this.value < 1) {this.value = ''; alert('La valeur saisie n\'est pas valable');}">
             <select id="treatmentPeriodTexte" required style="width: 12vh; height: 2.7vh;">
                 <option value="" disabled selected hidden></option>
                 <option value="jours">jours</option>
@@ -23,9 +24,10 @@
         </td>
 
         <td>
-            <input id="renewal" type="number" min="0" max="100" name="" required
+            <input id="renewal" type="number" min="0" max="2" name="" required
             onkeydown="return event.key !== ' ' && event.key !== '-' && event.key !== '+' && !['e', 'E'].includes(event.key);"
-            oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="2">
+            oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" 
+            maxlength="2" onchange="if (this.value > 2 || this.value < 0) {this.value = ''; alert('La valeur saisie n\'est pas valable');}">
         </td>
 
         <td>
@@ -61,7 +63,6 @@
             },
             loadData() 
             {
-                //Ajout médicaments liste déroulante
                 const data = require('../assets/medicine.json');
                 const medicineSelect = document.getElementById("medicineActDatalist");
                 let result = [];
@@ -69,7 +70,6 @@
                 {
                     let concat = data[i].CODE_UCD.toString() + " " + data[i].NOM_COURT;
                     result.push(concat);
-                    //Ajout liste déroulante
                     let option = document.createElement("option");
                     option.value = data[i].NOM_COURT;
                     option.text = concat;

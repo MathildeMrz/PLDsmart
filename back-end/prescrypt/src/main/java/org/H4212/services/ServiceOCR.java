@@ -6,6 +6,9 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
+
+import org.hibernate.annotations.SourceType;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
@@ -17,17 +20,18 @@ public class ServiceOCR {
     {
         String result = null;
         Tesseract tesseract = new Tesseract();
-        //tesseract.setDatapath("C:/Users/33660/Documents/PLD_SMART/PLDsmart/back-end/prescrypt/src/main/resources/tessdata");//datapath chez Mathilde
-        tesseract.setDatapath("C:/Users/zhang/Documents/GitHub/PLDsmart/back-end/prescrypt/src/main/resources/tessdata");//datapath chez Yi
+        //System.out.println("CHEMIN COURANT : "+System.getProperty("user.dir"));
+
+        tesseract.setDatapath("src/main/resources/tessdata");
+        //tesseract.setDatapath("C:/Users/zhang/Documents/GitHub/PLDsmart/back-end/prescrypt/src/main/resources/tessdata");//datapath chez Yi
         tesseract.setLanguage("fra");
         tesseract.setVariable("user_words_suffix", ".user-words");
-        tesseract.setVariable("user_words_file", "C:/Users/zhang/Documents/GitHub/PLDsmart/back-end/prescrypt/src/main/resources/tessdata/fra.user-words");
+        tesseract.setVariable("user_words_file", "src/main/resources/tessdata/fra.user-words");
         JSONObject prescriptionJson = new JSONObject();        
 
         try (InputStream inputStream = new ByteArrayInputStream(image)) {
             BufferedImage bufferedImage = ImageIO.read(inputStream);
             result = tesseract.doOCR(bufferedImage);
-            System.out.println("result : "+result);
 
             result = result.replaceAll("\n", "");
 
@@ -143,35 +147,112 @@ public class ServiceOCR {
                 prescriptionJson.put("Poids", poids);
             } else {
                 prescriptionJson.put("Poids", "");
-}
-
-            /* Médicament(s) */
-            String[] medications = result.split("Médicament");
-            medications = Arrays.copyOfRange(medications, 1, medications.length);
-
-            /* Médicament(s) */
-            Pattern medicamentPattern = Pattern.compile("Médicament\s*:\s*(.+?);Posologie\s*:\s*(.+?)mg;Période\s*:\s*(.+?);Renouvelable\s*:\s*(.+?);Remboursable\s*:\s*(.+?);Indication\s*:\s*(.+?);");
-            Matcher medicamentMatcher = medicamentPattern.matcher(result);
-            while (medicamentMatcher.find()) 
-            {
-                JSONObject medicineJson = new JSONObject();
-                String nomMedicament = medicamentMatcher.group(1);
-                String posologie = medicamentMatcher.group(2);
-                String periode = medicamentMatcher.group(3);
-                String renouvelable = medicamentMatcher.group(4);
-                String remboursable = medicamentMatcher.group(5);
-                String indication = medicamentMatcher.group(6);
-                medicineJson.put("NomMedicament", nomMedicament);
-                medicineJson.put("Posologie", posologie);
-                medicineJson.put("Periode", periode);
-                medicineJson.put("Renouvelable", renouvelable);
-                medicineJson.put("Remboursable", remboursable);
-                medicineJson.put("Indication", indication);
-                prescriptionJson.accumulate("Medicament", medicineJson);
             }
 
-            System.out.println("SERVICEOCRRRRRRRRRRRRRRRRRRRRRRRRRRRrR : "+prescriptionJson);
+            /* Durée validité */
+            Pattern dureeValiditePattern = Pattern.compile("Durée de validité\s*:\s*(\\d+)");
+            Matcher dureeValiditeMatcher = dureeValiditePattern.matcher(result);
+            if (dureeValiditeMatcher.find()) {
+                String validite = dureeValiditeMatcher.group(1);
+                prescriptionJson.put("Validite", validite);
+            } else {
+                prescriptionJson.put("Validite", "");
+            }
 
+            /* Médicament(s) */
+            String[] medications = result.split("Médicament\s*:\s*");
+            medications = Arrays.copyOfRange(medications, 1, medications.length);
+
+            JSONArray medicationsArray = new JSONArray();
+
+            for (String medication : medications)
+            {
+                JSONObject medicineJson = new JSONObject();
+                /* Nom */
+                Pattern nomMedicamentPattern = Pattern.compile("(.+?);\s*Posologie");
+                Matcher nomMedicamentMatcher = nomMedicamentPattern.matcher(medication);
+                if (nomMedicamentMatcher.find()) {
+                    String nomMedicament = nomMedicamentMatcher.group(1);
+                    medicineJson.put("NomMedicament", nomMedicament);
+                } else {
+                    medicineJson.put("NomMedicament", "");
+
+                }
+
+                /* Posologie */
+                Pattern posologyPattern = Pattern.compile("Posologie\s*:\s*(.+?);");
+                Matcher posologyMatcher = posologyPattern.matcher(medication);
+                if (posologyMatcher.find()) {
+                    String posologie = posologyMatcher.group(1);
+                    medicineJson.put("Posologie", posologie);
+                } else {
+                    medicineJson.put("Posologie", "");
+                }
+
+                /* Periode */
+                Pattern periodePattern = Pattern.compile("Période\s*:\s*(\\d+)");
+                Matcher periodeMatcher = periodePattern.matcher(medication);
+                if (periodeMatcher.find()) {
+                    String periode = periodeMatcher.group(1);
+                    medicineJson.put("Periode", periode);
+                } else {
+                    medicineJson.put("Periode", "");
+                }
+
+                /* Periode text*/
+                Pattern periodeTextPattern = Pattern.compile("Période\s*:\s*\\d+\s*(.+?)\s*;");
+                Matcher periodeTextPatternMatcher = periodeTextPattern.matcher(medication);
+                if (periodeTextPatternMatcher.find()) {
+                    String periodeText = periodeTextPatternMatcher.group(1);
+                    medicineJson.put("PeriodeTexte", periodeText);  
+                } else {
+                    medicineJson.put("PeriodeTexte", "");
+                }               
+                
+                /* Renouvelable */
+                Pattern renouvelablePattern = Pattern.compile("Renouvelable\s*:\s*(\\d+)");
+                Matcher renouvelableMatcher = renouvelablePattern.matcher(medication);
+
+                Pattern renouvelableZeroPattern = Pattern.compile("Renouvelable\s*:\s*(.+?)");
+                Matcher renouvelableZeroMatcher = renouvelableZeroPattern.matcher(medication);
+
+                if (renouvelableMatcher.find()) 
+                {
+                    String renouvelable = renouvelableMatcher.group(1);
+                        medicineJson.put("Renouvelable", renouvelable);
+                }
+                else if(renouvelableZeroMatcher.find())
+                {                    
+                    medicineJson.put("Renouvelable", "0");
+                }
+                else
+                {
+                    medicineJson.put("Renouvelable", "");
+                }
+
+                /* Remboursable */
+                Pattern remboursablePattern = Pattern.compile("Remboursable\s*:\s*(.+?);");
+                Matcher remboursableMatcher = remboursablePattern.matcher(medication);
+                if (remboursableMatcher.find()) {
+                    String remboursable = remboursableMatcher.group(1);
+                    medicineJson.put("Remboursable", remboursable);
+                } else {
+                    medicineJson.put("Remboursable", "");
+
+                }
+
+                /* Indication */
+                Pattern indicationPattern = Pattern.compile("Indication\s*:\s*(.+?);");
+                Matcher indicationMatcher = indicationPattern.matcher(medication);
+                if (indicationMatcher.find()) {
+                    String indication = indicationMatcher.group(1);
+                    medicineJson.put("Indication", indication);
+                } else {
+                    medicineJson.put("Indication", "");
+                }
+                medicationsArray.put(medicineJson);
+            }
+            prescriptionJson.put("Medicaments",medicationsArray);
         } 
         catch (IOException e) {
         }

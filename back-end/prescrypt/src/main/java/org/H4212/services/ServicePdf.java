@@ -1,34 +1,26 @@
 package org.H4212.services;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.net.URL;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Chunk;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.List;
-import com.itextpdf.text.ListItem;
-import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
 
 
 public class ServicePdf {
 
-    public static final String TAHOMA = "C:/Users/33660/Documents/PLD_SMART/PLDsmart/back-end/prescrypt/src/main/resources/tahoma.ttf";
+    public static final String ROBOTO = "src/main/resources/RobotoMono-Light.ttf";
+
     private static BaseFont baseFont = null;
 
     static {
         try {
-            baseFont = BaseFont.createFont(TAHOMA, BaseFont.WINANSI, BaseFont.EMBEDDED);
+            baseFont = BaseFont.createFont(ROBOTO, BaseFont.WINANSI, BaseFont.EMBEDDED);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -36,7 +28,7 @@ public class ServicePdf {
 
     private static Font prescriptionFont = new Font(baseFont, 12);
 
-    private static Font prescriptionBoldFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD, BaseColor.BLACK);
+    private static Font prescriptionBoldFont = new Font(baseFont, 12, Font.BOLD, BaseColor.BLACK);
     private static Chunk bullet = new Chunk("\u2022", prescriptionFont);
 
     public byte[] generatePdf(String jsonPdf) {
@@ -67,8 +59,6 @@ public class ServicePdf {
         JSONParser parser = new JSONParser(); 
         JSONObject json = (JSONObject) parser.parse(jsonPdf);
 
-
-        // Récupérer la valeur de l'attribut "doctorName"
         String doctorName = json.get("doctorName").toString();
         String doctorJob = json.get("doctorJob").toString();
         String RPPSNum = json.get("RPPSNum").toString();
@@ -82,6 +72,7 @@ public class ServicePdf {
         String consultationAddress = json.get("addressPrescription").toString();
         String consultationPhoneNumber = json.get("consultationPhoneNumber").toString();
         String rowsMedicamentsActs = json.get("prescriptions").toString();
+        String validityPrescriptionDays = json.get("validityPrescriptionDays").toString();
 
         // Afficher la valeur de l'attribut "doctorName"
         
@@ -93,17 +84,15 @@ public class ServicePdf {
         addEmptyLine(officePart, 1);
 
         //Consultation
-        Paragraph consultationPart = new Paragraph("Fait le : "+consultationDate+"; ", prescriptionFont);
+        Paragraph consultationPart = new Paragraph("Fait le : "+consultationDate+";\nDurée de validité : "+validityPrescriptionDays+" jours;", prescriptionFont);
         addEmptyLine(consultationPart, 1);
 
         //Patient
-        //Check if age, weight, height empty
         String patientString = "Nom patient : "+patientName+";\nPrénom patient : "+patientFirstName+"; \n";
-        if(! patientAge.isEmpty())
+        if(!patientAge.isEmpty())
         {
-            patientString += "Age  : " +patientAge+" ans; ";
+            patientString += "Age : " +patientAge+" ans; ";
         }
-
 
         if(! patientSexe.isEmpty())
         {
@@ -123,13 +112,12 @@ public class ServicePdf {
         Paragraph patientPart = new Paragraph(patientString, prescriptionBoldFont);     
         addEmptyLine(patientPart, 1);   
 
-        //Medicine
-        List list = new List(List.UNORDERED);
-        list.setListSymbol(bullet);
-
         JSONArray jsonArray = (JSONArray) parser.parse(rowsMedicamentsActs);
 
-        int counter = 1;
+        document.add(doctorPart);
+        document.add(officePart);
+        document.add(consultationPart);
+        document.add(patientPart);
 
         for (Object element : jsonArray) 
         {
@@ -140,17 +128,19 @@ public class ServicePdf {
             String renewal = ((JSONObject)element).get("renewal").toString();
             String refundable = ((JSONObject)element).get("refundable").toString();
             String indication = ((JSONObject)element).get("indication").toString();
-            String row = "Médicament"+counter+" : "+medicineAct+"; \nPosologie : " + posology +"; \nPériode : "+ treatmentPeriod + " " + treatmentPeriodTexteObj;            
-            int renewalInt = Integer.parseInt(renewal);
+            String row = "Médicament : "+medicineAct+"; \nPosologie : " + posology +"; \nPériode : "+ treatmentPeriod + " " + treatmentPeriodTexteObj+";";            
             row+= "\nRenouvelable : ";
             boolean refundableBool = Boolean.parseBoolean(refundable);
-            if(renewalInt == 0){
-                row +="Non; ";
-            } 
-            else{
-                row = row +"Oui; "+renewal+" fois; ";
 
-            }
+            if((! renewal.isEmpty()) && (renewal.equals("0")))
+            {
+                row = row +"Aucune fois;";
+            } 
+            else if(! renewal.isEmpty())
+            {
+                row = row +renewal+" fois;";
+            }          
+
             row+= "\nRemboursable : ";
             if(refundableBool){
                 row += "Non; ";
@@ -158,19 +148,15 @@ public class ServicePdf {
             else {
                 row += "Oui; ";
             }
-            row+="\nIndication : "+indication+"; \n\n";
+            if(! indication.isEmpty())
+            {
+                row+="\nIndication : "+indication+"; \n\n";
+            } 
 
-            ListItem item = new ListItem(row, prescriptionFont);
-            list.add(item);
-            counter = counter+1;
+            Paragraph medicinePart = new Paragraph(row, prescriptionFont);     
+            addEmptyLine(patientPart, 1);   
+            document.add(medicinePart);
         }
-                
-        document.add(doctorPart);
-        document.add(officePart);
-        document.add(consultationPart);
-        document.add(patientPart);
-        document.add(list);
-
     }
 
     private static void addEmptyLine(Paragraph paragraph, int number) {

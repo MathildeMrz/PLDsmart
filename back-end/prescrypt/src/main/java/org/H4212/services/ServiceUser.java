@@ -191,7 +191,7 @@ public class ServiceUser {
 
         if(resultSetPharmacist.next())
         {
-            return new Pharmacist((long) resultSetPharmacist.getLong(1), resultSetPharmacist.getString(2), resultSetPharmacist.getString(3));
+            return new Pharmacist((long) resultSetPharmacist.getLong(1), resultSetPharmacist.getString(2), resultSetPharmacist.getString(3), resultSetPharmacist.getString(4), resultSetPharmacist.getString(5));
         }else{
             System.out.println("ResultSet is empty");
             return new Pharmacist();
@@ -217,12 +217,12 @@ public class ServiceUser {
         PreparedStatement preparedStatementPharmacist;
 
         if(resultSet.next()) {
-            String fetchDoctorQuery =
+            String fetchPharmacistQuery =
                     """
                 SELECT * from pharmacist WHERE pharmacistId = ?;
                 """;
 
-            preparedStatementPharmacist = connection.prepareStatement(fetchDoctorQuery);
+            preparedStatementPharmacist = connection.prepareStatement(fetchPharmacistQuery);
             preparedStatementPharmacist.setLong(1, resultSet.getLong(1));
         }else{
             System.out.println("ResultSet is empty");
@@ -238,7 +238,7 @@ public class ServiceUser {
 
         if(resultSetPharmacist.next())
         {
-            return new Pharmacist((long) resultSetPharmacist.getLong(1), resultSetPharmacist.getString(2), resultSetPharmacist.getString(3));
+            return new Pharmacist((long) resultSetPharmacist.getLong(1), resultSetPharmacist.getString(2), resultSetPharmacist.getString(3), resultSetPharmacist.getString(4), resultSetPharmacist.getString(5));
         }else{
             System.out.println("resultSetPharmacist is empty");
             return new Pharmacist();
@@ -335,7 +335,7 @@ public class ServiceUser {
 
         String stringQueryDoctor =
                 """
-                    INSERT INTO doctor VALUES (?,?,?,?,?,?,?);
+                    INSERT INTO doctor VALUES (?,?,?,?,?,?,?,?);
                 """;
 
         PreparedStatement preparedStatementDoctor = connection.prepareStatement(stringQueryDoctor);
@@ -346,6 +346,7 @@ public class ServiceUser {
         preparedStatementDoctor.setString(5, registerDoctorRequest.getDoctor().getQualification());
         preparedStatementDoctor.setString(6, registerDoctorRequest.getDoctor().getOfficeAddress());
         preparedStatementDoctor.setString(7, registerDoctorRequest.getDoctor().getTelephone());
+        preparedStatementDoctor.setString(8, registerDoctorRequest.getDoctor().getEthAddress());
 
         preparedStatementDoctor.executeUpdate();
     }
@@ -370,13 +371,15 @@ public class ServiceUser {
 
         String stringQueryPharmacist =
                 """
-                    INSERT INTO pharmacist VALUES (?,?,?);
+                    INSERT INTO pharmacist VALUES (?,?,?,?,?);
                 """;
 
         PreparedStatement preparedStatementPharmacist = connection.prepareStatement(stringQueryPharmacist);
         preparedStatementPharmacist.setLong(1, id);
         preparedStatementPharmacist.setString(2, registerPharmacistRequest.getPharmacist().getLastName());
         preparedStatementPharmacist.setString(3, registerPharmacistRequest.getPharmacist().getFirstName());
+        preparedStatementPharmacist.setString(4, registerPharmacistRequest.getPharmacist().getTelephone());
+        preparedStatementPharmacist.setString(5, registerPharmacistRequest.getPharmacist().getPharmacyAddress());
 
         preparedStatementPharmacist.executeUpdate();
     }
