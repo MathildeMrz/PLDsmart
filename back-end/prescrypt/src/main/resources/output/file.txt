@@ -1,16 +1,39 @@
-Nom docteur : Docteur Malo OLIVIER;
-Qualification : str;
-RPPS : 111; 
+Nom docteur : Docteur Arthur UNGRIA;
+Qualification : Neurochirurgien nucléaire;
+RPPS : 112; 
  
-Adresse : str;
-Tel : str; 
+Adresse : 5 avenue des Maréchaussées Paris 75001;
+Tel : 0601456118; 
  
-Fait le : 2023-05-10T17:57; 
+Fait le : 2023-05-11T10:37;
+Durée de validité : 90 jours;
  
-Nom patient : DEAPRDIEU;
-Prénom patient : Gérard;
-Age : 20 ans;
-Sexe : Homme;
-Taille : 120 cm;
-Poids : 160 kg; 
+Nom patient : DEPARDIEU;
+Prénom patient : Sylvie;
+Age : 30 ans;
+Sexe : Femme;
+Taille : 200 cm;
+Poids : 190 kg; 
+ 
+Médicament : A.C.T.H. BOIRON;
+Posologie : 400;
+Période : 1 mois;
+Renouvelable : 2 fois;
+Remboursable : Oui;
+Indication : Une fois par jour pendant 1000 ans;
+ 
+Médicament : ABECMA 260;
+Posologie : 260;
+Période : 10 jours;
+Renouvelable : Aucune fois;
+Remboursable : Non;
+Indication : À l'infini et au-delà;
+ 
+Médicament : AMERSCAN DMSA, poudre pour solution injectable;
+Posologie : 1000;
+Période : 30 mois;
+Renouvelable : 1 fois;
+Remboursable : Oui;
+Indication : Toujours plus haut, toujours plus loin, toujours plus fort;
+ 
  
