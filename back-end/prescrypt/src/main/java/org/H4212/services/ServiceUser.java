@@ -128,6 +128,30 @@ public class ServiceUser {
         }
     }
 
+    public Doctor getDoctorFromRPPS(long RPPS) throws SQLException {
+        String stringQuery =
+                """
+                    SELECT doctorId from doctor WHERE idPSdoctor = ?;
+                """;
+
+        PreparedStatement preparedStatement = connection.prepareStatement(stringQuery) ;
+        preparedStatement.setLong(1, RPPS);
+
+        ResultSet resultSet;
+        try {
+            resultSet = preparedStatement.executeQuery();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        if(resultSet.next()) {
+            return getDoctor(resultSet.getLong(1));
+        }else{
+            System.out.println("ResultSet is empty");
+            return new Doctor();
+        }
+    }
+
     public List<GetDoctorResponse> getDoctors() throws SQLException{
         List<GetDoctorResponse> getDoctorResponseList = new ArrayList<GetDoctorResponse>();
         String stringQueryDoctors =
