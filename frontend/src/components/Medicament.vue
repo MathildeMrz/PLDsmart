@@ -11,10 +11,11 @@
         </td>
 
         <td>
-            <input id="treatmentPeriod" type="number" min="1" name="" required
+            <input id="treatmentPeriod" type="number" min="1" max="31" name="" required
             onkeydown="return event.key !== ' ' && event.key !== '-' && event.key !== '+' && !['e', 'E'].includes(event.key);"
             oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="3"
-            style="width: 7vh; border-right: 2px solid #1817BA;">
+            style="width: 7vh; border-right: 2px solid #1817BA;"
+            onchange="if (this.value > 31 || this.value < 1) {this.value = ''; alert('La valeur saisie n\'est pas valable');}">
             <select id="treatmentPeriodTexte" required style="width: 12vh; height: 2.7vh;">
                 <option value="" disabled selected hidden></option>
                 <option value="jours">jours</option>
@@ -23,9 +24,10 @@
         </td>
 
         <td>
-            <input id="renewal" type="number" min="0" max="100" name="" required
+            <input id="renewal" type="number" min="0" max="2" name="" required
             onkeydown="return event.key !== ' ' && event.key !== '-' && event.key !== '+' && !['e', 'E'].includes(event.key);"
-            oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="2">
+            oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" 
+            maxlength="2" onchange="if (this.value > 2 || this.value < 0) {this.value = ''; alert('La valeur saisie n\'est pas valable');}">
         </td>
 
         <td>
