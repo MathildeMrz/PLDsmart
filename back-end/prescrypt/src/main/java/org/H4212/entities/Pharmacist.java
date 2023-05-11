@@ -7,7 +7,7 @@ import jakarta.persistence.Entity;
 public class Pharmacist extends Person{
 
     private String telephone;
-
+    private String ethAddress;
     private String pharmacyAddress;
     /*public Pharmacist(long id, String lastName, String firstName, String pseudo, String password) {
         super(id, lastName, firstName, pseudo, password);
@@ -15,18 +15,20 @@ public class Pharmacist extends Person{
     public Pharmacist(String lastName, String firstName, String pseudo, String password) {
         super(lastName, firstName, pseudo, password);
     }
-    public Pharmacist(String lastName, String firstName, String pseudo, String password, String telephone, String pharmacyAddress) {
+    public Pharmacist(String lastName, String firstName, String pseudo, String password, String telephone, String pharmacyAddress, String ethAddress) {
         super(lastName, firstName, pseudo, password);
         this.telephone = telephone;
         this.pharmacyAddress = pharmacyAddress;
+        this.ethAddress = ethAddress;
     }
     public Pharmacist(long id, String lastName, String firstName){
         super(id, lastName,firstName);
     }
-    public Pharmacist(long id, String lastName, String firstName, String telephone, String pharmacyAddress){
+    public Pharmacist(long id, String lastName, String firstName, String telephone, String pharmacyAddress, String ethAddress){
         super(id, lastName,firstName);
         this.telephone = telephone;
         this.pharmacyAddress = pharmacyAddress;
+        this.ethAddress = ethAddress;
     }
     public Pharmacist(){}
 
@@ -46,11 +48,20 @@ public class Pharmacist extends Person{
         this.pharmacyAddress = pharmacyAddress;
     }
 
+    public String getEthAddress() {
+        return ethAddress;
+    }
+
+    public void setEthAddress(String ethAddress) {
+        this.ethAddress = ethAddress;
+    }
+
     @Override
     public JsonObjectBuilder toJsonBuilder() {
         return super.toJsonBuilder()
                 .add("telephone", telephone)
-                .add("pharmacyAddress", pharmacyAddress);
+                .add("pharmacyAddress", pharmacyAddress)
+                .add("ethAddress", ethAddress);
     }
 
     @Override

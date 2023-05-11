@@ -39,6 +39,7 @@ CREATE TABLE pharmacist
     firstName VARCHAR(100),
     telephone VARCHAR(100),
     address VARCHAR(100),
+    ethAddress VARCHAR(100),
     PRIMARY KEY (pharmacistId),
     FOREIGN KEY (pharmacistId) REFERENCES users(userId)
 );
@@ -99,11 +100,11 @@ INSERT INTO doctor VALUES (4, 'UNGRIA', 'Arthur', 112, 'Neurochirurgien nucléai
 INSERT INTO doctor VALUES (5, 'LARIBI', 'Fatma', 113, 'Psychologue astrologue', '11 rue des Parisiens Massy Pal', '0601020304', '0xstr');
 INSERT INTO doctor VALUES (6, 'MARZA', 'Mathilde', 114, 'Physicien théoricien', '25 impasse des arbres Lyon', '0703020104', '0xstr');
 INSERT INTO doctor VALUES (7, 'ZHANG', 'Yi', 115, 'Médecin cosmonaute', '2 rue des russes Moscou', '0101010103', '0xstr');
-INSERT INTO pharmacist VALUES (2, 'AIMÉ', 'Korantin', '0601020304', 'str');
-INSERT INTO pharmacist VALUES (8, 'VIGNERON', 'Chloé', '0603030302', '42 rue des physiciens Villeurbanne');
-INSERT INTO pharmacist VALUES (9, 'MARTINS', 'Juliana', '0302010605', '1 rue de la police Marseille');
-INSERT INTO pharmacist VALUES (10, 'BRES', 'Stéphane', '0609090807', '90 avenue des beaux gars Washington D.C.');
-INSERT INTO pharmacist VALUES (11, 'BRUNIE', 'Lionel', '0601456120', '12 Grove Street Los Angeles');
+INSERT INTO pharmacist VALUES (2, 'AIMÉ', 'Korantin', '0601020304', 'str', '0xstr');
+INSERT INTO pharmacist VALUES (8, 'VIGNERON', 'Chloé', '0603030302', '42 rue des physiciens Villeurbanne', '0xstr');
+INSERT INTO pharmacist VALUES (9, 'MARTINS', 'Juliana', '0302010605', '1 rue de la police Marseille', '0xstr');
+INSERT INTO pharmacist VALUES (10, 'BRES', 'Stéphane', '0609090807', '90 avenue des beaux gars Washington D.C.', '0xstr');
+INSERT INTO pharmacist VALUES (11, 'BRUNIE', 'Lionel', '0601456120', '12 Grove Street Los Angeles', '0xstr');
 --INSERT INTO patient VALUES (10, 'DEPARDIEU', 'Gérard', 60, 100, TRUE, 190);
 
 --INSERT INTO medication VALUES (12, 'paracetamol', 10, 'str', 'PT20S');
