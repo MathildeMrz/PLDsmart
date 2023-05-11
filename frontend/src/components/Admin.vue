@@ -10,10 +10,8 @@
         </div>
 
         <div class="searchbar">
-            <input type="text" placeholder="Rechercher un professionnel" />
-            <button class="buttonTable" type="submit">
-                <img src="../assets/search.png" id="searchIcon" alt="button search" />
-            </button>
+            <input id="searchInput" type="text" placeholder="Rechercher un professionnel" v-model="searchedProfessional" @input="searchProfessionalByName" />
+            <img src="../assets/search.png" id="searchIcon" alt="button search" class="buttonTable" />
         </div>
     </div>
 
@@ -26,6 +24,7 @@
                 <th style="width: 8vw;">Numéro RPPS</th>
                 <th style="width: 20vw;">Adresse</th>
                 <th style="width: 8vw;">Téléphone</th>
+                <th style="width: 14vw;">Adresse Ethereum</th>
                 <th style="width: 3vw;">
                     <button class="buttonTable" type="submit" @click="addProfessional">
                         <img src="../assets/plus.png" alt="button add prescription" />
@@ -34,7 +33,7 @@
             </tr>
         </thead>
         <tbody id="profesionnalsList">
-            <Doctor v-for="(professional, index) in professionals" :key="index" :index="index" :lastName="professional.lastName" :firstName="professional.firstName" :qualification="professional.qualification" :idPSdoctor="professional.idPSdoctor" :officeAddress="professional.officeAddress" :telephone="professional.telephone" @delete="deleteProfessional" @update="modifyProfessional"/>
+            <Doctor v-for="(professional, index) in professionals" :key="index" :index="index" :lastName="professional.lastName" :firstName="professional.firstName" :qualification="professional.qualification" :idPSdoctor="professional.idPSdoctor" :officeAddress="professional.officeAddress" :telephone="professional.telephone" :ethAddress="professional.ethAddress" @add="registerProfessional" @delete="deleteProfessional" @update="modifyProfessional"/>
         </tbody>
     </table>
 
@@ -51,7 +50,7 @@
             </tr>
         </thead>
         <tbody id="profesionnalsList">
-            <Pharmacist v-for="(professional, index) in professionals" :key="index" :index="index" :lastName="professional.lastName" :firstName="professional.firstName" @delete="deleteProfessional" @update="modifyProfessional"/>
+            <Pharmacist v-for="(professional, index) in professionals" :key="index" :index="index" :lastName="professional.lastName" :firstName="professional.firstName" @add="registerProfessional" @delete="deleteProfessional" @update="modifyProfessional"/>
         </tbody>
     </table>
 
@@ -76,6 +75,8 @@
         data() {
             return {
                 selectedOption: 'doctors',
+                searchedProfessional: '',
+                allProfessionals: [],
                 professionals: []
             };
         },
@@ -86,6 +87,7 @@
             deleteProfessional(index)
             {
                 this.professionals.splice(index, 1);
+                console.log("deleting the doctor from index " + index + " in DB");
             },
             addProfessional() 
             {
@@ -95,8 +97,22 @@
                     qualification: '',
                     idPSdoctor: '',
                     officeAddress: '',
-                    telephone: ''
+                    telephone: '',
+                    ethAddress: ''
                 });
+            },
+            registerProfessional(index) {
+                if(index === this.professionals.length - 1) {
+                    console.log("adding the doctor from index " + index + " to DB");
+                }
+                else {
+                    console.log("updating the doctor from index " + index + " in DB");
+                    /*if (this.selectedOption === 'doctors') {
+                        this.registerDoctor(index);
+                    } else if (this.selectedOption === 'pharmacists') {
+                        this.registerPharmacist(index);
+                    }*/
+                }
             },
             modifyProfessional(index, newValue, where) {
                 if (where === 'lastName') {
@@ -111,7 +127,20 @@
                     this.professionals[index].officeAddress = newValue;
                 } else if (where === 'telephone') {
                     this.professionals[index].telephone = newValue;
+                } else if (where === 'ethAddress') {
+                    this.professionals[index].ethAddress = newValue;
                 }
+            },
+            searchProfessionalByName() {
+                this.professionals = [];
+
+                this.$nextTick(() => {
+                    for(var index in this.allProfessionals) {
+                        if(this.allProfessionals[index].lastName.includes(this.searchedProfessional.toUpperCase())) {
+                            this.professionals.push(this.allProfessionals[index]);
+                        }
+                    }
+                });
             },
             disconnect() 
             {
@@ -127,6 +156,8 @@
                     document.getElementById("pharmacists-table").style.display = "table";
                     this.loadPharmacists();
                 }
+
+                this.allProfessionals = this.professionals;
             },
             async loadDoctors() {
                 try {
@@ -148,7 +179,6 @@
                         console.log("Doctors' list loaded successfully !");
                         document.getElementById("loader-div").style.visibility = "hidden";
                         for (var res in response) {
-                            console.log(response[res]);
                             this.professionals.push(response[res]);
                         }
                         return handleProf;
@@ -227,6 +257,7 @@
 
     .my-table td {
         color:rgba(24,23,186,0.23);
+        height: 45px;
     }
 
     .my-table th {
