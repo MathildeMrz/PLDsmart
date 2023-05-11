@@ -272,11 +272,11 @@ public class ServiceOCR {
         PDFRenderer pdfRenderer = new PDFRenderer(document);
         BufferedImage bim = null;
         for (int page = 0; page < document.getNumberOfPages(); ++page) {
-            bim = pdfRenderer.renderImageWithDPI(page, 600, ImageType.RGB);
+            bim = pdfRenderer.renderImageWithDPI(page, 400, ImageType.RGB);
         }
         document.close();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(bim, "jpg", baos);
+        ImageIO.write(bim, "png", baos);
         byte[] imageJPG = baos.toByteArray();
         return generateJSON(imageJPG);
     }
