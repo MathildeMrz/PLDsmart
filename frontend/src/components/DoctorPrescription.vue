@@ -122,7 +122,7 @@
 import Medicament from './Medicament.vue';
 import NavigationBar from './NavigationBar.vue';
 import { addPrescription } from '@/utils/web3Utils';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 import Web3 from "web3";
 const web3 = new Web3();
 export default {
@@ -472,6 +472,7 @@ select {
     display: block;
     margin: auto;
     margin-top: 5vh;
+    margin-bottom: 5vh;
     padding: 15px 25px 15px 25px;
     background: rgba(24, 23, 186, 0.46);
     border: none;
