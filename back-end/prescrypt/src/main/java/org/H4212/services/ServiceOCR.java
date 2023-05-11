@@ -272,7 +272,7 @@ public class ServiceOCR {
         PDFRenderer pdfRenderer = new PDFRenderer(document);
         BufferedImage bim = null;
         for (int page = 0; page < document.getNumberOfPages(); ++page) {
-            bim = pdfRenderer.renderImageWithDPI(page, 1200, ImageType.RGB);
+            bim = pdfRenderer.renderImageWithDPI(page, 600, ImageType.RGB);
         }
         document.close();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
