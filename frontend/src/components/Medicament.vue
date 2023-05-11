@@ -35,7 +35,7 @@
         </td>
 
         <td>
-            <textarea id="indication" rows="4" style="word-wrap: break-word;" name="" @input="filterChars"></textarea>
+            <textarea id="indication" rows="4" style="word-wrap: break-word;" name="" @input="filterChars('indication')"></textarea>
         </td>
 
         <td>
