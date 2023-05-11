@@ -34,4 +34,15 @@ public class DoctorApi {
         // renvoyer la réponse JSON
         return Response.ok(jsonResponse).build();
     }
+
+    @GET
+    @Path("/RPPS/{RPPS}")
+    public Response getDoctorFromRPPS(@PathParam("RPPS") long RPPS) throws SQLException{
+        Doctor doctor = serviceUser.getDoctorFromRPPS(RPPS);
+        if(doctor.getLastName() != null){
+            return Response.ok(doctor.toJsonBuilder().build()).build();
+        }else{
+            return Response.status(500).entity("{}").build();
+        }
+    }
 }
