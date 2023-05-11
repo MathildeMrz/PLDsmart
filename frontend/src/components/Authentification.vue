@@ -42,7 +42,7 @@
     props: {},
     data() {
       return {
-          selectedOption: 'doctors'
+          selectedOption: 'doctor'
       };
     },
     methods: {
