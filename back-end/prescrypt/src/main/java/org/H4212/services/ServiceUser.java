@@ -319,7 +319,7 @@ public class ServiceUser {
 
         String hashedPassword = hashString(registerDoctorRequest.getDoctor().getPassword());
 
-        Long id = (long) (Math.random() * ( Long.MAX_VALUE - 0L ));
+        long id = (long) (Math.random() * ( 1000000L - 0L ));
 
         String stringQueryUsers =
                 """
@@ -355,7 +355,7 @@ public class ServiceUser {
 
         String hashedPassword = hashString(registerPharmacistRequest.getPharmacist().getPassword());
 
-        Long id = (long) (Math.random() * ( Long.MAX_VALUE - 0L ));
+        Long id = (long) (Math.random() * ( 1000000L - 0L ));
 
         String stringQueryUsers =
                 """
