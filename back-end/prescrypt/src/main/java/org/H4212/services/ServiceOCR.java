@@ -25,10 +25,7 @@ public class ServiceOCR {
     {
         String result = null;
         Tesseract tesseract = new Tesseract();
-        //System.out.println("CHEMIN COURANT : "+System.getProperty("user.dir"));
-
         tesseract.setDatapath("src/main/resources/tessdata");
-        //tesseract.setDatapath("C:/Users/zhang/Documents/GitHub/PLDsmart/back-end/prescrypt/src/main/resources/tessdata");//datapath chez Yi
         tesseract.setLanguage("fra");
         tesseract.setVariable("user_words_suffix", ".user-words");
         tesseract.setVariable("user_words_file", "src/main/resources/tessdata/fra.user-words");
@@ -37,6 +34,8 @@ public class ServiceOCR {
         try (InputStream inputStream = new ByteArrayInputStream(image)) {
             BufferedImage bufferedImage = ImageIO.read(inputStream);
             result = tesseract.doOCR(bufferedImage);
+
+            System.out.println("RESULTAT OCRRRRRRRRRRRRRRRRRRRR : "+result);
 
             result = result.replaceAll("\n", "");
 
@@ -258,6 +257,7 @@ public class ServiceOCR {
                 medicationsArray.put(medicineJson);
             }
             prescriptionJson.put("Medicaments",medicationsArray);
+            //System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAA : "+prescriptionJson);
         } 
         catch (IOException e) {
         }
