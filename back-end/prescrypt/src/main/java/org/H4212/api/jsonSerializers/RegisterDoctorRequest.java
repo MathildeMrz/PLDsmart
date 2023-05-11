@@ -15,12 +15,12 @@ public class RegisterDoctorRequest {
             this.doctor = new Doctor(jsonObject.getString("lastName"), jsonObject.getString("firstName"),
                     jsonObject.getString("username"), jsonObject.getString("password"),
                     (long) Integer.parseInt(jsonObject.getString("idPSdoctor")), jsonObject.getString("qualification"),
-                    jsonObject.getString("officeAddress"), jsonObject.getString("telephone"));
+                    jsonObject.getString("officeAddress"), jsonObject.getString("telephone"), jsonObject.getString("ethAddress"));
         }catch(Exception e){
             this.doctor = new Doctor(jsonObject.getString("lastName"), jsonObject.getString("firstName"),
                     jsonObject.getString("username"), jsonObject.getString("password"),
                     (long) jsonObject.getInt("idPSdoctor"), jsonObject.getString("qualification"),
-                    jsonObject.getString("officeAddress"), jsonObject.getString("telephone"));
+                    jsonObject.getString("officeAddress"), jsonObject.getString("telephone"), jsonObject.getString("ethAddress"));
         }
     }
 

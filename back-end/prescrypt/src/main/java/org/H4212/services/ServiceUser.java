@@ -335,7 +335,7 @@ public class ServiceUser {
 
         String stringQueryDoctor =
                 """
-                    INSERT INTO doctor VALUES (?,?,?,?,?,?,?);
+                    INSERT INTO doctor VALUES (?,?,?,?,?,?,?,?);
                 """;
 
         PreparedStatement preparedStatementDoctor = connection.prepareStatement(stringQueryDoctor);
@@ -346,6 +346,7 @@ public class ServiceUser {
         preparedStatementDoctor.setString(5, registerDoctorRequest.getDoctor().getQualification());
         preparedStatementDoctor.setString(6, registerDoctorRequest.getDoctor().getOfficeAddress());
         preparedStatementDoctor.setString(7, registerDoctorRequest.getDoctor().getTelephone());
+        preparedStatementDoctor.setString(8, registerDoctorRequest.getDoctor().getEthAddress());
 
         preparedStatementDoctor.executeUpdate();
     }

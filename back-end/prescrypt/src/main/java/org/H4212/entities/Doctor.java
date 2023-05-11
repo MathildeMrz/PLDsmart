@@ -54,7 +54,14 @@ public class Doctor extends Person {
         this.telephone = telephone;
         this.ethAddress = ethAddress;
     }
-
+    public Doctor(String lastName, String firstName, String pseudo, String password, Long idPSdoctor, String qualification, String officeAddress, String telephone, String ethAddress) {
+        super(lastName, firstName, pseudo, password);
+        this.idPSdoctor = idPSdoctor;
+        this.qualification = qualification;
+        this.officeAddress = officeAddress;
+        this.telephone = telephone;
+        this.ethAddress = ethAddress;
+    }
     public Doctor() {
 
     }
