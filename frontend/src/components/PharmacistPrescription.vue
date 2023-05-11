@@ -117,7 +117,7 @@
                 <img src="../assets/plus.png" alt="button add prescription" />
             </button>
         </div>
-        <button id="deliverPrescButton" class="ordonnance" @click="deliverPresc">Delivrer ordonnance</button>
+        <button id="verifyPrescButton" class="ordonnance" @click="verifyValidity">Vérifier l'ordonnance</button>
     </div>
 </template>
 
@@ -125,7 +125,7 @@
 <script>
 import Medicament from './Medicament.vue';
 import NavigationBar from './NavigationBar.vue';
-import { deliverPrescription } from '@/utils/web3Utils'
+import { verifyValidityription } from '@/utils/web3Utils'
 import Swal from 'sweetalert2'
 import Web3 from "web3";
 const web3 = new Web3();
@@ -346,7 +346,7 @@ export default {
         addMedicine() {
             this.medicines.push({});
         },
-        async deliverPresc() {
+        async verifyValidity() {
             const table = document.querySelector("table");
 
             if (table.rows.length == 1) {
@@ -436,7 +436,7 @@ export default {
                 const prescriptionHash = web3.utils.sha3(JSONString);
 
                 try {
-                    const txReceipt = await deliverPrescription(prescriptionHash);
+                    const txReceipt = await verifyValidityription(prescriptionHash);
                     if (txReceipt.success) {
                         Swal.fire({
                             icon: 'success',
@@ -482,8 +482,14 @@ export default {
     text-decoration-color: #1817BA;
     margin-left: 10px;
     cursor: pointer;
+}
 
+.red-border {
+    border-color: red;
+}
 
+blue-border {
+    border-color: #1817BA;
 }
 
 td:nth-child(5) {
