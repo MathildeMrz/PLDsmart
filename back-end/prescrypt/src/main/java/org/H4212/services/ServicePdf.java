@@ -14,8 +14,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 public class ServicePdf {
 
-    public static final String ROBOTO = "C:/Users/33660/Documents/PLD_SMART/PLDsmart/back-end/prescrypt/src/main/resources/RobotoMono-Light.ttf";
-    //public static final String ROBOTO = "C:/Users/33660/Documents/PLD_SMART/PLDsmart/back-end/prescrypt/src/main/resources/tahoma.ttf";
+    public static final String ROBOTO = "src/main/resources/RobotoMono-Light.ttf";
 
     private static BaseFont baseFont = null;
 
@@ -56,7 +55,6 @@ public class ServicePdf {
 
     private static void addContent(Document document, String jsonPdf) throws DocumentException, ParseException {
 
-        System.out.println("jsonPdffffffffffffffffff : "+jsonPdf);
         // Convertir la chaîne JSON en objet JsonObject
         JSONParser parser = new JSONParser(); 
         JSONObject json = (JSONObject) parser.parse(jsonPdf);
@@ -121,17 +119,10 @@ public class ServicePdf {
         document.add(consultationPart);
         document.add(patientPart);
 
-        System.out.println("(json : \n\n"+json.toString());
-
-        System.out.println("(jsonArray vautttttt : "+jsonArray.toString());
-
         for (Object element : jsonArray) 
         {
-            System.out.println("(element vautttttt : "+element);
-
             String medicineAct = ((JSONObject)element).get("medicineAct").toString();
             String posology = ((JSONObject)element).get("posology").toString();
-            System.out.println("medicineAct vautttttt : "+medicineAct);            
             String treatmentPeriod = ((JSONObject)element).get("treatmentPeriod").toString();
             String treatmentPeriodTexteObj = ((JSONObject)element).get("treatmentPeriodTexte").toString();
             String renewal = ((JSONObject)element).get("renewal").toString();
@@ -141,8 +132,6 @@ public class ServicePdf {
             row+= "\nRenouvelable : ";
             boolean refundableBool = Boolean.parseBoolean(refundable);
 
-            System.out.println("renewal ? "+renewal);
-            System.out.println("renewal == (Integer.toString(0) ? "+renewal.equals("0"));
             if((! renewal.isEmpty()) && (renewal.equals("0")))
             {
                 row = row +"Aucune fois;";

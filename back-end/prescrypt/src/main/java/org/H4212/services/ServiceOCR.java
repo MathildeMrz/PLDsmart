@@ -20,11 +20,13 @@ public class ServiceOCR {
     {
         String result = null;
         Tesseract tesseract = new Tesseract();
-        tesseract.setDatapath("C:/Users/33660/Documents/PLD_SMART/PLDsmart/back-end/prescrypt/src/main/resources/tessdata");//datapath chez Mathilde
+        //System.out.println("CHEMIN COURANT : "+System.getProperty("user.dir"));
+
+        tesseract.setDatapath("src/main/resources/tessdata");
         //tesseract.setDatapath("C:/Users/zhang/Documents/GitHub/PLDsmart/back-end/prescrypt/src/main/resources/tessdata");//datapath chez Yi
         tesseract.setLanguage("fra");
         tesseract.setVariable("user_words_suffix", ".user-words");
-        tesseract.setVariable("user_words_file", "C:/Users/zhang/Documents/GitHub/PLDsmart/back-end/prescrypt/src/main/resources/tessdata/fra.user-words");
+        tesseract.setVariable("user_words_file", "src/main/resources/tessdata/fra.user-words");
         JSONObject prescriptionJson = new JSONObject();        
 
         try (InputStream inputStream = new ByteArrayInputStream(image)) {
