@@ -9,7 +9,7 @@ public class RegisterPharmacistRequest {
 
     public RegisterPharmacistRequest(JsonObject jsonObject){
         this.pharmacist = new Pharmacist(jsonObject.getString("lastName"), jsonObject.getString("firstName"),
-                    jsonObject.getString("username"), jsonObject.getString("password"));
+                    jsonObject.getString("username"), jsonObject.getString("password"), jsonObject.getString("telephone"), jsonObject.getString("pharmacyAddress"));
     }
 
     /*public RegisterPharmacistRequest(JsonObject jsonObject){
