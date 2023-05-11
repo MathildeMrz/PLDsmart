@@ -109,12 +109,12 @@ public class ServicePrescription {
     }
 
     public void createPrescription(CreatePrescriptionRequest createPrescriptionRequest) throws SQLException {
-        long medicationPrescriptionId = (long) (Math.random() * (Long.MAX_VALUE - 0L));
-        long prescriptionId = (long) (Math.random() * (Long.MAX_VALUE - 0L));
-        long patientId = (long) (Math.random() * (Long.MAX_VALUE - 0L));
+        long medicationPrescriptionId = (long) (Math.random() * (1000000L - 0L));
+        long prescriptionId = (long) (Math.random() * (1000000L - 0L));
+        long patientId = (long) (Math.random() * (1000000L - 0L));
         for(int i = 0; i < createPrescriptionRequest.getPrescription().getMedicationList().size(); i++)
         {
-            long medicationId = (long) (Math.random() * (Long.MAX_VALUE - 0L));
+            long medicationId = (long) (Math.random() * (1000000L - 0L));
             String stringQueryMedication =
                     """
                         INSERT INTO medication VALUES (?,?,?,?,?);
