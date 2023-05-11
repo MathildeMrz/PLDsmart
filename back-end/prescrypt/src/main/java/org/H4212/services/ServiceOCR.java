@@ -277,7 +277,7 @@ public class ServiceOCR {
         document.close();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(bim, "png", baos);
-        byte[] imageJPG = baos.toByteArray();
-        return generateJSON(imageJPG);
+        byte[] image = baos.toByteArray();
+        return generateJSON(image);
     }
 }
