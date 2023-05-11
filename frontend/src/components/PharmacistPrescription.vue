@@ -128,6 +128,7 @@ import NavigationBar from './NavigationBar.vue';
 import { deliverPrescription } from '@/utils/web3Utils'
 import Swal from 'sweetalert2'
 import Web3 from "web3";
+import { findClosestMatch } from '@/utils/utils'
 const web3 = new Web3();
 
 export default {
@@ -297,7 +298,7 @@ export default {
             medicaments.forEach(function(medicament) 
             {
                 console.log("medicament : "+medicament+ " index = "+index);
-                const NomMedicament = medicament["NomMedicament"];
+                const NomMedicament = findClosestMatch(medicament["NomMedicament"]);
                 const Posologie = medicament["Posologie"];
                 const Periode = medicament["Periode"];
                 const PeriodeTexte = medicament["PeriodeTexte"];
@@ -472,9 +473,10 @@ export default {
                 };
                 let JSONString = JSON.stringify(jsonPdf);
 
-                console.log("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB : "+JSONString);
+                console.log("JSONString pharmacien : \n"+JSONString);
 
                 const prescriptionHash = web3.utils.sha3(JSONString);
+                console.log("Hash pharmacien : \n", prescriptionHash);
                 console.log("Hash : "+prescriptionHash);
 
                 try {

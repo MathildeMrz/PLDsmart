@@ -47,7 +47,6 @@
 </template>
 
 <script>
-
     export default {
         name: 'MedicamentComponent',
         props: ['index'],
@@ -75,7 +74,7 @@
                     option.text = concat;
                     medicineSelect.appendChild(option);
                 }
-            }
+            },
         }
     }   ;
 </script>

@@ -14,7 +14,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 public class ServicePdf {
 
-    public static final String ROBOTO = "src/main/resources/tahoma.ttf";
+    public static final String ROBOTO = "src/main/resources/OCR_B.ttf";
 
     private static BaseFont baseFont = null;
 
@@ -26,8 +26,8 @@ public class ServicePdf {
         }
     }
 
-    private static Font prescriptionFont = new Font(baseFont, 14);
-    private static Font prescriptionBoldFont = new Font(baseFont, 14, Font.BOLD, BaseColor.BLACK);
+    private static Font prescriptionFont = new Font(baseFont, 16);
+    private static Font prescriptionBoldFont = new Font(baseFont, 16, Font.BOLD, BaseColor.BLACK);
     //private static Chunk bullet = new Chunk("\u2022", prescriptionFont);
 
     public byte[] generatePdf(String jsonPdf) {

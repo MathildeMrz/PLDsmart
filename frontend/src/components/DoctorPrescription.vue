@@ -265,9 +265,10 @@ export default {
                 };
 
                 let JSONString = JSON.stringify(jsonPdf);
-                console.log("CCCCCCCCCCCCCCCCCCCCCCCCCCCC : "+JSONString);
+                console.log("JSONString docteur : \n"+JSONString);
 
                 const prescriptionHash = web3.utils.sha3(JSONString);
+                console.log("Hash docteur: \n", prescriptionHash);
                 var daysValid = document.getElementById("validityPrescriptionDays").value
 
                 try {
