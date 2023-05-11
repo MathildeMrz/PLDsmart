@@ -180,6 +180,16 @@ export default {
                 }
             }
 
+            const selects = document.querySelectorAll("select");
+            for (let i = 0; i < selects.length; i++) {
+                const select = selects[i];
+                select.classList.remove("red-border");
+                if (!(select.id == "sexe") && select.value === '') {
+                    incorrectPrescription = Boolean(true);
+                    select.classList.add("red-border");
+                }
+            }
+
             if (!incorrectPrescription) 
             {
                 console.log("!incorrectPrescription");
