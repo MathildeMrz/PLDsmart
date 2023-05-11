@@ -77,14 +77,10 @@
                 'Content-Type': 'application/json; charset=UTF-8'
               }
             });
-          let response = await handleAuth.json();
-          console.log(response);
-
+          let userData = await handleAuth.json();
+          userData.type = job;
           if(handleAuth.status == 200) {
-            if(job=="doctor"){
-              document.cookie = "id=" + response.id + "; path=/doctor.html";
-            }
-            //location.href = job + ".html?"+ response.id;
+            localStorage.setItem('user', JSON.stringify(userData));
             location.href = job + ".html";
           }
           else {
