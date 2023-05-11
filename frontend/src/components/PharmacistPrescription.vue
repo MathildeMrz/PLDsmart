@@ -74,7 +74,7 @@
             <h3>La consultation</h3>
             <div class="information">
                 <div class="column">
-                    <input id="prescriptionDate" type="datetime-local" min="0" max="150" name="" />
+                    <input id="prescriptionDate" min="0" max="150" name="" />
                     <p class="indications">Date de l'ordonnance (yyyy-MM-dd hh:mm)</p>
                 </div>
 
@@ -84,7 +84,7 @@
                 </div>
 
                 <div class="column">
-                    <input id="consultationPhoneNumber" type="number" min="0" max="9999999999" name="" />
+                    <input id="consultationPhoneNumber" type="text" name="" />
                     <p class="indications">Tel. cabinet</p>
                 </div>
             </div>
@@ -125,7 +125,7 @@
 <script>
 import Medicament from './Medicament.vue';
 import NavigationBar from './NavigationBar.vue';
-import { verifyValidityription } from '@/utils/web3Utils'
+import { deliverPrescription } from '@/utils/web3Utils'
 import Swal from 'sweetalert2'
 import Web3 from "web3";
 const web3 = new Web3();
@@ -254,12 +254,8 @@ export default {
             }
 
         },
-        fillFormAfterOCR(response) {
-
-            var responseJson = JSON.stringify(response);
-            console.log("data : " + responseJson);
-            const jsonData = JSON.parse(responseJson);
-            console.log("data javascript : " + jsonData);
+        fillFormAfterOCR(jsonData) 
+        {
             const doctorName = jsonData["NomDocteur"];
             const doctorJob = jsonData["Qualification"];
             const RPPSNum = jsonData["RPPS"];
@@ -305,7 +301,6 @@ export default {
                 const Remboursable = medicament["Remboursable"];
                 const Indication = medicament["Indication"];
 
-                console.log("IMPORTANT : "+PeriodeTexte);
                 self.addMedicine();              
 
                 setTimeout(function() {
@@ -376,16 +371,18 @@ export default {
                 const patientName = document.getElementById("patientName").value;
                 const patientFirstName = document.getElementById("patientFirstName").value;
                 const patientAge = document.getElementById("patientAge").value;
-                const patientSexe = document.getElementById("sexe").value;
+                const patientSexe = document.getElementById("patientSexe").value;
                 const patientWeight = document.getElementById("patientWeight").value;
                 const patientHeight = document.getElementById("patientHeight").value;
                 const date = new Date(document.getElementById("prescriptionDate").value);
+                const validityPrescriptionDays = document.getElementById("validityPrescriptionDays").value;
+
                 const y = date.getFullYear();
                 const m = date.getMonth() + 1;
                 const d = date.getDate();
                 const h = date.getHours();
                 const min = date.getMinutes();
-                const prescriptionDate = ('0' + d).slice(-2) + "/" + ('0' + m).slice(-2) + "/" + y + " " + ('0' + h).slice(-2) + ":" + ('0' + min).slice(-2);
+                const prescriptionDate = y+'-'+('0' + m).slice(-2)+'-'+('0' + d).slice(-2)+'T'+('0' + h).slice(-2)+':'+('0' + min).slice(-2);
                 const addressPrescription = document.getElementById("addressPrescription").value;
                 const consultationPhoneNumber = document.getElementById("consultationPhoneNumber").value;
 
@@ -429,14 +426,18 @@ export default {
                     "prescriptionDate": prescriptionDate,
                     "addressPrescription": addressPrescription,
                     "consultationPhoneNumber": consultationPhoneNumber,
+                    "validityPrescriptionDays":validityPrescriptionDays,
                     "prescriptions": rowsMedicamentsActs
                 };
                 let JSONString = JSON.stringify(jsonPdf);
 
+                console.log("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB : "+JSONString);
+
                 const prescriptionHash = web3.utils.sha3(JSONString);
+                console.log("Hash : "+prescriptionHash);
 
                 try {
-                    const txReceipt = await verifyValidityription(prescriptionHash);
+                    const txReceipt = await deliverPrescription(prescriptionHash);
                     if (txReceipt.success) {
                         Swal.fire({
                             icon: 'success',
@@ -461,9 +462,9 @@ export default {
                     return;
                 }
             }
-        },
-        props: {},
-    }
+        }
+    },
+    props: {}
 };
 
 </script>
