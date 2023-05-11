@@ -152,7 +152,11 @@ export default {
 
             if (type != "image/png" && type != "image/jpeg" && type != "image/pdf" &&
                 type != "application/png" && type != "application/jpeg" && type != "application/pdf") {
-                alert("Les formats pris en compte pour l'OCR sont : jpeg, pdf et png");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops',
+                    text: 'Les formats pris en compte pour l\'OCR sont : jpeg, pdf et png'
+                })
             }
             else {
                 /* Contrôler le type */
@@ -351,7 +355,11 @@ export default {
 
             if (table.rows.length == 1) {
                 incorrectPrescription = Boolean(true);
-                alert("Au moins un médicament ou acte doit être renseigné");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Au moins un médicament ou acte doit être renseigné'
+                })
                 this.addMedicine();
             }
 
@@ -366,6 +374,23 @@ export default {
                     incorrectPrescription = Boolean(true);
                     input.classList.add("red-border");
                 }
+            }
+            const selects = document.querySelectorAll("select");
+            for (let i = 0; i < selects.length; i++) {
+                const select = selects[i];
+                select.classList.remove("red-border");
+                if (!(select.id == "patientSexe") && select.value === '') {
+                    incorrectPrescription = Boolean(true);
+                    select.classList.add("red-border");
+                }
+            }
+
+            if(incorrectPrescription){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Veuillez remplir tous les champs obligatoires.'
+                })
             }
 
             if (!incorrectPrescription) 
