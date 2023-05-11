@@ -163,74 +163,25 @@ export default {
                 /* Contrôler le type */
                 if (type == "application/pdf") {
                     console.log("PDF détecté");
+                    const self = this;
                     const reader = new FileReader();
-                    reader.onload = function () {
-                        import("pdfjs-dist/build/pdf.min.js").then((pdfjsLib) => {
-                            /* Initialiser PDF.js */
-                            pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.6.172/pdf.worker.min.js";
+                    reader.onload = function (event) {
+                        const byteArray = new Uint8Array(event.target.result);
 
-                            /* Charger le fichier PDF */
-                            pdfjsLib.getDocument(reader.result).promise.then(function (pdf) {
-                                console.log("PDF chargé avec succès !");
-                                console.log("pdf : " + pdf);
-
-                                console.log("Nombre de pages : " + pdf.numPages);
-
-                                for (var pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
-                                    pdf.getPage(pageNumber).then(function (page) {
-                                        var canvas = document.createElement("canvas");
-                                        var context = canvas.getContext("2d");
-                                        var viewport = page.getViewport({ scale: 1.5 });
-                                        canvas.width = viewport.width;
-                                        canvas.height = viewport.height;
-
-                                        var renderTask = page.render({
-                                            canvasContext: context,
-                                            viewport: viewport
-                                        });
-
-                                        renderTask.promise.then(function () {
-                                            const imageData = canvas.toDataURL('image/png');
-                                            // Récupérer l'élément <img> à partir de son ID
-                                            const img = document.getElementById("image-preview");
-                                            img.src = imageData;
-
-                                            fetch(imageData)
-                                                .then(res => res.arrayBuffer())
-                                                .then(buffer => {
-                                                    /*Appel OCR*/
-                                                    const self = this;
-                                                    const blob = new Blob([buffer], { type: 'image/png' });
-                                                    const reader = new FileReader();
-                                                    reader.onload = function (event) {
-                                                        const byteArray = new Uint8Array(event.target.result);
-                                                        const url = 'http://localhost:9000/OCR-api';
-                                                        fetch(url, {
-                                                            method: 'POST',
-                                                            body: byteArray.buffer, // encode le tableau de bytes en ArrayBuffer
-                                                        })
-                                                            .then(response => response.json())
-                                                            .then(data => {
-                                                                self.fillFormAfterOCR(data);
-                                                            })
-                                                            .catch(error => {
-                                                                console.error(error);
-                                                            });
-                                                    };
-                                                    reader.readAsArrayBuffer(blob);
-                                                });
-                                            console.log("Page " + pageNumber + " convertie en PNG : " + imageData);
-
-                                        });
-                                    });
-                                }
-                            }).catch(function (error) {
-                                console.log("Erreur lors du chargement du PDF :", error);
+                        const url = 'http://localhost:9000/OCR-api/pdf-1'; //OCR PDF TO JSON
+                        fetch(url, {
+                            method: 'POST',
+                            body: byteArray.buffer, // encode le tableau de bytes en ArrayBuffer
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                self.fillFormAfterOCR(data);
+                            })
+                            .catch(error => {
+                                console.error(error);
                             });
-                        }).catch(function (error) {
-                            console.log("Erreur lors du chargement de PDF.js :", error);
-                        });
                     };
+
                     reader.readAsArrayBuffer(file);
                 }
                 else {
