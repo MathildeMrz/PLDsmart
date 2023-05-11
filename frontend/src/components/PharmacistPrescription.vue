@@ -125,7 +125,7 @@
 <script>
 import Medicament from './Medicament.vue';
 import NavigationBar from './NavigationBar.vue';
-import { verifyValidityription } from '@/utils/web3Utils'
+import { deliverPrescriription } from '@/utils/web3Utils'
 import Swal from 'sweetalert2'
 import Web3 from "web3";
 const web3 = new Web3();
@@ -331,13 +331,17 @@ export default {
             document.querySelectorAll("input").forEach((input)=>{input.value = "";})
             var indication = document.querySelector("#indication");
             var joursMois = document.querySelector("#treatmentPeriodTexte");
-            
-            if((indication != null)||(joursMois != null))
+        
+
+            if(indication != null)
             {
                 indication.value = "";
+            }
+
+            if(joursMois != null){
                 joursMois.value = "";
             }
-            
+
             this.medicines = [];
 
             let input = document.createElement('input');
@@ -448,7 +452,7 @@ export default {
                 const prescriptionHash = web3.utils.sha3(JSONString);
 
                 try {
-                    const txReceipt = await verifyValidityription(prescriptionHash);
+                    const txReceipt = await deliverPrescriription(prescriptionHash);
                     if (txReceipt.success) {
                         Swal.fire({
                             icon: 'success',
