@@ -144,6 +144,70 @@ export default {
     },
     methods:
     {
+
+        fillFormAfterOCR(jsonData) {
+            const doctorName = jsonData["NomDocteur"];
+            const doctorJob = jsonData["Qualification"];
+            const RPPSNum = jsonData["RPPS"];
+            const patientName = jsonData["NomPatient"];
+            const patientFirstName = jsonData["PrenomPatient"];
+            const patientAge = jsonData["Age"];
+            const patientSexe = jsonData["Sexe"];
+            const patientWeight = jsonData["Poids"];
+            const patientHeight = jsonData["Taille"];
+            const prescriptionDate = jsonData["Date"];
+            const addressPrescription = jsonData["Adresse"];
+            const consultationPhoneNumber = jsonData["Tel"];
+            const validityPrescriptionDays = jsonData["Validite"];
+
+            document.getElementById("doctorName").value = doctorName;
+            document.getElementById("doctorJob").value = doctorJob;
+            document.getElementById("RPPSNum").value = RPPSNum;
+            document.getElementById("patientName").value = patientName;
+            document.getElementById("patientFirstName").value = patientFirstName;
+            document.getElementById("patientAge").value = patientAge;
+            document.getElementById("patientSexe").value = patientSexe;
+            document.getElementById("patientWeight").value = patientWeight;
+            document.getElementById("patientHeight").value = patientHeight;
+            document.getElementById("prescriptionDate").value = prescriptionDate;
+            document.getElementById("addressPrescription").value = addressPrescription;
+            document.getElementById("consultationPhoneNumber").value = consultationPhoneNumber;
+            document.getElementById("validityPrescriptionDays").value = validityPrescriptionDays;
+
+            //Médicaments
+            const self = this;
+            var index = 0;
+
+            const medicaments = jsonData["Medicaments"];
+
+            medicaments.forEach(function (medicament) {
+                console.log("medicament : " + medicament + " index = " + index);
+                const NomMedicament = medicament["NomMedicament"];
+                const Posologie = medicament["Posologie"];
+                const Periode = medicament["Periode"];
+                const PeriodeTexte = medicament["PeriodeTexte"];
+                const Renouvelable = medicament["Renouvelable"];
+                const Remboursable = medicament["Remboursable"];
+                const Indication = medicament["Indication"];
+
+                self.addMedicine();
+
+                setTimeout(function () {
+                    document.querySelectorAll(".row")[index].querySelector("#medicineAct").value = NomMedicament;
+                    document.querySelectorAll(".row")[index].querySelector("#posology").value = Posologie;
+                    document.querySelectorAll(".row")[index].querySelector("#treatmentPeriod").value = Periode;
+                    document.querySelectorAll(".row")[index].querySelector("#treatmentPeriodTexte").value = PeriodeTexte;
+                    document.querySelectorAll(".row")[index].querySelector("#renewal").value = Renouvelable;
+
+                    if (Remboursable == "Non") {
+                        document.querySelectorAll(".row")[index].querySelector("#refundable").checked = true;
+                    }
+                    document.querySelectorAll(".row")[index].querySelector("#indication").value = Indication;
+                    index = index + 1;
+                }, 1000);
+
+            });
+        },
         handleOCR(input) {
             console.log("Ok dans handleOCR");
             var file = input.files[0];
@@ -193,12 +257,13 @@ export default {
                                             // Récupérer l'élément <img> à partir de son ID
                                             const img = document.getElementById("image-preview");
                                             img.src = imageData;
+                                            const self = this;
 
                                             fetch(imageData)
                                                 .then(res => res.arrayBuffer())
                                                 .then(buffer => {
                                                     /*Appel OCR*/
-                                                    const self = this;
+
                                                     const blob = new Blob([buffer], { type: 'image/png' });
                                                     const reader = new FileReader();
                                                     reader.onload = function (event) {
@@ -258,86 +323,19 @@ export default {
             }
 
         },
-        fillFormAfterOCR(jsonData) 
-        {
-            const doctorName = jsonData["NomDocteur"];
-            const doctorJob = jsonData["Qualification"];
-            const RPPSNum = jsonData["RPPS"];
-            const patientName = jsonData["NomPatient"];
-            const patientFirstName = jsonData["PrenomPatient"];
-            const patientAge = jsonData["Age"];
-            const patientSexe = jsonData["Sexe"];
-            const patientWeight = jsonData["Poids"];
-            const patientHeight = jsonData["Taille"];
-            const prescriptionDate = jsonData["Date"];
-            const addressPrescription = jsonData["Adresse"];            
-            const consultationPhoneNumber = jsonData["Tel"];
-            const validityPrescriptionDays = jsonData["Validite"];            
-
-            document.getElementById("doctorName").value = doctorName;
-            document.getElementById("doctorJob").value = doctorJob;
-            document.getElementById("RPPSNum").value = RPPSNum;
-            document.getElementById("patientName").value = patientName;
-            document.getElementById("patientFirstName").value = patientFirstName;
-            document.getElementById("patientAge").value = patientAge;
-            document.getElementById("patientSexe").value = patientSexe;
-            document.getElementById("patientWeight").value = patientWeight;
-            document.getElementById("patientHeight").value = patientHeight;
-            document.getElementById("prescriptionDate").value = prescriptionDate;
-            document.getElementById("addressPrescription").value = addressPrescription;            
-            document.getElementById("consultationPhoneNumber").value = consultationPhoneNumber;
-            document.getElementById("validityPrescriptionDays").value = validityPrescriptionDays;
-
-            //Médicaments
-            const self = this;
-            var index = 0;
-
-            const medicaments = jsonData["Medicaments"];
-
-            medicaments.forEach(function(medicament) 
-            {
-                console.log("medicament : "+medicament+ " index = "+index);
-                const NomMedicament = medicament["NomMedicament"];
-                const Posologie = medicament["Posologie"];
-                const Periode = medicament["Periode"];
-                const PeriodeTexte = medicament["PeriodeTexte"];
-                const Renouvelable = medicament["Renouvelable"];
-                const Remboursable = medicament["Remboursable"];
-                const Indication = medicament["Indication"];
-
-                self.addMedicine();              
-
-                setTimeout(function() {
-                    document.querySelectorAll(".row")[index].querySelector("#medicineAct").value = NomMedicament;
-                    document.querySelectorAll(".row")[index].querySelector("#posology").value = Posologie;
-                    document.querySelectorAll(".row")[index].querySelector("#treatmentPeriod").value = Periode;
-                    document.querySelectorAll(".row")[index].querySelector("#treatmentPeriodTexte").value = PeriodeTexte;
-                    document.querySelectorAll(".row")[index].querySelector("#renewal").value = Renouvelable;
-
-                    if(Remboursable == "Non")
-                    {
-                        document.querySelectorAll(".row")[index].querySelector("#refundable").checked = true;
-                    }
-                    document.querySelectorAll(".row")[index].querySelector("#indication").value = Indication;
-                    index = index + 1;
-                }, 1000);
-                
-            });
-        },
 
         handleFileImport() {
             console.log("in the method handleFileImport!");
-            document.querySelectorAll("input").forEach((input)=>{input.value = "";})
+            document.querySelectorAll("input").forEach((input) => { input.value = ""; })
             var indication = document.querySelector("#indication");
             var joursMois = document.querySelector("#treatmentPeriodTexte");
-        
 
-            if(indication != null)
-            {
+
+            if (indication != null) {
                 indication.value = "";
             }
 
-            if(joursMois != null){
+            if (joursMois != null) {
                 joursMois.value = "";
             }
 
@@ -396,7 +394,7 @@ export default {
                 }
             }
 
-            if(incorrectPrescription){
+            if (incorrectPrescription) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
@@ -404,8 +402,7 @@ export default {
                 })
             }
 
-            if (!incorrectPrescription) 
-            {
+            if (!incorrectPrescription) {
                 const doctorName = document.getElementById("doctorName").value;
                 const doctorJob = document.getElementById("doctorJob").value;
                 const RPPSNum = document.getElementById("RPPSNum").value;
@@ -423,7 +420,7 @@ export default {
                 const d = date.getDate();
                 const h = date.getHours();
                 const min = date.getMinutes();
-                const prescriptionDate = y+'-'+('0' + m).slice(-2)+'-'+('0' + d).slice(-2)+'T'+('0' + h).slice(-2)+':'+('0' + min).slice(-2);
+                const prescriptionDate = y + '-' + ('0' + m).slice(-2) + '-' + ('0' + d).slice(-2) + 'T' + ('0' + h).slice(-2) + ':' + ('0' + min).slice(-2);
                 const addressPrescription = document.getElementById("addressPrescription").value;
                 const consultationPhoneNumber = document.getElementById("consultationPhoneNumber").value;
 
@@ -467,15 +464,13 @@ export default {
                     "prescriptionDate": prescriptionDate,
                     "addressPrescription": addressPrescription,
                     "consultationPhoneNumber": consultationPhoneNumber,
-                    "validityPrescriptionDays":validityPrescriptionDays,
+                    "validityPrescriptionDays": validityPrescriptionDays,
                     "prescriptions": rowsMedicamentsActs
                 };
                 let JSONString = JSON.stringify(jsonPdf);
 
-                console.log("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB : "+JSONString);
-
                 const prescriptionHash = web3.utils.sha3(JSONString);
-                console.log("Hash : "+prescriptionHash);
+                console.log("Hash : " + prescriptionHash);
 
                 try {
                     const txReceipt = await deliverPrescription(prescriptionHash);
@@ -483,7 +478,7 @@ export default {
                         Swal.fire({
                             icon: 'success',
                             title: 'Success',
-                            text: 'The delivery is registered succesfully in the block chain'
+                            text: 'L\'ordonnance est valide'
                         })
                     } else {
                         Swal.fire({
@@ -498,7 +493,7 @@ export default {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Something when wrong when trying to call the blockchain. Try again later'
+                        text: 'L\'ordonnance est invalide'
                     })
                     return;
                 }

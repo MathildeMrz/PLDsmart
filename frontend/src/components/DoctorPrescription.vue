@@ -28,9 +28,9 @@
             <h3>Le patient</h3>
             <div class="prescription-box information">
                 <div class="column">
-                    <input id="patientName" type="text" name="" required>
+                    <input id="patientName" type="text" name="" required @input="filterChars('patientName')">
                     <p class="indications" style="margin-bottom:2vh;">NOM *</p>
-                    <input id="patientFirstName" type="text" name="" required>
+                    <input id="patientFirstName" type="text" name="" required @input="filterChars('patientFirstName')">
                     <p class="indications">Prénom *</p>
                 </div>
 
@@ -86,8 +86,11 @@
             <h3>La prescription</h3>
 
             <div class="column">
-                <input id="validityPrescriptionDays" type="number" name="" value="90">
-                <p class="indications">La validité de l'ordonnance (jours)</p>
+                <input id="validityPrescriptionDays" type="number" min="1" max="999" name="" value="90"
+                onkeydown="return event.key !== ' ' && event.key !== '-' && event.key !== '+' && !['e', 'E'].includes(event.key);"
+                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                maxlength="3" onchange="if (this.value > 1000 || this.value < 1 ) {this.value = ''; alert('La valeur saisie dans le champs validité n\'est pas valable');}">
+                <p class="indications">La validité de l'ordonnance (jours)</p> 
             </div>
 
             <table id="tablePrescription" class="my-table">
@@ -134,7 +137,8 @@ export default {
         };
     },
     methods: {
-        mounted() {
+        mounted() 
+        {
             import("pdfjs-dist/build/pdf.min").then((pdfjsLib) => {
                 pdfjsLib.GlobalWorkerOptions.workerSrc =
                     "https://cdn.jsdelivr.net/npm/pdfjs-dist@2.7.570/build/pdf.worker.min.js";
@@ -146,15 +150,18 @@ export default {
             });
 
         },
-        deleteMedicine(index) {
+        deleteMedicine(index) 
+        {
             this.medicines.splice(index, 1);
         },
-        addMedicine() {
+        addMedicine() 
+        {
             this.medicines.push({
 
             });
         },
-        disconnect() {
+        disconnect() 
+        {
             location.href = '/';
         },
         async verifyValidity() 
@@ -265,7 +272,6 @@ export default {
                 };
 
                 let JSONString = JSON.stringify(jsonPdf);
-                console.log("CCCCCCCCCCCCCCCCCCCCCCCCCCCC : "+JSONString);
 
                 const prescriptionHash = web3.utils.sha3(JSONString);
                 var daysValid = document.getElementById("validityPrescriptionDays").value
@@ -276,8 +282,8 @@ export default {
                     if (txReceipt.success) {
                         Swal.fire({
                             icon: 'success',
-                            title: 'Success',
-                            text: 'The prescription is registered succesfully in the block chain'
+                            title: 'Succès',
+                            text: 'L\'ordonnance a été enregistrée avec succès dans la blockchain'
                         })
                     } else {
                         Swal.fire({
@@ -291,7 +297,7 @@ export default {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Something when wrong when trying to call the blockchain. Try again later'
+                        text: 'L\'ordonnance n\'a pas pu être enregistrée dans la blockchain'
                     })
                     return;
                 }
@@ -315,6 +321,16 @@ export default {
                     })
                     .catch(error => console.error(error));
             }
+        },
+        filterChars(identifier) 
+        {
+            var valeurInput = document.getElementById(identifier).value;
+            var valeurModifiee = valeurInput.replace(";", "");
+            document.getElementById(identifier).value = valeurModifiee;
+
+            valeurInput = document.getElementById(identifier).value;
+            valeurModifiee = valeurInput.replace("\n", "");
+            document.getElementById(identifier).value = valeurModifiee;            
         },
         props: {},
     }
