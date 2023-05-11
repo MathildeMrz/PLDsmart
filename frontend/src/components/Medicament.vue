@@ -61,7 +61,6 @@
             },
             loadData() 
             {
-                //Ajout médicaments liste déroulante
                 const data = require('../assets/medicine.json');
                 const medicineSelect = document.getElementById("medicineActDatalist");
                 let result = [];
@@ -69,7 +68,6 @@
                 {
                     let concat = data[i].CODE_UCD.toString() + " " + data[i].NOM_COURT;
                     result.push(concat);
-                    //Ajout liste déroulante
                     let option = document.createElement("option");
                     option.value = data[i].NOM_COURT;
                     option.text = concat;

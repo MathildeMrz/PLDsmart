@@ -272,6 +272,7 @@ export default {
             const prescriptionDate = jsonData["Date"];
             const addressPrescription = jsonData["Adresse"];            
             const consultationPhoneNumber = jsonData["Tel"];
+            const validityPrescriptionDays = jsonData["Validite"];            
 
             document.getElementById("doctorName").value = doctorName;
             document.getElementById("doctorJob").value = doctorJob;
@@ -285,11 +286,10 @@ export default {
             document.getElementById("prescriptionDate").value = prescriptionDate;
             document.getElementById("addressPrescription").value = addressPrescription;            
             document.getElementById("consultationPhoneNumber").value = consultationPhoneNumber;
+            document.getElementById("validityPrescriptionDays").value = validityPrescriptionDays;
 
             //Médicaments
             const self = this;
-            //var index = 0;
-
             var index = 0;
 
             const medicaments = jsonData["Medicaments"];
@@ -297,17 +297,15 @@ export default {
             medicaments.forEach(function(medicament) 
             {
                 console.log("medicament : "+medicament+ " index = "+index);
-
                 const NomMedicament = medicament["NomMedicament"];
-                console.log("NomMedicament : "+NomMedicament);
                 const Posologie = medicament["Posologie"];
                 const Periode = medicament["Periode"];
                 const PeriodeTexte = medicament["PeriodeTexte"];
-                console.log("PeriodeTexte : "+PeriodeTexte);
                 const Renouvelable = medicament["Renouvelable"];
                 const Remboursable = medicament["Remboursable"];
                 const Indication = medicament["Indication"];
 
+                console.log("IMPORTANT : "+PeriodeTexte);
                 self.addMedicine();              
 
                 setTimeout(function() {
@@ -370,7 +368,8 @@ export default {
                 }
             }
 
-            if (!incorrectPrescription) {
+            if (!incorrectPrescription) 
+            {
                 const doctorName = document.getElementById("doctorName").value;
                 const doctorJob = document.getElementById("doctorJob").value;
                 const RPPSNum = document.getElementById("RPPSNum").value;

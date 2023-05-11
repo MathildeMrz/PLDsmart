@@ -157,7 +157,8 @@ export default {
         disconnect() {
             location.href = '/';
         },
-        async verifyValidity() {
+        async verifyValidity() 
+        {
             const table = document.querySelector("table");
 
             if (table.rows.length == 1) {
@@ -179,7 +180,10 @@ export default {
                 }
             }
 
-            if (!incorrectPrescription) {
+            if (!incorrectPrescription) 
+            {
+                console.log("!incorrectPrescription");
+
                 const doctorName = document.getElementById("doctorName").textContent;
                 const doctorJob = document.getElementById("doctorJob").textContent;
                 const RPPSNum = document.getElementById("RPPSNum").textContent;
@@ -192,6 +196,7 @@ export default {
                 const prescriptionDate = document.getElementById("prescriptionDate").textContent;
                 const addressPrescription = document.getElementById("addressPrescription").textContent;
                 const consultationPhoneNumber = document.getElementById("consultationPhoneNumber").textContent;
+                const validityPrescriptionDays = document.getElementById("validityPrescriptionDays").value;
 
                 const table = document.querySelector("table");
                 const rows = table.querySelectorAll("tbody tr");
@@ -233,7 +238,8 @@ export default {
                     "prescriptionDate": prescriptionDate,
                     "addressPrescription": addressPrescription,
                     "consultationPhoneNumber": consultationPhoneNumber,
-                    "prescriptions": rowsMedicamentsActs
+                    "validityPrescriptionDays":validityPrescriptionDays,
+                    "prescriptions": rowsMedicamentsActs                    
                 };
 
                 let JSONString = JSON.stringify(jsonPdf);
@@ -338,6 +344,7 @@ export default {
             const qualification = data.qualification;
             const officeAddress = data.officeAddress;
             const idPSdoctor = data.idPSdoctor;
+
             // remplir les champs de formulaire avec les informations récupérées
             document.getElementById('doctorName').innerHTML = "Docteur " + firstName + " " + lastName;
             document.getElementById('consultationPhoneNumber').innerHTML = telephone;
