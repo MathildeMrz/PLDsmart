@@ -182,8 +182,7 @@ export default {
             const medicaments = jsonData["Medicaments"];
 
             medicaments.forEach(function (medicament) {
-                console.log("medicament : " + medicament + " index = " + index);
-                const NomMedicament = medicament["NomMedicament"];
+                const NomMedicament = findClosestMatch(medicament["NomMedicament"]);
                 const Posologie = medicament["Posologie"];
                 const Periode = medicament["Periode"];
                 const PeriodeTexte = medicament["PeriodeTexte"];
